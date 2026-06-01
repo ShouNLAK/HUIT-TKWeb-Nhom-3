@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Nhập - Viet Travel Hub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Trang đăng nhập */
+        body { opacity: 1 !important; }
+
+        .auth-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 460px;
+            background: rgba(255,255,255,0.06);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        .auth-logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .auth-logo img {
+            height: 56px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+        }
+        .auth-logo h4 {
+            color: #fff;
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin: 0;
+        }
+
+        .auth-tabs {
+            display: flex;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 4px;
+            margin-bottom: 2rem;
+        }
+        .auth-tab-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            color: rgba(255,255,255,0.5);
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+        .auth-tab-btn.active {
+            background: #0d6efd;
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(13,110,253,0.4);
+        }
+
+        /* Input fields */
+        .auth-input-wrap {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+        .auth-input-wrap .bi {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255,255,255,0.4);
+            font-size: 1.1rem;
+            z-index: 2;
+        }
+        .auth-input-wrap input {
+            padding-left: 42px;
+        }
+
+        .btn-auth {
+            width: 100%;
+            padding: 13px;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 10px;
+            border: none;
+            background: linear-gradient(135deg, #0d6efd, #00c6ff);
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 0.5rem;
+        }
+        .btn-auth:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(13,110,253,0.5);
+        }
+
+        /* Demo account hint */
+        .demo-accounts {
+            margin-top: 1.5rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 1rem;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .demo-accounts h6 {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.8rem;
+            margin-bottom: 8px;
+        }
+        .demo-btn {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            cursor: pointer;
+            border: 1px solid;
+            transition: all 0.2s;
+            margin: 3px;
+        }
+        .demo-btn:hover { transform: scale(1.05); }
+        .demo-btn.admin { color: #f39c12; border-color: #f39c12; }
+        .demo-btn.user  { color: #2ecc71; border-color: #2ecc71; }
+
+        .thong-bao-loi {
+            color: #ff6b6b;
+            font-size: 0.88rem;
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+        }
+        .thong-bao-ok {
+            color: #2ecc71;
+            font-size: 0.88rem;
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .auth-card { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Nền slideshow -->
+    <ul class="slideshow-bg">
+        <li></li><li></li><li></li><li></li>
+    </ul>
+    <div class="overlay" style="background:rgba(0,0,0,0.75);"></div>
+
+    <div class="auth-page">
+        <div class="auth-card">
+            <!-- Logo -->
+            <div class="auth-logo">
+                <img src="jpg/Logo.jpg" alt="Logo" onerror="this.style.display='none'">
+                <h4>VIET TRAVEL HUB</h4>
+                <p class="text-secondary small mb-0">Hành trình bắt đầu từ đây</p>
+            </div>
+
+            <!-- Tab chuyển đổi Đăng Nhập / Đăng Ký -->
+            <div class="auth-tabs">
+                <button class="auth-tab-btn active" id="tab-dn" onclick="chuyenTab('dangnhap')">
+                    <i class="bi bi-person-check"></i> Đăng Nhập
+                </button>
+                <button class="auth-tab-btn" id="tab-dk" onclick="chuyenTab('dangky')">
+                    <i class="bi bi-person-plus"></i> Đăng Ký
+                </button>
+            </div>
+
+            <!-- FORM ĐĂNG NHẬP -->
+            <div id="form-dangnhap">
+                <div class="auth-input-wrap">
+                    <i class="bi bi-envelope"></i>
+                    <input type="email" class="form-control" id="dn-email"
+                           placeholder="Email của bạn" autocomplete="email">
+                </div>
+                <div class="auth-input-wrap">
+                    <i class="bi bi-lock"></i>
+                    <input type="password" class="form-control" id="dn-matkhau"
+                           placeholder="Mật khẩu">
+                </div>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" id="ghi-nho">
+                    <label class="form-check-label text-light small" for="ghi-nho">Ghi nhớ đăng nhập</label>
+                </div>
+                <button class="btn-auth" onclick="xuLyDangNhap()">
+                    <i class="bi bi-box-arrow-in-right"></i> Đăng Nhập
+                </button>
+                <div class="thong-bao-loi" id="loi-dangnhap"></div>
+            </div>
+
+            <!-- FORM ĐĂNG KÝ -->
+            <div id="form-dangky" style="display:none;">
+                <div class="auth-input-wrap">
+                    <i class="bi bi-person"></i>
+                    <input type="text" class="form-control" id="dk-hoten"
+                           placeholder="Họ và tên đầy đủ">
+                </div>
+                <div class="auth-input-wrap">
+                    <i class="bi bi-envelope"></i>
+                    <input type="email" class="form-control" id="dk-email"
+                           placeholder="Địa chỉ email">
+                </div>
+                <div class="auth-input-wrap">
+                    <i class="bi bi-lock"></i>
+                    <input type="password" class="form-control" id="dk-matkhau"
+                           placeholder="Mật khẩu (tối thiểu 6 ký tự)">
+                </div>
+                <div class="auth-input-wrap">
+                    <i class="bi bi-lock-fill"></i>
+                    <input type="password" class="form-control" id="dk-xacnhan"
+                           placeholder="Xác nhận mật khẩu">
+                </div>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" id="dong-y">
+                    <label class="form-check-label text-light small" for="dong-y">
+                        Tôi đồng ý với <a href="#" class="text-warning">điều khoản sử dụng</a>
+                    </label>
+                </div>
+                <button class="btn-auth" onclick="xuLyDangKy()">
+                    <i class="bi bi-person-plus"></i> Tạo Tài Khoản
+                </button>
+                <div class="thong-bao-loi" id="loi-dangky"></div>
+                <div class="thong-bao-ok" id="ok-dangky"></div>
+            </div>
+
+            <!-- Tài khoản demo để test nhanh -->
+            <div class="demo-accounts">
+                <h6><i class="bi bi-info-circle"></i> Tài khoản thử nghiệm:</h6>
+                <span class="demo-btn admin" onclick="dienNhanhAdmin()">
+                    👑 Admin: admin@vietravelhub.vn / admin123
+                </span>
+                <br>
+                <span class="demo-btn user" onclick="dienNhanhUser()">
+                    👤 User: user@vietravelhub.vn / user123
+                </span>
+            </div>
+
+            <!-- Nút quay về -->
+            <div class="text-center mt-3">
+                <a href="index.html" class="text-secondary small text-decoration-none">
+                    <i class="bi bi-arrow-left"></i> Quay về trang chủ
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+
+    <script>
+        // Nếu đã đăng nhập rồi thì redirect về trang chủ
+        document.addEventListener("DOMContentLoaded", function() {
+            if (typeof daoDangNhap === 'function' && daoDangNhap()) {
+                window.location.href = 'index.html';
+                return;
+            }
+            // Đọc ?tab=dangky từ URL (khi được redirect từ register.html)
+            var urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('tab') === 'dangky') {
+                chuyenTab('dangky');
+            }
+        });
+
+        // Chuyển đổi giữa tab Đăng Nhập và Đăng Ký
+        function chuyenTab(tenTab) {
+            var formDN = document.getElementById('form-dangnhap');
+            var formDK = document.getElementById('form-dangky');
+            var tabDN = document.getElementById('tab-dn');
+            var tabDK = document.getElementById('tab-dk');
+
+            if (tenTab === 'dangnhap') {
+                formDN.style.display = 'block';
+                formDK.style.display = 'none';
+                tabDN.classList.add('active');
+                tabDK.classList.remove('active');
+            } else {
+                formDN.style.display = 'none';
+                formDK.style.display = 'block';
+                tabDN.classList.remove('active');
+                tabDK.classList.add('active');
+            }
+        }
+
+        // Xử lý Đăng Nhập
+        function xuLyDangNhap() {
+            var email = document.getElementById('dn-email').value.trim();
+            var mk = document.getElementById('dn-matkhau').value;
+            var elLoi = document.getElementById('loi-dangnhap');
+
+            if (!email || !mk) {
+                elLoi.style.display = 'block';
+                elLoi.innerHTML = '<i class="bi bi-exclamation-circle"></i> Vui lòng nhập đầy đủ email và mật khẩu!';
+                return;
+            }
+
+            var ketQua = dangNhap(email, mk);
+            if (ketQua.thanhCong) {
+                elLoi.style.display = 'none';
+                // Redirect về trang đã lưu hoặc trang chủ
+                var trangRedirect = sessionStorage.getItem('redirect_after_login') || 'index.html';
+                sessionStorage.removeItem('redirect_after_login');
+                window.location.href = trangRedirect;
+            } else {
+                elLoi.style.display = 'block';
+                elLoi.innerHTML = '<i class="bi bi-x-circle"></i> ' + ketQua.thongBao;
+            }
+        }
+
+        // Xử lý Đăng Ký
+        function xuLyDangKy() {
+            var hoTen = document.getElementById('dk-hoten').value;
+            var email = document.getElementById('dk-email').value;
+            var mk = document.getElementById('dk-matkhau').value;
+            var xacNhan = document.getElementById('dk-xacnhan').value;
+            var dongY = document.getElementById('dong-y').checked;
+            var elLoi = document.getElementById('loi-dangky');
+            var elOk = document.getElementById('ok-dangky');
+
+            if (!dongY) {
+                elLoi.style.display = 'block';
+                elLoi.innerHTML = '<i class="bi bi-exclamation-circle"></i> Vui lòng đồng ý với điều khoản!';
+                return;
+            }
+
+            var ketQua = dangKy(hoTen, email, mk, xacNhan);
+            if (ketQua.thanhCong) {
+                elLoi.style.display = 'none';
+                elOk.style.display = 'block';
+                elOk.innerHTML = '<i class="bi bi-check-circle"></i> ' + ketQua.thongBao;
+                // Tự chuyển về tab đăng nhập sau 2 giây
+                setTimeout(function() { chuyenTab('dangnhap'); }, 2000);
+            } else {
+                elOk.style.display = 'none';
+                elLoi.style.display = 'block';
+                elLoi.innerHTML = '<i class="bi bi-x-circle"></i> ' + ketQua.thongBao;
+            }
+        }
+
+        // Điền nhanh tài khoản Admin
+        function dienNhanhAdmin() {
+            chuyenTab('dangnhap');
+            document.getElementById('dn-email').value = 'admin@vietravelhub.vn';
+            document.getElementById('dn-matkhau').value = 'admin123';
+        }
+
+        // Điền nhanh tài khoản User
+        function dienNhanhUser() {
+            chuyenTab('dangnhap');
+            document.getElementById('dn-email').value = 'user@vietravelhub.vn';
+            document.getElementById('dn-matkhau').value = 'user123';
+        }
+
+        // Cho phép nhấn Enter để đăng nhập
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                var formDN = document.getElementById('form-dangnhap');
+                if (formDN.style.display !== 'none') {
+                    xuLyDangNhap();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đặt Vé Máy Bay - Viet Travel Hub</title>
+    <meta name="description" content="Đặt vé máy bay giá rẻ các hãng Vietnam Airlines, Vietjet, Bamboo Airways. Chọn ghế trực tiếp trên sơ đồ máy bay.">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Màu đặc trưng trang máy bay */
+        .page-accent { color: #0d6efd; }
+        .airline-logo-box {
+            width: 64px; height: 64px;
+            background: #fff; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden; padding: 6px; flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .airline-logo-box img { width: 100%; height: 100%; object-fit: contain; }
+
+        .flight-route {
+            display: flex; align-items: center; gap: 12px;
+        }
+        .flight-city-code {
+            font-size: 2rem; font-weight: 900; line-height: 1;
+        }
+        .flight-arrow {
+            flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;
+        }
+        .flight-arrow-line {
+            width: 100%; height: 1px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.1), rgba(255,255,255,0.5), rgba(255,255,255,0.1));
+            position: relative;
+        }
+        .flight-arrow-line::after {
+            content: '✈'; position: absolute;
+            right: -2px; top: -9px;
+            font-size: 0.9rem; color: rgba(255,255,255,0.7);
+        }
+
+        /* Filter bar */
+        .filter-bar {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px; padding: 12px 16px;
+            display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+            margin-bottom: 20px;
+        }
+        .filter-chip {
+            padding: 6px 14px; border-radius: 50px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: rgba(255,255,255,0.7); font-size: 0.82rem;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .filter-chip:hover, .filter-chip.active {
+            background: #0d6efd; border-color: #0d6efd; color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <ul class="slideshow-bg"><li></li><li></li><li></li><li></li></ul>
+    <div class="overlay"></div>
+
+    <div class="loader-curtain" id="loader">
+        <i class="bi bi-airplane-fill plane-spinner"></i>
+        <h3 class="mt-3 text-white fw-light">Đang tải chuyến bay...</h3>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand" href="index.html" onclick="chuyenTrang(event,'index.html')">
+                <img src="jpg/Logo.jpg" alt="Logo" style="height:36px;border-radius:6px;" onerror="this.style.display='none'">
+                VIET TRAVEL HUB
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-center" id="navMenu">
+                <ul class="navbar-nav align-items-lg-center gap-1 me-auto ms-lg-4">
+                    <li class="nav-item"><a class="nav-link" href="index.html" onclick="chuyenTrang(event,'index.html')"><i class="bi bi-house-door"></i> Trang Chủ</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="flight.html"><i class="bi bi-airplane"></i> Máy Bay</a></li>
+                    <li class="nav-item"><a class="nav-link" href="train.html" onclick="chuyenTrang(event,'train.html')"><i class="bi bi-train-front"></i> Tàu Hỏa</a></li>
+                    <li class="nav-item"><a class="nav-link" href="bus.html" onclick="chuyenTrang(event,'bus.html')"><i class="bi bi-bus-front"></i> Xe Khách</a></li>
+                </ul>
+                <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0">
+                    <a class="btn btn-outline-warning btn-sm px-3 position-relative" href="cart.html" onclick="chuyenTrang(event,'cart.html')">
+                        <i class="bi bi-cart3"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cart-count">0</span>
+                    </a>
+                    <div id="navbar-auth-area" class="d-flex gap-2"></div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- NỘI DUNG CHÍNH -->
+    <section class="container" style="padding-top:110px; min-height:100vh;">
+
+        <!-- Tiêu đề trang -->
+        <div class="d-flex align-items-center gap-3 mb-4">
+            <div style="width:52px;height:52px;background:linear-gradient(135deg,#0d6efd,#00c6ff);border-radius:14px;display:flex;align-items:center;justify-content:center;">
+                <i class="bi bi-airplane-fill text-white fs-3"></i>
+            </div>
+            <div>
+                <h2 class="fw-900 text-white mb-0">Đặt Vé Máy Bay</h2>
+                <p class="text-white-50 mb-0 small">Hàng không nội địa – Giá tốt nhất mỗi ngày</p>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- CỘT TRÁI: Form tìm + Kết quả -->
+            <div class="col-lg-8">
+                <!-- FORM TÌM KIẾM -->
+                <div class="glass-panel mb-4">
+                    <h6 class="fw-700 text-white mb-3"><i class="bi bi-search text-primary"></i> Tìm Chuyến Bay</h6>
+                    <form id="flight-search-form" onsubmit="timChuyenBay(event)">
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <label class="form-label">Điểm Khởi Hành</label>
+                                <select class="form-select" id="flight-from">
+                                    <option value="">-- Điểm đi --</option>
+                                    <option value="SGN">✈ TP.HCM (SGN)</option>
+                                    <option value="HAN">✈ Hà Nội (HAN)</option>
+                                    <option value="DAD">✈ Đà Nẵng (DAD)</option>
+                                    <option value="PQC">✈ Phú Quốc (PQC)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Điểm Đến</label>
+                                <select class="form-select" id="flight-to">
+                                    <option value="">-- Điểm đến --</option>
+                                    <option value="HAN">✈ Hà Nội (HAN)</option>
+                                    <option value="DAD">✈ Đà Nẵng (DAD)</option>
+                                    <option value="PQC">✈ Phú Quốc (PQC)</option>
+                                    <option value="CXR">✈ Nha Trang (CXR)</option>
+                                    <option value="SGN">✈ TP.HCM (SGN)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Ngày Bay</label>
+                                <input type="date" class="form-control" id="flight-date">
+                            </div>
+                            <div class="col-md-3 d-flex align-items-end">
+                                <button type="submit" class="btn btn-custom w-100 py-3 fw-700">
+                                    <i class="bi bi-search"></i> Tìm Bay
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- FILTER BAR -->
+                <div class="filter-bar">
+                    <span class="text-white-50 small fw-600"><i class="bi bi-funnel"></i> Lọc:</span>
+                    <span class="filter-chip active" onclick="locHang(this,'')">Tất cả</span>
+                    <span class="filter-chip" onclick="locHang(this,'Vietnam Airlines')">Vietnam Airlines</span>
+                    <span class="filter-chip" onclick="locHang(this,'Vietjet Air')">Vietjet Air</span>
+                    <span class="filter-chip" onclick="locHang(this,'Bamboo Airways')">Bamboo Airways</span>
+                    <span class="ms-auto text-white-50 small" id="so-ket-qua">Đang tải...</span>
+                </div>
+
+                <!-- KẾT QUẢ CHUYẾN BAY -->
+                <div id="flight-results">
+                    <div class="text-center py-5">
+                        <i class="bi bi-airplane text-primary fs-1 opacity-50"></i>
+                        <p class="text-white-50 mt-2">Nhập thông tin và bấm Tìm Bay để xem chuyến</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CỘT PHẢI: Thông tin hỗ trợ -->
+            <div class="col-lg-4">
+                <!-- Bản đồ tuyến bay -->
+                <div class="glass-panel mb-4">
+                    <h6 class="fw-700 text-white mb-3"><i class="bi bi-map-fill text-primary"></i> Tuyến Bay Nội Địa</h6>
+                    <div class="d-flex flex-column gap-3">
+                        <div class="d-flex align-items-center gap-3 p-2 rounded" style="background:rgba(13,110,253,0.1);">
+                            <i class="bi bi-circle-fill text-primary" style="font-size:0.5rem;"></i>
+                            <div class="flex-1">
+                                <div class="fw-700 text-white small">Sài Gòn → Hà Nội</div>
+                                <div class="text-white-50" style="font-size:0.75rem;">2h 15p · 12 chuyến/ngày</div>
+                            </div>
+                            <span class="text-warning small fw-700">1.2M</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-3 p-2 rounded" style="background:rgba(13,110,253,0.08);">
+                            <i class="bi bi-circle-fill text-primary" style="font-size:0.5rem;"></i>
+                            <div class="flex-1">
+                                <div class="fw-700 text-white small">Sài Gòn → Đà Nẵng</div>
+                                <div class="text-white-50" style="font-size:0.75rem;">1h 10p · 10 chuyến/ngày</div>
+                            </div>
+                            <span class="text-warning small fw-700">1.5M</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-3 p-2 rounded" style="background:rgba(13,110,253,0.08);">
+                            <i class="bi bi-circle-fill text-primary" style="font-size:0.5rem;"></i>
+                            <div class="flex-1">
+                                <div class="fw-700 text-white small">Hà Nội → Phú Quốc</div>
+                                <div class="text-white-50" style="font-size:0.75rem;">2h 10p · 5 chuyến/ngày</div>
+                            </div>
+                            <span class="text-warning small fw-700">2.8M</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chú ý hành lý -->
+                <div class="glass-panel mb-4">
+                    <h6 class="fw-700 text-white mb-3"><i class="bi bi-info-circle text-warning"></i> Quy Định Hành Lý</h6>
+                    <div class="d-flex flex-column gap-2">
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom" style="border-color:rgba(255,255,255,0.08)!important;">
+                            <span class="text-white-50 small"><i class="bi bi-bag-check text-success me-1"></i>Xách tay</span>
+                            <span class="text-white small fw-600">7 kg</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom" style="border-color:rgba(255,255,255,0.08)!important;">
+                            <span class="text-white-50 small"><i class="bi bi-luggage text-primary me-1"></i>Ký gửi (Eco)</span>
+                            <span class="text-white small fw-600">20 kg</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center py-2">
+                            <span class="text-white-50 small"><i class="bi bi-luggage text-warning me-1"></i>Ký gửi (Bus)</span>
+                            <span class="text-white small fw-600">30 kg</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hỗ trợ -->
+                <div class="glass-panel" style="border:1px solid rgba(13,110,253,0.3);">
+                    <div class="d-flex gap-3 align-items-center">
+                        <i class="bi bi-headset text-primary fs-1"></i>
+                        <div>
+                            <div class="fw-700 text-white">Cần Hỗ Trợ?</div>
+                            <div class="text-white-50 small">Hotline: <strong class="text-warning">1900 9999</strong></div>
+                            <div class="text-white-50 small">Phục vụ 24/7</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MODAL CHỌN GHẾ MÁY BAY -->
+    <div class="modal fade" id="flightSeatModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width:420px;">
+            <div class="modal-content">
+                <div class="modal-header" style="background:linear-gradient(135deg,#0d6efd,#00c6ff);">
+                    <div>
+                        <h5 class="modal-title fw-800 text-white mb-0">
+                            <i class="bi bi-airplane-fill"></i> Chọn Ghế Ngồi
+                        </h5>
+                        <div class="text-white opacity-75 small" id="modal-flight-info">---</div>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-3" style="background:#f0f4f8;">
+
+                    <!-- Chú thích ghế -->
+                    <div class="seat-legend mb-3">
+                        <div class="legend-item">
+                            <div class="legend-dot" style="background:#fdebd0;border-color:#f0b27a;"></div>
+                            <span>Thương Gia</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot" style="background:#d5f5e3;border-color:#82e0aa;"></div>
+                            <span>Phổ Thông</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot" style="background:linear-gradient(135deg,#0d6efd,#00c6ff);border-color:#0b5ed7;"></div>
+                            <span>Đang Chọn</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot" style="background:#eee;border-color:#bbb;"></div>
+                            <span>Đã Đặt</span>
+                        </div>
+                    </div>
+
+                    <!-- THÂN MÁY BAY 2D – căn giữa -->
+                    <div style="display:flex; justify-content:center;">
+                        <div id="aircraft-seat-map" style="display:inline-block; min-width:200px;"></div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="background:#1a1a2e;border-top:1px solid rgba(255,255,255,0.1); flex-direction:column; gap:8px; align-items:stretch; padding:12px 16px;">
+                    <!-- Thông tin ghế đã chọn -->
+                    <div id="flight-seat-info-selected" class="text-white-50 small text-center">Chưa chọn ghế nào</div>
+                    <!-- Nút hành động -->
+                    <div class="d-flex gap-2 justify-content-between">
+                        <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Hủy</button>
+                        <button type="button" class="btn btn-custom px-4 fw-700 flex-1"
+                                id="btn-confirm-flight" onclick="xacNhanChonGhe()" disabled>
+                            <i class="bi bi-check2-circle me-1"></i> Xác Nhận – <span id="btn-seat-label">Ghế</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MODAL CHI TIẾT CHUYẾN BAY -->
+    <div class="modal fade" id="flightDetailModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-800 text-white">Chi Tiết Chuyến Bay</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="flight-detail-body"></div>
+                <div class="modal-footer" style="border-top:1px solid rgba(255,255,255,0.1);">
+                    <button class="btn btn-outline-light" data-bs-dismiss="modal">Đóng</button>
+                    <button class="btn btn-custom px-4 fw-700" onclick="tiepTucChonGhe()">
+                        <i class="bi bi-cursor-fill"></i> Chọn Ghế Ngay
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer style="padding:30px 0;border-top:1px solid rgba(255,255,255,0.08);margin-top:60px;">
+        <div class="container text-center">
+            <p class="text-white-50 small mb-0">© 2024 Viet Travel Hub · Đặt vé máy bay nhanh chóng</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="js/data.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/flight.js"></script>
+</body>
+</html>
