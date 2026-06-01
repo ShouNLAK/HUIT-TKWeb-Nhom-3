@@ -1,629 +1,329 @@
-// =============================================================
-// VIET TRAVEL HUB - js/train.js (Logic trang Tàu Hỏa)
-// Sơ đồ toa ghế mềm + toa giường cabin
-// =============================================================
-
-// Biến trạng thái
-var ngayDiTau = '';
-var tauDangChon = null;
-var choTauDangChon = null;
-var kieuToa = 'ghe'; // 'ghe' hoặc 'giuong'
-
-document.addEventListener("DOMContentLoaded", function() {
-    var homNay = new Date().toISOString().split('T')[0];
-    var inputNgay = document.getElementById('train-date-out');
-    var inputNgayVe = document.getElementById('train-date-return');
-    
-    if (inputNgay) {
-        inputNgay.min = homNay;
-        inputNgay.value = homNay;
-        ngayDiTau = homNay;
-    }
-    if (inputNgayVe) {
-        inputNgayVe.min = homNay;
-    }
-
-    // Prefill từ trang chủ
-    var paramsStr = sessionStorage.getItem('vth_search_params');
-    var daTimKiem = false;
-    if (paramsStr) {
-        var params = JSON.parse(paramsStr);
-        if (params.loai === 'train') {
-            if (document.getElementById('train-from')) document.getElementById('train-from').value = params.tuSearch || '';
-            if (document.getElementById('train-to')) document.getElementById('train-to').value = params.denSearch || '';
-            if (document.getElementById('train-date-out') && params.ngaySearch) {
-                document.getElementById('train-date-out').value = params.ngaySearch;
-                ngayDiTau = params.ngaySearch;
-            }
-            if (document.getElementById('train-roundtrip') && params.khuHoi) {
-                document.getElementById('train-roundtrip').checked = true;
-                if (document.getElementById('train-date-return')) {
-                    document.getElementById('train-date-return').disabled = false;
-                    document.getElementById('train-date-return').value = params.ngayVeSearch || '';
-                }
-            }
-            if (document.getElementById('train-adults') && params.slNguoiLon) document.getElementById('train-adults').value = params.slNguoiLon;
-            if (document.getElementById('train-children') && params.slTreEm) document.getElementById('train-children').value = params.slTreEm;
-            
-            // Tự động tìm kiếm
-            timTau();
-            daTimKiem = true;
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ Hàng - Viet Travel Hub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Internal CSS cho trang giỏ hàng */
+        .order-form-label {
+            color: rgba(255,255,255,0.7);
+            font-weight: 500; font-size: 0.88rem;
+            margin-bottom: 5px;
         }
-        sessionStorage.removeItem('vth_search_params');
-    }
-
-    if (!daTimKiem) {
-        hienThiDanhSachTau(mockTrains);
-    }
-});
-
-// ---------------------------------------------------------------
-// HÀM: Toggle trường Ngày Về
-// ---------------------------------------------------------------
-function toggleReturnDateTrain() {
-    var rdOneway = document.getElementById('train-oneway');
-    var inputNgayVe = document.getElementById('train-date-return');
-    if (!rdOneway || !inputNgayVe) return;
-    
-    if (rdOneway.checked) {
-        inputNgayVe.disabled = true;
-        inputNgayVe.value = '';
-    } else {
-        inputNgayVe.disabled = false;
-        var inputNgayDi = document.getElementById('train-date-out');
-        if (inputNgayDi && inputNgayDi.value) {
-            inputNgayVe.min = inputNgayDi.value;
-            inputNgayVe.value = inputNgayDi.value;
+        .summary-card {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 16px;
+            padding: 24px;
+            position: sticky; top: 100px;
         }
-    }
-}
-
-// ---------------------------------------------------------------
-// HÀM: Tìm chuyến tàu
-// ---------------------------------------------------------------
-function timTau(event) {
-    if (event) event.preventDefault();
-
-    var tu = document.getElementById('train-from').value;
-    var den = document.getElementById('train-to').value;
-    var inputNgay = document.getElementById('train-date-out');
-    var inputNgayVe = document.getElementById('train-date-return');
-    var rdRoundtrip = document.getElementById('train-roundtrip');
-    ngayDiTau = inputNgay ? inputNgay.value : '';
-
-    if (!ngayDiTau) {
-        hienCanhBaoTau('Vui lòng chọn Ngày Đi!');
-        return;
-    }
-    if (rdRoundtrip && rdRoundtrip.checked && inputNgayVe && !inputNgayVe.value) {
-        hienCanhBaoTau('Vui lòng chọn Ngày Về!');
-        return;
-    }
-    if (rdRoundtrip && rdRoundtrip.checked && inputNgayVe && inputNgayVe.value < ngayDiTau) {
-        hienCanhBaoTau('Ngày về không được nhỏ hơn ngày đi!');
-        return;
-    }
-    if (tu !== '' && den !== '' && tu === den) {
-        hienCanhBaoTau('Ga Đi và Ga Đến không được trùng nhau!');
-        return;
-    }
-
-    // Lưu vào LocalStorage
-    var lichSuTK = JSON.parse(localStorage.getItem('lichSuTimKiemTau') || '[]');
-    lichSuTK.unshift({
-        tu: tu,
-        den: den,
-        ngayDi: ngayDiTau,
-        ngayVe: inputNgayVe ? inputNgayVe.value : '',
-        khuHoi: rdRoundtrip ? rdRoundtrip.checked : false,
-        thoiGian: new Date().toLocaleString('vi-VN')
-    });
-    if(lichSuTK.length > 5) lichSuTK.pop();
-    localStorage.setItem('lichSuTimKiemTau', JSON.stringify(lichSuTK));
-
-    var slNguoiLon = parseInt(document.getElementById('train-adults').value) || 1;
-    var slTreEm = parseInt(document.getElementById('train-children').value) || 0;
-    sessionStorage.setItem('trainAdults', slNguoiLon);
-    sessionStorage.setItem('trainChildren', slTreEm);
-    sessionStorage.setItem('trainIsRoundTrip', rdRoundtrip ? rdRoundtrip.checked : false);
-
-    var ketQua = mockTrains;
-
-    function getCityCode(cityName) {
-        if (!cityName) return '';
-        var lowerName = cityName.toLowerCase().trim();
-        if (lowerName.includes('sgn') || lowerName.includes('sài gòn') || lowerName.includes('hồ chí minh')) return 'SGN';
-        if (lowerName.includes('han') || lowerName.includes('hà nội')) return 'HAN';
-        if (lowerName.includes('dad') || lowerName.includes('đà nẵng')) return 'DAD';
-        if (lowerName.includes('nha') || lowerName.includes('nha trang') || lowerName.includes('cxr')) return 'NHA';
-
-        for (var code in destinations) {
-            if (destinations[code].name.toLowerCase().includes(lowerName)) {
-                if (code === 'CXR') return 'NHA'; // Map CXR flight code to NHA train code
-                return code;
-            }
+        .payment-method {
+            display: flex; align-items: center; gap: 12px;
+            padding: 13px 15px; border-radius: 12px;
+            border: 2px solid rgba(255,255,255,0.1);
+            cursor: pointer; transition: all 0.22s;
+            margin-bottom: 10px;
+            background: rgba(255,255,255,0.03);
         }
-        return cityName;
-    }
-
-    var tuCode = getCityCode(tu);
-    var denCode = getCityCode(den);
-
-    if (tuCode !== '') {
-        var loc1 = [];
-        for (var i = 0; i < ketQua.length; i++) {
-            if (ketQua[i].from === tuCode || ketQua[i].from.toLowerCase() === tuCode.toLowerCase()) loc1.push(ketQua[i]);
+        .payment-method:has(input:checked) {
+            border-color: #0d6efd;
+            background: rgba(13,110,253,0.12);
+            box-shadow: 0 0 0 1px rgba(13,110,253,0.3);
         }
-        ketQua = loc1;
-    }
-    if (denCode !== '') {
-        var loc2 = [];
-        for (var j = 0; j < ketQua.length; j++) {
-            if (ketQua[j].to === denCode || ketQua[j].to.toLowerCase() === denCode.toLowerCase()) loc2.push(ketQua[j]);
+        .payment-method input { width: 18px; height: 18px; accent-color: #0d6efd; flex-shrink: 0; }
+        .payment-logo {
+            width: 40px; height: 40px;
+            border-radius: 8px;
+            object-fit: contain;
+            flex-shrink: 0;
+            background: #fff;
+            padding: 3px;
         }
-        ketQua = loc2;
-    }
-
-    hienThiDanhSachTau(ketQua);
-}
-
-function hienCanhBaoTau(msg) {
-    document.getElementById('train-results').innerHTML =
-        '<div class="alert alert-warning fw-600"><i class="bi bi-exclamation-triangle-fill me-2"></i>' + msg + '</div>';
-}
-
-// ---------------------------------------------------------------
-// HÀM: Render danh sách tàu
-// ---------------------------------------------------------------
-function hienThiDanhSachTau(danhSach) {
-    var container = document.getElementById('train-results');
-    if (!container) return;
-
-    if (danhSach.length === 0) {
-        container.innerHTML = '<div class="text-center py-5"><i class="bi bi-train-front text-white-50" style="font-size:3rem;opacity:0.3;"></i><p class="text-white-50 mt-3">Không có chuyến tàu phù hợp.</p></div>';
-        return;
-    }
-
-    var html = '';
-    
-    // BẢNG GIÁ THEO NGÀY (So sánh giá các ngày lân cận)
-    html += '<div class="glass-panel p-3 mb-4" style="animation:fadeInUp 0.4s ease both;">';
-    html +=   '<h6 class="text-white fw-700 mb-3"><i class="bi bi-calendar-check text-success"></i> So sánh giá các ngày lân cận</h6>';
-    html +=   '<div class="d-flex text-center overflow-auto gap-2" style="white-space:nowrap; padding-bottom:8px;">';
-    
-    var d = new Date(ngayDiTau || new Date());
-    for(var x = -2; x <= 3; x++) {
-        var tempD = new Date(d);
-        tempD.setDate(d.getDate() + x);
-        var isThu7CN = (tempD.getDay() === 0 || tempD.getDay() === 6);
-        var thuStr = tempD.getDay() === 0 ? 'CN' : 'T' + (tempD.getDay()+1);
-        var giaMock = isThu7CN ? 690000 : 549000;
-        var activeStyle = (x === 0) ? 'background:rgba(46,204,113,0.25); border:1px solid #2ecc71;' : 'background:rgba(255,255,255,0.05); border:1px solid transparent;';
-        
-        html += '<div class="p-2 rounded-3" style="min-width:110px; cursor:pointer; transition:0.3s;' + activeStyle + '" onmouseover="this.style.filter=\'brightness(1.2)\'" onmouseout="this.style.filter=\'none\'">';
-        html +=   '<div class="text-white-50 small">' + thuStr + ', ' + tempD.getDate()+'/'+(tempD.getMonth()+1) + '</div>';
-        html +=   '<div class="text-warning fw-700 mt-1">' + (giaMock/1000) + 'K</div>';
-        html += '</div>';
-    }
-    html +=   '</div>';
-    html += '</div>';
-
-    // DANH SÁCH CHUYẾN TÀU
-    for (var i = 0; i < danhSach.length; i++) {
-        var t = danhSach[i];
-        var gioParts = t.time.split(' - ');
-
-        html += '<div class="ticket-card train" style="animation:fadeInUp 0.4s ease both;animation-delay:' + (i * 0.08) + 's;">';
-
-        // Huy hiệu tàu
-        html +=   '<div class="text-center">';
-        html +=     '<div style="width:60px;height:60px;background:linear-gradient(135deg,#2ecc71,#27ae60);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto;">';
-        html +=       '<i class="bi bi-train-front-fill text-white fs-2"></i>';
-        html +=     '</div>';
-        html +=     '<div class="fw-900 text-white mt-1" style="font-size:1.1rem;">' + t.code + '</div>';
-        html +=     '<div class="badge bg-success mt-1" style="font-size:0.68rem;">' + (t.type || 'SE') + '</div>';
-        html +=   '</div>';
-
-        // Thông tin tuyến
-        html +=   '<div style="flex:1;">';
-        html +=     '<div class="fw-700 text-white mb-1">' + t.name + '</div>';
-        html +=     '<div class="d-flex align-items-center gap-3 mb-2">';
-        html +=       '<div class="text-center">';
-        html +=         '<div class="fw-900 text-white fs-4">' + (gioParts[0] || '') + '</div>';
-        html +=         '<div class="text-white-50 small">' + tenGaTau(t.from) + '</div>';
-        html +=       '</div>';
-        html +=       '<div class="text-center flex-1">';
-        html +=         '<div class="text-white-50 small">' + (t.duration || '---') + '</div>';
-        html +=         '<div style="height:2px;background:linear-gradient(90deg,#2ecc71,#27ae60);border-radius:1px;margin:4px 0;position:relative;">';
-        html +=           '<i class="bi bi-train-front-fill text-success position-absolute" style="right:-2px;top:-7px;font-size:0.7rem;"></i>';
-        html +=         '</div>';
-        html +=         '<div class="badge" style="background:rgba(46,204,113,0.15);color:#2ecc71;font-size:0.68rem;">Thẳng</div>';
-        html +=       '</div>';
-        html +=       '<div class="text-center">';
-        html +=         '<div class="fw-900 text-white fs-4">' + (gioParts[1] || '') + '</div>';
-        html +=         '<div class="text-white-50 small">' + tenGaTau(t.to) + '</div>';
-        html +=       '</div>';
-        html +=     '</div>';
-
-        // Loại ghế & Tiện ích thêm
-        html +=     '<div class="d-flex flex-wrap gap-2 mt-2 align-items-center">';
-        html +=       '<span class="badge" style="background:rgba(46,204,113,0.2);color:#2ecc71;font-size:0.72rem;"><i class="bi bi-chair-fill"></i> Ghế mềm từ ' + (t.price/1000).toFixed(0) + 'K</span>';
-        html +=       '<span class="badge" style="background:rgba(243,156,18,0.2);color:#f39c12;font-size:0.72rem;"><i class="bi bi-door-closed-fill"></i> Giường cabin từ ' + ((t.price + 150000)/1000).toFixed(0) + 'K</span>';
-        html +=       '<span class="badge" style="background:rgba(52,152,219,0.2);color:#3498db;font-size:0.72rem;"><i class="bi bi-ticket-perforated-fill"></i> Còn ' + Math.floor(Math.random()*40 + 10) + ' vé</span>';
-        html +=       '<button class="btn btn-sm btn-outline-info rounded-pill py-0 px-2" style="font-size:0.72rem;" onclick="xemChiTietHanhTrinh(\'' + t.id + '\')"><i class="bi bi-map"></i> Chi tiết hành trình</button>';
-        html +=     '</div>';
-        html +=   '</div>';
-
-        // Giá + nút
-        html +=   '<div class="text-end">';
-        html +=     '<div class="text-white-50 small">Từ</div>';
-        html +=     '<div class="fw-900 text-warning" style="font-size:1.6rem;">' + (t.price/1000).toFixed(0) + 'K</div>';
-        html +=     '<div class="text-white-50 small mb-2">' + t.price.toLocaleString('vi-VN') + ' ₫</div>';
-        html +=     '<button class="btn btn-sm fw-700" style="background:linear-gradient(135deg,#2ecc71,#27ae60);color:#fff;border-radius:50px;padding:6px 18px;" onclick="moModalChonChoTau(\'' + t.id + '\')">';
-        html +=       'Chọn Chỗ <i class="bi bi-arrow-right"></i>';
-        html +=     '</button>';
-        html +=   '</div>';
-
-        html += '</div>';
-    }
-
-    // Thêm keyframe nếu chưa có
-    if (!document.getElementById('train-keyframes')) {
-        var s = document.createElement('style');
-        s.id = 'train-keyframes';
-        s.innerText = '@keyframes fadeInUp { from { opacity:0;transform:translateY(20px); } to { opacity:1;transform:translateY(0); } }';
-        document.head.appendChild(s);
-    }
-
-    container.innerHTML = html;
-}
-
-function tenGaTau(ma) {
-    var map = { 'SGN': 'Sài Gòn', 'HAN': 'Hà Nội', 'DAD': 'Đà Nẵng', 'NHA': 'Nha Trang' };
-    return map[ma] || ma;
-}
-
-// ---------------------------------------------------------------
-// HÀM: Xem chi tiết hành trình
-// ---------------------------------------------------------------
-function xemChiTietHanhTrinh(idTau) {
-    var tau;
-    for (var i = 0; i < mockTrains.length; i++) {
-        if (mockTrains[i].id === idTau) { tau = mockTrains[i]; break; }
-    }
-    if (!tau) return;
-
-    var html = '<div class="timeline-container py-3 px-2">';
-    html += '<h6 class="text-success fw-700 mb-3"><i class="bi bi-train-front"></i> Lộ trình dự kiến tàu ' + tau.code + ' (' + tau.name + ')</h6>';
-    html += '<div class="position-relative" style="border-left: 2px dashed #2ecc71; margin-left: 12px; padding-left: 20px;">';
-    
-    // Mock dữ liệu lộ trình
-    var stops = [
-        { time: tau.time.split(' - ')[0], station: tenGaTau(tau.from), status: 'Xuất phát' },
-        { time: '...', station: 'Các ga dọc đường', status: 'Dừng 5-10 phút' },
-        { time: tau.time.split(' - ')[1], station: tenGaTau(tau.to), status: 'Đích đến' }
-    ];
-
-    for(var j=0; j<stops.length; j++) {
-        var s = stops[j];
-        var iconColor = j === 0 ? 'text-primary' : (j === stops.length-1 ? 'text-danger' : 'text-warning');
-        html += '<div class="mb-4 position-relative">';
-        html += '<i class="bi bi-circle-fill ' + iconColor + ' position-absolute" style="left: -27px; top: 0; font-size: 0.8rem; background:#1a1a2e; border-radius:50%;"></i>';
-        html += '<div class="fw-700 text-white">' + s.time + ' - ' + s.station + '</div>';
-        html += '<div class="text-white-50 small">' + s.status + '</div>';
-        html += '</div>';
-    }
-
-    html += '</div></div>';
-    
-    document.getElementById('train-itinerary-body').innerHTML = html;
-    var myModal = new bootstrap.Modal(document.getElementById('trainItineraryModal'));
-    myModal.show();
-}
-
-var gheTauDangChonList = [];
-
-// ---------------------------------------------------------------
-// HÀM: Mở modal chọn chỗ tàu
-// ---------------------------------------------------------------
-function moModalChonChoTau(idTau) {
-    tauDangChon = null;
-    gheTauDangChonList = [];
-    kieuToa = 'ghe';
-
-    for (var i = 0; i < mockTrains.length; i++) {
-        if (mockTrains[i].id === idTau) {
-            tauDangChon = mockTrains[i];
-            break;
+        .payment-logo-svg {
+            width: 40px; height: 40px;
+            border-radius: 8px;
+            flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem;
         }
-    }
-    if (!tauDangChon) return;
+    </style>
+</head>
+<body>
+    <ul class="slideshow-bg"><li></li><li></li><li></li><li></li></ul>
+    <div class="overlay" style="background:rgba(0,0,0,0.82);"></div>
 
-    var t = tauDangChon;
-    var gioParts = t.time.split(' - ');
-    document.getElementById('train-modal-info').innerHTML =
-        t.code + ' · ' + t.name + ' · ' + (gioParts[0]||'') + ' → ' + (gioParts[1]||'') + ' · ' + dinhDangNgay(ngayDiTau);
+    <div class="loader-curtain" id="loader">
+        <i class="bi bi-cart3 plane-spinner"></i>
+        <h3 class="mt-3 text-white fw-light">Đang tải giỏ hàng...</h3>
+    </div>
 
-    // Reset
-    var nutXN = document.getElementById('btn-confirm-train');
-    if (nutXN) { nutXN.disabled = true; nutXN.innerText = 'Xác Nhận Mua'; }
-    document.getElementById('train-seat-info-selected').innerText = 'Chưa chọn chỗ';
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolled" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand" href="index.html" onclick="chuyenTrang(event,'index.html')">
+                <img src="jpg/Logo.jpg" alt="Logo" style="height:36px;border-radius:6px;" onerror="this.style.display='none'">
+                VIET TRAVEL HUB
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-center" id="navMenu">
+                <ul class="navbar-nav align-items-lg-center gap-1 me-auto ms-lg-4">
+                    <li class="nav-item"><a class="nav-link" href="index.html" onclick="chuyenTrang(event,'index.html')"><i class="bi bi-house-door"></i> Trang Chủ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="flight.html" onclick="chuyenTrang(event,'flight.html')"><i class="bi bi-airplane"></i> Máy Bay</a></li>
+                    <li class="nav-item"><a class="nav-link" href="train.html" onclick="chuyenTrang(event,'train.html')"><i class="bi bi-train-front"></i> Tàu Hỏa</a></li>
+                    <li class="nav-item"><a class="nav-link" href="bus.html" onclick="chuyenTrang(event,'bus.html')"><i class="bi bi-bus-front"></i> Xe Khách</a></li>
+                </ul>
+                <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0">
+                    <a class="btn btn-warning btn-sm px-3 position-relative fw-700" href="cart.html">
+                        <i class="bi bi-cart3-fill"></i> Giỏ Hàng
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cart-count">0</span>
+                    </a>
+                    <div id="navbar-auth-area" class="d-flex gap-2"></div>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-    var myModal = new bootstrap.Modal(document.getElementById('trainSeatModal'));
-    myModal.show();
-    setTimeout(function() { doiToaTau('1', 'ghe'); }, 200);
-}
+    <!-- NỘI DUNG GIỎ HÀNG -->
+    <section class="container" style="padding-top:110px; min-height:100vh;">
 
-// ---------------------------------------------------------------
-// HÀM: Đổi toa tàu
-// ---------------------------------------------------------------
-function doiToaTau(soToa, kieu) {
-    kieuToa = kieu;
-    choTauDangChon = null;
+        <!-- Tiêu đề -->
+        <div class="d-flex align-items-center gap-3 mb-5">
+            <div style="width:52px;height:52px;background:linear-gradient(135deg,#f39c12,#e67e22);border-radius:14px;display:flex;align-items:center;justify-content:center;">
+                <i class="bi bi-cart3-fill text-white fs-3"></i>
+            </div>
+            <div>
+                <h2 class="fw-900 text-white mb-0">Giỏ Hàng Của Bạn</h2>
+                <p class="text-white-50 mb-0 small">Kiểm tra và hoàn tất đặt vé · <span id="so-ve-text">0 vé</span></p>
+            </div>
+            <div class="ms-auto d-none d-md-block">
+                <button class="btn btn-outline-danger btn-sm" onclick="xoaHetGio()">
+                    <i class="bi bi-trash3"></i> Xóa Tất Cả
+                </button>
+            </div>
+        </div>
 
-    // Reset tất cả các nút toa
-    var buttons = document.querySelectorAll('.btn-toa');
-    buttons.forEach(function(btn) {
-        btn.className = 'btn btn-outline-secondary rounded-pill px-3 fw-700 btn-toa';
-    });
+        <!-- Trạng thái giỏ trống -->
+        <div id="empty-cart-msg" style="display:none;">
+            <div class="glass-panel text-center py-5 mx-auto" style="max-width:600px; margin-top:40px;">
+                <i class="bi bi-cart-x text-white-50" style="font-size:4rem; opacity:0.35;"></i>
+                <h4 class="text-white mt-3 mb-2 fw-700">Giỏ hàng trống!</h4>
+                <p class="text-white-50 mb-4">Hãy khám phá và chọn chuyến đi yêu thích của bạn</p>
+                <div class="d-flex justify-content-center gap-2 flex-wrap">
+                    <a href="flight.html" class="btn btn-primary px-3 py-2" onclick="chuyenTrang(event,'flight.html')">
+                        <i class="bi bi-airplane-fill me-1"></i> Máy Bay
+                    </a>
+                    <a href="train.html" class="btn btn-success px-3 py-2" onclick="chuyenTrang(event,'train.html')">
+                        <i class="bi bi-train-front-fill me-1"></i> Tàu Hỏa
+                    </a>
+                    <a href="bus.html" class="btn btn-danger px-3 py-2" onclick="chuyenTrang(event,'bus.html')">
+                        <i class="bi bi-bus-front-fill me-1"></i> Xe Khách
+                    </a>
+                </div>
+            </div>
+        </div>
 
-    var activeBtn = document.getElementById('btn-toa-' + soToa);
-    var nutXN = document.getElementById('btn-confirm-train');
+        <div id="khung-dat-hang" style="display:none;">
+            <div class="row g-4">
+                <!-- CỘT TRÁI: Danh sách vé + Form hành khách -->
+                <div class="col-lg-7">
 
-    if (kieu === 'ghe') {
-        if(activeBtn) activeBtn.className = 'btn btn-success rounded-pill px-3 fw-700 btn-toa';
-        document.getElementById('train-legend-ghe').style.display = 'flex';
-        document.getElementById('train-legend-giuong').style.display = 'none';
-        veToaGheMem();
-    } else {
-        if(activeBtn) activeBtn.className = (soToa === 'vip') ? 'btn btn-warning rounded-pill px-3 fw-700 btn-toa text-dark' : 'btn btn-success rounded-pill px-3 fw-700 btn-toa';
-        document.getElementById('train-legend-ghe').style.display = 'none';
-        document.getElementById('train-legend-giuong').style.display = 'flex';
-        veCabinGiuong();
-    }
+                    <!-- Danh sách vé -->
+                    <h5 class="fw-700 text-white mb-3">
+                        <i class="bi bi-ticket-perforated-fill text-warning me-2"></i>Vé Đã Chọn
+                    </h5>
+                    <div id="gio-hang-container">
+                        <!-- cart.js render vào đây -->
+                    </div>
 
-    if (nutXN) { nutXN.disabled = true; nutXN.innerText = 'Xác Nhận Mua'; }
-    document.getElementById('train-seat-info-selected').innerText = 'Chưa chọn chỗ';
-}
+                    <!-- FORM THÔNG TIN HÀNH KHÁCH -->
+                    <div class="glass-panel mt-4">
+                        <h5 class="fw-700 text-white mb-4">
+                            <i class="bi bi-person-vcard-fill text-primary me-2"></i>Thông Tin Hành Khách
+                        </h5>
 
-// ---------------------------------------------------------------
-// HÀM: Vẽ toa ghế mềm (4 ghế/hàng: 2-2, 20 hàng)
-// ---------------------------------------------------------------
-function veToaGheMem() {
-    var container = document.getElementById('train-seat-map-container');
-    if (!container) return;
+                        <!-- Inline style cho label -->
+                        <style>
+                            .req-star { color: #e74c3c; margin-left: 2px; }
+                        </style>
 
-    var gheDaDat = ['3A','3B','7C','7D','11A','14C','16D'];
-    var html = '';
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="order-form-label">Họ Và Tên <span class="req-star">*</span></label>
+                                <input type="text" class="form-control" id="hk-hoten"
+                                       placeholder="Nguyễn Văn An" autocomplete="name">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="order-form-label">Số Điện Thoại <span class="req-star">*</span></label>
+                                <input type="tel" class="form-control" id="hk-sdt"
+                                       placeholder="0912 345 678" autocomplete="tel">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="order-form-label">Email Nhận Vé <span class="req-star">*</span></label>
+                                <input type="email" class="form-control" id="hk-email"
+                                       placeholder="email@example.com" autocomplete="email">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="order-form-label">CCCD / CMND <span class="req-star">*</span></label>
+                                <input type="text" class="form-control" id="hk-cmnd"
+                                       placeholder="001234567890" maxlength="12">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="order-form-label">Ngày Sinh</label>
+                                <input type="date" class="form-control" id="hk-ngaysinh">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="order-form-label">Giới Tính</label>
+                                <select class="form-select" id="hk-gioitinh">
+                                    <option value="nam">Nam</option>
+                                    <option value="nu">Nữ</option>
+                                    <option value="khac">Khác</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="order-form-label">Ghi Chú</label>
+                                <textarea class="form-control" id="hk-ghichu"
+                                          rows="2" placeholder="Yêu cầu đặc biệt, hỗ trợ người khuyết tật..."></textarea>
+                            </div>
+                        </div>
+                    </div>
 
-    html += '<div class="train-coach-container">';
-    html +=   '<div class="text-center fw-700 mb-3" style="color:#2c3e50;font-size:0.8rem;letter-spacing:1px;">🚃 TOA GHẾ MỀM – NGỒI</div>';
+                    <!-- PHƯƠNG THỨC THANH TOÁN -->
+                    <div class="glass-panel mt-4">
+                        <h5 class="fw-700 text-white mb-4">
+                            <i class="bi bi-credit-card-2-front-fill text-success me-2"></i>Phương Thức Thanh Toán
+                        </h5>
+                        <!-- Phương thức thanh toán -->
+                        <label class="payment-method">
+                            <input type="radio" name="thanh-toan" value="bank" checked>
+                            <!-- Logo Ngân Hàng -->
+                            <img src="jpg/Vi-VNPay.jpg" class="payment-logo" alt="VNPAY">
+                            <div style="flex:1;">
+                                <div class="fw-600 text-white" style="font-size:0.9rem;">Chuyển Khoản Ngân Hàng</div>
+                                <div class="text-white-50 small">VCB &middot; Techcombank &middot; BIDV &middot; MB Bank</div>
+                            </div>
+                        </label>
+                        <label class="payment-method">
+                            <input type="radio" name="thanh-toan" value="momo">
+                            <!-- Logo MoMo -->
+                            <img src="jpg/Vi-Momo.jpg" class="payment-logo" alt="MoMo">
+                            <div style="flex:1;">
+                                <div class="fw-600 text-white" style="font-size:0.9rem;"><span style="color:#f06;">Mo</span><span style="color:#f06;">Mo</span></div>
+                                <div class="text-white-50 small">Thanh toán nhanh qua QR • Không cần thẻ</div>
+                            </div>
+                        </label>
+                        <label class="payment-method">
+                            <input type="radio" name="thanh-toan" value="card">
+                            <!-- Logo Visa/Mastercard -->
+                            <img src="jpg/Logo.jpg" class="payment-logo" alt="Visa">
+                            <div style="flex:1;">
+                                <div class="fw-600 text-white" style="font-size:0.9rem;">Thẻ Tín Dụng / Ghi Nợ</div>
+                                <div class="text-white-50 small">Visa &middot; Mastercard &middot; JCB &middot; NAPAS</div>
+                            </div>
+                        </label>
+                        <label class="payment-method">
+                            <input type="radio" name="thanh-toan" value="zalopay">
+                            <!-- Logo ZaloPay -->
+                            <img src="jpg/Vi-ZaloPay.jpg" class="payment-logo" alt="ZaloPay">
+                            <div style="flex:1;">
+                                <div class="fw-600 text-white" style="font-size:0.9rem;"><span style="color:#00ADFF;">Zalo</span><span style="color:#fff;">Pay</span></div>
+                                <div class="text-white-50 small">Thanh toán qua ứng dụng Zalo</div>
+                            </div>
+                        </label>
+                    </div><!-- /glass-panel thanh toán -->
+                </div>
 
-    // Header cột
-    html +=   '<div class="d-flex justify-content-between mb-2 px-1">';
-    html +=     '<div class="train-seat-grp"><span class="train-aisle-label">A</span><span class="train-aisle-label">B</span></div>';
-    html +=     '<div class="train-aisle-label" style="width:36px;"></div>';
-    html +=     '<div class="train-seat-grp"><span class="train-aisle-label">C</span><span class="train-aisle-label">D</span></div>';
-    html +=   '</div>';
+                <!-- CỘT PHẢI: Tóm tắt đơn hàng -->
+                <div class="col-lg-5">
+                    <div class="summary-card">
+                        <h5 class="fw-700 text-white mb-4">
+                            <i class="bi bi-receipt text-warning me-2"></i>Tóm Tắt Đơn Hàng
+                        </h5>
 
-    for (var hang = 1; hang <= 20; hang++) {
-        var gheTrong = [hang + 'A', hang + 'B', hang + 'C', hang + 'D'];
+                        <!-- Bảng tóm tắt -->
+                        <table class="table table-dark table-borderless" id="bang-tom-tat">
+                            <tbody id="tom-tat-body">
+                                <!-- cart.js render -->
+                            </tbody>
+                        </table>
 
-        html += '<div class="train-row">';
-        html +=   '<div class="train-seat-grp">';
+                        <hr style="border-color:rgba(255,255,255,0.1);">
 
-        // A, B
-        for (var ci = 0; ci < 2; ci++) {
-            var ky = ['A','B'][ci];
-            var ma = hang + ky;
-            var laDaDat = gheDaDat.indexOf(ma) > -1;
-            var cls = 'train-seat ' + (ci === 0 ? 'window' : 'middle') + (laDaDat ? ' booked' : '');
-            html += '<div class="' + cls + '" onclick="chonChoTau(this,\'' + ma + '\')">' + ma + '</div>';
-        }
+                        <!-- Phí dịch vụ -->
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-white-50 small">Giá vé</span>
+                            <span class="text-white fw-700" id="tong-tien-gioHang" style="white-space:nowrap;">0 ₫</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-white-50 small">Phí dịch vụ</span>
+                            <span class="text-success small fw-600">Miễn phí</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-white-50 small">Thuế VAT</span>
+                            <span class="text-success small fw-600">Đã bao gồm</span>
+                        </div>
 
-        html +=   '</div>';
-        html +=   '<div class="train-divider">Lối đi</div>';
-        html +=   '<div class="train-seat-grp">';
+                        <hr style="border-color:rgba(255,255,255,0.1);">
 
-        // C, D
-        for (var ci2 = 0; ci2 < 2; ci2++) {
-            var ky2 = ['C','D'][ci2];
-            var ma2 = hang + ky2;
-            var laDaDat2 = gheDaDat.indexOf(ma2) > -1;
-            var cls2 = 'train-seat ' + (ci2 === 1 ? 'window' : 'middle') + (laDaDat2 ? ' booked' : '');
-            html += '<div class="' + cls2 + '" onclick="chonChoTau(this,\'' + ma2 + '\')">' + ma2 + '</div>';
-        }
-        html +=   '</div>';
-        html += '</div>';
+                        <div class="d-flex justify-content-between mb-4">
+                            <span class="fw-700 text-white">Tổng Thanh Toán</span>
+                            <span class="fw-900 text-warning fs-5" id="tong-thanh-toan" style="white-space:nowrap;">0 ₫</span>
+                        </div>
 
-        if (hang % 5 === 0 && hang < 20) {
-            html += '<div class="train-divider">— Khoang ' + Math.floor(hang/5) + ' —</div>';
-        }
-    }
+                        <!-- Nút đặt hàng -->
+                        <button class="btn btn-custom w-100 py-3 fw-800 fs-5 mb-3" onclick="datHang()">
+                            <i class="bi bi-check2-circle me-2"></i>Hoàn Tất Đặt Vé
+                        </button>
 
-    html += '</div>';
-    container.innerHTML = html;
-}
+                        <p class="text-white-50 text-center" style="font-size:0.78rem;">
+                            <i class="bi bi-shield-check text-success me-1"></i>
+                            Thanh toán được bảo mật bởi SSL 256-bit
+                        </p>
 
-// ---------------------------------------------------------------
-// HÀM: Vẽ cabin giường nằm (5 cabin, mỗi cabin 6 giường: 3 trên + 3 dưới)
-// ---------------------------------------------------------------
-function veCabinGiuong() {
-    var container = document.getElementById('train-seat-map-container');
-    if (!container) return;
+                        <!-- Ưu đãi -->
+                        <div class="p-3 rounded mt-2" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);">
+                            <div class="fw-600 text-success small mb-1"><i class="bi bi-gift-fill me-1"></i>Ưu Đãi Hiện Tại</div>
+                            <div class="text-white-50 small">Miễn phí đặt vé · Không phí ẩn · Hoàn tiền 100% nếu hủy đúng hạn</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    var giuongDaDat = ['1-A1U', '2-B2L', '3-A3U', '4-B1U'];
-    var html = '';
-    var isVip = (kieuToa === 'vip');
+    <!-- MODAL ĐẶT VÉ THÀNH CÔNG -->
+    <div class="modal fade" id="modal-thanh-cong" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-body p-4" id="modal-success-body">
+                    <!-- cart.js fill vào -->
+                </div>
+                <div class="modal-footer justify-content-center gap-3" style="border-top:1px solid rgba(255,255,255,0.1);">
+                    <button class="btn btn-outline-light" data-bs-dismiss="modal">Đóng</button>
+                    <button class="btn btn-custom px-4 fw-700" onclick="chuyenTrang(event,'index.html')">
+                        <i class="bi bi-house-door"></i> Về Trang Chủ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    html += '<div class="cabin-container">';
-    html +=   '<div class="text-center fw-700 mb-2" style="color:#2c3e50;font-size:0.8rem;letter-spacing:1px;">🛏 TOA GIƯỜNG NẰM ' + (isVip ? 'VIP (CABIN 2 GIƯỜNG)' : 'CABIN 6 CHỖ') + '</div>';
+    <footer style="padding:30px 0;border-top:1px solid rgba(255,255,255,0.08);margin-top:60px;">
+        <div class="container text-center">
+            <p class="text-white-50 small mb-0">© 2024 Viet Travel Hub · Giỏ hàng an toàn – Thanh toán bảo mật</p>
+        </div>
+    </footer>
 
-    var soCabin = isVip ? 7 : 5;
-    var soTang = isVip ? 1 : 3;
-
-    for (var cabin = 1; cabin <= soCabin; cabin++) {
-        html += '<div class="cabin-box" ' + (isVip ? 'style="border: 2px solid #f39c12; background: rgba(243,156,18,0.05);"' : '') + '>';
-        html +=   '<div class="cabin-header" ' + (isVip ? 'style="background: #f39c12; color: #fff;"' : '') + '>Cabin ' + cabin + ' <span style="opacity:0.8;font-size:0.72rem;font-weight:400;">(' + (soTang*2) + ' giường)</span></div>';
-        html +=   '<div class="cabin-beds">';
-
-        // Cột A (trái)
-        html +=     '<div class="cabin-col">';
-        for (var tang = 1; tang <= soTang; tang++) {
-            var maG = cabin + '-A' + tang + (tang % 2 === 0 ? 'U' : 'L');
-            var daDat = giuongDaDat.indexOf(maG) > -1;
-            var maCheck = cabin + '-A' + (tang === 1 ? '1L' : (tang === 2 ? '2U' : '3U'));
-            var isSelected = gheTauDangChonList.some(function(g){ return g.ma === maCheck; });
-            var clsG = 'train-bed ' + (tang % 2 !== 0 ? 'lower' : 'upper') + (daDat ? ' booked' : '') + (isSelected ? ' selected' : '');
-            var tenTang = tang === 1 ? 'Dưới' : (tang === 2 ? 'Giữa' : 'Trên');
-            html +=   '<div class="' + clsG + '" onclick="chonGiuongTau(this,\'' + cabin + '\',\'A\',\'' + tenTang + '\')">';
-            html +=     '<span>A' + cabin + ' - ' + tenTang + '</span>';
-            html +=   '</div>';
-        }
-        html +=     '</div>';
-
-        // Lối đi giữa 2 giường
-        html +=     '<div style="width:30px;"></div>';
-
-        // Cột B (phải)
-        html +=     '<div class="cabin-col">';
-        for (var tang2 = 1; tang2 <= soTang; tang2++) {
-            var maG2 = cabin + '-B' + tang2 + (tang2 % 2 !== 0 ? 'U' : 'L');
-            var daDat2 = giuongDaDat.indexOf(maG2) > -1;
-            var maCheck2 = cabin + '-B' + (tang2 === 1 ? '1L' : (tang2 === 2 ? '2U' : '3U'));
-            var isSelected2 = gheTauDangChonList.some(function(g){ return g.ma === maCheck2; });
-            var clsG2 = 'train-bed ' + (tang2 % 2 !== 0 ? 'lower' : 'upper') + (daDat2 ? ' booked' : '') + (isSelected2 ? ' selected' : '');
-            var tenTang2 = tang2 === 1 ? 'Dưới' : (tang2 === 2 ? 'Giữa' : 'Trên');
-            html +=   '<div class="' + clsG2 + '" onclick="chonGiuongTau(this,\'' + cabin + '\',\'B\',\'' + tenTang2 + '\')">';
-            html +=     '<span>B' + cabin + ' - ' + tenTang2 + '</span>';
-            html +=   '</div>';
-        }
-        html +=     '</div>';
-
-        html +=   '</div>';
-        html += '</div>';
-    }
-
-    html += '</div>';
-    container.innerHTML = html;
-}
-
-function chonChoTau(phanTu, maGhe) {
-    if (phanTu.classList.contains('booked')) {
-        alert('Chỗ ' + maGhe + ' đã được đặt!');
-        return;
-    }
-
-    var slNguoiLon = parseInt(sessionStorage.getItem('trainAdults')) || 1;
-    var slTreEm = parseInt(sessionStorage.getItem('trainChildren')) || 0;
-    var tongHanhKhach = slNguoiLon + slTreEm;
-
-    var index = gheTauDangChonList.findIndex(function(g) { return g.ma === maGhe; });
-    var gia = tauDangChon.price;
-
-    if (index > -1) {
-        gheTauDangChonList.splice(index, 1);
-        phanTu.classList.remove('selected');
-    } else {
-        if (gheTauDangChonList.length >= tongHanhKhach) {
-            alert('Bạn chỉ được chọn tối đa ' + tongHanhKhach + ' chỗ (Tương ứng với số lượng hành khách đã nhập)!');
-            return;
-        }
-        gheTauDangChonList.push({ loai: 'ghe', ma: maGhe, gia: gia });
-        phanTu.classList.add('selected');
-    }
-
-    capNhatThongTinChonCho();
-}
-
-function chonGiuongTau(phanTu, cabin, cot, tang) {
-    if (phanTu.classList.contains('booked')) {
-        alert('Giường này đã được đặt!');
-        return;
-    }
-
-    var slNguoiLon = parseInt(sessionStorage.getItem('trainAdults')) || 1;
-    var slTreEm = parseInt(sessionStorage.getItem('trainChildren')) || 0;
-    var tongHanhKhach = slNguoiLon + slTreEm;
-
-    var maGiuong = cabin + '-' + cot + (tang === 'Dưới' ? '1L' : (tang === 'Giữa' ? '2U' : '3U'));
-    var index = gheTauDangChonList.findIndex(function(g) { return g.ma === maGiuong; });
-    var giaGiuong = tauDangChon.price + 150000;
-    if (tang === 'Trên') giaGiuong -= 50000;
-
-    if (index > -1) {
-        gheTauDangChonList.splice(index, 1);
-        phanTu.classList.remove('selected');
-    } else {
-        if (gheTauDangChonList.length >= tongHanhKhach) {
-            alert('Bạn chỉ được chọn tối đa ' + tongHanhKhach + ' giường (Tương ứng với số lượng hành khách đã nhập)!');
-            return;
-        }
-        gheTauDangChonList.push({ loai: 'giuong', ma: maGiuong, gia: giaGiuong });
-        phanTu.classList.add('selected');
-    }
-
-    capNhatThongTinChonCho();
-}
-
-function capNhatThongTinChonCho() {
-    var nutXN = document.getElementById('btn-confirm-train');
-    var slNguoiLon = parseInt(sessionStorage.getItem('trainAdults')) || 1;
-    var slTreEm = parseInt(sessionStorage.getItem('trainChildren')) || 0;
-    var tongHanhKhach = slNguoiLon + slTreEm;
-
-    if (gheTauDangChonList.length === 0) {
-        document.getElementById('train-seat-info-selected').innerText = 'Chưa chọn chỗ';
-        if (nutXN) { nutXN.disabled = true; nutXN.innerHTML = 'Xác Nhận Mua'; }
-        return;
-    }
-
-    var tongTien = 0;
-    var gheText = '';
-    for (var i = 0; i < gheTauDangChonList.length; i++) {
-        var ghe = gheTauDangChonList[i];
-        tongTien += ghe.gia;
-        gheText += '<span class="badge bg-secondary me-1">' + ghe.ma + '</span>';
-    }
-
-    document.getElementById('train-seat-info-selected').innerHTML =
-        'Đã chọn: ' + gheText +
-        ' <span class="text-warning ms-2 fw-700">Tổng: ' + tongTien.toLocaleString('vi-VN') + ' ₫</span>';
-
-    if (nutXN) { 
-        nutXN.disabled = (gheTauDangChonList.length < tongHanhKhach);
-        nutXN.innerHTML = '<i class="bi bi-check2-circle"></i> Xác Nhận Mua (' + gheTauDangChonList.length + '/' + tongHanhKhach + ')'; 
-    }
-}
-
-// ---------------------------------------------------------------
-// HÀM: Xác nhận đặt tàu và thêm vào giỏ hàng
-// ---------------------------------------------------------------
-function xacNhanDatTau() {
-    if (gheTauDangChonList.length === 0 || !tauDangChon) return;
-
-    var t = tauDangChon;
-    var isKhuHoi = sessionStorage.getItem('trainIsRoundTrip') === 'true';
-    var textChieu = isKhuHoi ? ' (Khứ Hồi)' : ' (Một Chiều)';
-    
-    for (var i = 0; i < gheTauDangChonList.length; i++) {
-        var choTau = gheTauDangChonList[i];
-        var loaiChoText = choTau.loai === 'ghe' ? 'Ghế Mềm' : 'Giường Nằm Cabin';
-        var chiTiet = choTau.ma + ' · ' + loaiChoText + textChieu +
-                      ' · Tàu ' + t.code + ' · ' + dinhDangNgay(ngayDiTau);
-
-        if (typeof addToCart === 'function') {
-            addToCart(
-                'Vé Tàu Hỏa – ' + t.code,
-                t.from + ' → ' + t.to,
-                choTau.gia,
-                chiTiet,
-                'train',
-                ''
-            );
-        }
-    }
-
-    var modal = bootstrap.Modal.getInstance(document.getElementById('trainSeatModal'));
-    if (modal) modal.hide();
-}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="js/data.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/cart.js"></script>
+</body>
+</html>

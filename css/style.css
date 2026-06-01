@@ -1,0 +1,874 @@
+/* ================================================================
+   VIET TRAVEL HUB - css/style.css
+   CSS External chính cho toàn bộ website
+   ================================================================ */
+
+/* ---- Import font Google ---- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+/* ---- CSS Variables (Biến CSS) ---- */
+:root {
+    --blue: #0d6efd;
+    --orange: #f39c12;
+    --green: #2ecc71;
+    --red: #e74c3c;
+    --dark: #0a0a1a;
+    --glass: rgba(255, 255, 255, 0.06);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --text-muted: rgba(255, 255, 255, 0.5);
+    --nav-h: 72px;
+    --radius: 16px;
+    --shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ================================================================
+   RESET & CƠ BẢN
+   ================================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--dark);
+    color: #fff;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Font weight utilities */
+.fw-600 { font-weight: 600 !important; }
+.fw-700 { font-weight: 700 !important; }
+.fw-800 { font-weight: 800 !important; }
+.fw-900 { font-weight: 900 !important; }
+
+/* ================================================================
+   NỀN SLIDESHOW (Ảnh local từ thư mục jpg/)
+   ================================================================ */
+.slideshow-bg {
+    list-style: none;
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    margin: 0;
+    padding: 0;
+}
+.slideshow-bg li {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0;
+    animation: slideshowFade 20s infinite;
+}
+.slideshow-bg li:nth-child(1) {
+    background-image: url('../jpg/Background-1.jpg');
+    animation-delay: 0s;
+}
+.slideshow-bg li:nth-child(2) {
+    background-image: url('../jpg/Background-2.jpg');
+    animation-delay: 5s;
+}
+.slideshow-bg li:nth-child(3) {
+    background-image: url('../jpg/Background-3.jpg');
+    animation-delay: 10s;
+}
+.slideshow-bg li:nth-child(4) {
+    background-image: url('../jpg/Background-4.jpg');
+    animation-delay: 15s;
+}
+@keyframes slideshowFade {
+    0%   { opacity: 0; transform: scale(1.05); }
+    8%   { opacity: 1; transform: scale(1); }
+    25%  { opacity: 1; transform: scale(1); }
+    33%  { opacity: 0; transform: scale(0.98); }
+    100% { opacity: 0; }
+}
+
+/* ---- Overlay tối ---- */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.72);
+    z-index: -1;
+}
+
+/* ================================================================
+   LOADER / CURTAIN
+   ================================================================ */
+.loader-curtain {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #050510, #0a0a2e);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+.loader-curtain.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+.plane-spinner {
+    font-size: 3rem;
+    color: var(--orange);
+    animation: spinFly 1.2s linear infinite;
+}
+@keyframes spinFly {
+    0%   { transform: rotate(0deg) scale(1); }
+    50%  { transform: rotate(180deg) scale(1.2); }
+    100% { transform: rotate(360deg) scale(1); }
+}
+
+/* ================================================================
+   NAVBAR
+   ================================================================ */
+#mainNav {
+    background: transparent;
+    backdrop-filter: blur(0px);
+    border-bottom: 1px solid transparent;
+    transition: var(--transition);
+    height: var(--nav-h);
+}
+#mainNav.scrolled {
+    background: rgba(10, 10, 26, 0.92) !important;
+    backdrop-filter: blur(20px);
+    border-bottom-color: var(--glass-border);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+.navbar-brand {
+    font-weight: 900;
+    font-size: 1.2rem;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.nav-link {
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 8px 14px !important;
+    border-radius: 8px;
+    transition: var(--transition);
+    position: relative;
+}
+.nav-link:hover, .nav-link.active {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: #fff !important;
+}
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 16px;
+    height: 2px;
+    background: var(--orange);
+    border-radius: 1px;
+}
+
+/* ================================================================
+   HERO SECTION
+   ================================================================ */
+.hero-section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: calc(var(--nav-h) + 20px) 0 60px;
+}
+.hero-title {
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 900;
+    line-height: 1.15;
+}
+.hero-title .highlight {
+    background: linear-gradient(135deg, var(--orange), #e74c3c);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.hero-badge {
+    background: rgba(243, 156, 18, 0.15);
+    border: 1px solid rgba(243, 156, 18, 0.4);
+    color: var(--orange);
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    gap: 8px;
+    letter-spacing: 0.3px;
+}
+
+/* ================================================================
+   SEARCH FORM (Trang chủ - Hero)
+   ================================================================ */
+.search-tab-bar {
+    display: flex;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 14px 14px 0 0;
+    padding: 8px;
+    gap: 6px;
+    border: 1px solid var(--glass-border);
+    border-bottom: none;
+}
+.search-tab-btn {
+    flex: 1;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    background: transparent;
+    color: rgba(255,255,255,0.5);
+    transition: var(--transition);
+}
+.search-tab-btn:hover { background: rgba(255,255,255,0.07); color: #fff; }
+.search-tab-btn.active { background: var(--blue); color: #fff; }
+
+.search-form-panel {
+    background: rgba(10, 10, 30, 0.85);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 0 0 var(--radius) var(--radius);
+    padding: 28px;
+}
+.search-panel { display: none; }
+.search-panel.active { display: block; }
+
+/* ================================================================
+   GLASS PANEL (Dùng chung nhiều trang)
+   ================================================================ */
+.glass-panel {
+    background: var(--glass);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    padding: 24px;
+    transition: var(--transition);
+}
+.glass-panel:hover { border-color: rgba(255, 255, 255, 0.2); }
+
+/* ================================================================
+   FORM CONTROLS (Bootstrap override cho nền tối)
+   ================================================================ */
+.form-control, .form-select {
+    background: rgba(255, 255, 255, 0.07) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    color: #fff !important;
+    border-radius: 10px !important;
+    padding: 10px 14px !important;
+    font-size: 0.9rem;
+    transition: var(--transition);
+}
+.form-control:focus, .form-select:focus {
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.3) !important;
+    border-color: var(--blue) !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    outline: none;
+}
+.form-control::placeholder { color: rgba(255,255,255,0.3) !important; }
+.form-select option { background: #1a1a2e; color: #fff; }
+.form-label {
+    color: rgba(255,255,255,0.7);
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+textarea.form-control { resize: vertical; min-height: 80px; }
+
+/* ================================================================
+   BUTTONS
+   ================================================================ */
+.btn-custom {
+    background: linear-gradient(135deg, var(--blue), #00c6ff);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    font-weight: 700;
+    padding: 10px 24px;
+    transition: var(--transition);
+    box-shadow: 0 4px 20px rgba(13, 110, 253, 0.4);
+}
+.btn-custom:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(13, 110, 253, 0.6);
+    color: #fff;
+}
+.btn-custom:active { transform: translateY(0); }
+
+.btn-accent {
+    background: linear-gradient(135deg, var(--orange), #e67e22);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    transition: var(--transition);
+}
+.btn-accent:hover { transform: translateY(-1px); color: #fff; opacity: 0.9; }
+
+/* ================================================================
+   TICKET CARD (Dùng ở flight.html, train.html, bus.html)
+   ================================================================ */
+.ticket-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: var(--transition);
+    flex-wrap: nowrap; /* Không xuống dòng trên PC */
+    overflow: hidden;
+}
+.ticket-card:hover {
+    border-color: rgba(13, 110, 253, 0.4);
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+.ticket-card.train:hover { border-color: rgba(46, 204, 113, 0.4); }
+.ticket-card.bus:hover   { border-color: rgba(231, 76, 60, 0.4); }
+
+/* Logo hãng */
+.airline-logo-box {
+    width: 72px;
+    height: 52px;
+    border-radius: 10px;
+    overflow: hidden;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.08);
+}
+.airline-logo-box img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
+
+/* Route */
+.flight-route { display: flex; align-items: center; flex-shrink: 0; }
+.flight-city-code { font-size: 1.5rem; font-weight: 900; white-space: nowrap; }
+.flight-arrow { text-align: center; }
+.flight-arrow-line {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    border-radius: 1px;
+    min-width: 50px;
+}
+
+/* ================================================================
+   SƠ ĐỒ MÁY BAY 2D
+   ================================================================ */
+.aircraft-nose {
+    text-align: center;
+    padding: 10px;
+    background: linear-gradient(180deg, #3498db, #1a5276);
+    border-radius: 50% 50% 0 0 / 30% 30% 0 0;
+    color: #fff;
+    font-size: 1.5rem;
+    margin-bottom: 6px;
+}
+.aircraft-wing {
+    height: 18px;
+    background: linear-gradient(90deg, #2980b9, #aed6f1, #2980b9);
+    margin: 6px -10px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+.plane-class-label {
+    text-align: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.5);
+    padding: 4px;
+    border: 1px dashed rgba(255,255,255,0.15);
+    border-radius: 6px;
+    margin: 6px 0;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+.seat-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 3px;
+    gap: 4px;
+}
+.row-num {
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.3);
+    width: 20px;
+    text-align: center;
+}
+.seat-grp { display: flex; gap: 3px; }
+.seat-aisle { width: 22px; }
+.plane-seat {
+    width: 30px;
+    height: 26px;
+    border-radius: 5px 5px 3px 3px;
+    font-size: 0.58rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: var(--transition);
+    line-height: 1;
+}
+.plane-seat.economy {
+    background: #d5f5e3;
+    border-color: #82e0aa;
+    color: #1a5e38;
+}
+.plane-seat.business {
+    background: #fdebd0;
+    border-color: #f0b27a;
+    color: #784212;
+}
+.plane-seat.booked {
+    background: repeating-linear-gradient(45deg, #eee, #eee 5px, #ddd 5px, #ddd 10px);
+    border-color: #bbb;
+    color: #aaa;
+    cursor: not-allowed;
+}
+.plane-seat:not(.booked):hover {
+    transform: scale(1.15);
+    box-shadow: 0 0 10px rgba(13, 110, 253, 0.5);
+}
+.plane-seat.selected {
+    background: linear-gradient(135deg, var(--blue), #00c6ff) !important;
+    border-color: var(--blue) !important;
+    color: #fff !important;
+    box-shadow: 0 0 14px rgba(13, 110, 253, 0.7);
+}
+
+/* ================================================================
+   SƠ ĐỒ TÀU HỎA
+   ================================================================ */
+.train-coach-container {
+    background: #fff;
+    border: 3px solid #2c3e50;
+    border-radius: 12px;
+    padding: 16px;
+    max-width: 380px;
+    margin: 0 auto;
+}
+.train-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 4px;
+    gap: 4px;
+}
+.train-seat-grp { display: flex; gap: 3px; }
+.train-seat {
+    width: 40px;
+    height: 36px;
+    border-radius: 6px 6px 4px 4px;
+    font-size: 0.6rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+    border: 2px solid;
+    color: #333;
+}
+.train-seat.window  { background: #d5f5e3; border-color: #82e0aa; }
+.train-seat.middle  { background: #fef9e7; border-color: #f9e79f; }
+.train-seat.aisle   { background: #d6eaf8; border-color: #a9cce3; }
+.train-seat.booked  { background: repeating-linear-gradient(45deg,#eee,#eee 4px,#ddd 4px,#ddd 8px); border-color:#bbb; cursor:not-allowed; }
+.train-seat.selected { background: linear-gradient(135deg,var(--blue),#00c6ff)!important; border-color:var(--blue)!important; color:#fff!important; }
+.train-seat:not(.booked):hover { transform: scale(1.1); }
+.train-divider {
+    font-size: 0.6rem;
+    color: #999;
+    text-align: center;
+    width: 36px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+.train-aisle-label {
+    width: 40px;
+    text-align: center;
+    font-size: 0.65rem;
+    color: #999;
+    font-weight: 700;
+}
+
+/* Cabin giường nằm */
+.cabin-container { max-width: 480px; margin: 0 auto; }
+.cabin-box {
+    background: #f5f5f5;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    overflow: hidden;
+}
+.cabin-header {
+    background: #2c3e50;
+    color: #fff;
+    padding: 8px 14px;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+.cabin-beds { display: flex; padding: 10px; gap: 8px; justify-content: center; }
+.cabin-col { display: flex; flex-direction: column; gap: 6px; }
+.cabin-aisle-div {
+    display: flex;
+    align-items: center;
+    writing-mode: vertical-rl;
+    font-size: 0.6rem;
+    color: #999;
+    font-weight: 700;
+    padding: 0 4px;
+}
+.train-bed {
+    width: 100px;
+    height: 34px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+    border: 2px solid;
+    color: #333;
+}
+.train-bed.lower  { background: #eafaf1; border-color: #82e0aa; }
+.train-bed.upper  { background: #fef9e7; border-color: #f9e79f; }
+.train-bed.booked { background: #fce4e4; border-color: #f1948a; cursor: not-allowed; color: #aaa; }
+.train-bed.selected { background: linear-gradient(135deg,var(--blue),#00c6ff)!important; border-color:var(--blue)!important; color:#fff!important; }
+.train-bed:not(.booked):hover { transform: scale(1.04); }
+
+/* ================================================================
+   SƠ ĐỒ XE KHÁCH
+   ================================================================ */
+.bus-vehicle {
+    background: #f5f5f5;
+    border: 3px solid #2c3e50;
+    border-radius: 12px;
+    padding: 14px;
+    max-width: 320px;
+    margin: 0 auto;
+}
+.bus-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+    justify-content: space-between;
+}
+.bus-bed {
+    width: 120px;
+    height: 38px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.68rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: 2px solid;
+    background: linear-gradient(135deg, #a8e6cf, #7dcd9f);
+    border-color: #55b47f;
+    color: #1a5e38;
+    transition: var(--transition);
+}
+.bus-bed.booked { background: linear-gradient(135deg,#bdc3c7,#95a5a6); border-color:#7f8c8d; color:#555; cursor: not-allowed; }
+.bus-bed.selected { background: linear-gradient(135deg,var(--blue),#00c6ff)!important; border-color:var(--blue)!important; color:#fff!important; }
+.bus-bed:not(.booked):hover { transform: scale(1.04); box-shadow: 0 4px 12px rgba(13,110,253,0.3); }
+.bus-aisle {
+    width: 28px;
+    text-align: center;
+    color: #bbb;
+    font-size: 1rem;
+}
+
+/* ================================================================
+   LEGEND GHẾ (chú thích)
+   ================================================================ */
+.seat-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    padding: 8px 16px;
+    background: #fff;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #333;
+}
+.legend-item { display: flex; align-items: center; gap: 6px; }
+.legend-dot {
+    width: 22px;
+    height: 18px;
+    border-radius: 4px;
+    border: 2px solid;
+}
+
+/* ================================================================
+   ĐIỂM ĐẾN - CARD & CAROUSEL
+   ================================================================ */
+.dest-card {
+    position: relative;
+    border-radius: var(--radius);
+    overflow: hidden;
+    cursor: pointer;
+    aspect-ratio: 1;
+    transition: var(--transition);
+}
+.dest-card:hover { transform: translateY(-6px) scale(1.02); box-shadow: var(--shadow); }
+.dest-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+.dest-card:hover img { transform: scale(1.08); }
+.dest-card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, rgba(0,0,0,0.75) 0%, transparent 60%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 16px;
+}
+.dest-card-overlay h5 { font-weight: 800; margin: 0; color: #fff; font-size: 1rem; }
+.dest-card-overlay small { color: rgba(255,255,255,0.7); }
+.dest-price-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--orange);
+    color: #fff;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 50px;
+}
+
+/* ================================================================
+   TABLE (Bảng tuyến đường, admin, ...)
+   ================================================================ */
+.bang-tuyen-duong {
+    background: transparent;
+    color: rgba(255,255,255,0.8);
+    font-size: 0.9rem;
+}
+.bang-tuyen-duong thead th {
+    background: rgba(255,255,255,0.07);
+    color: rgba(255,255,255,0.6);
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: none;
+    padding: 14px 16px;
+}
+.bang-tuyen-duong tbody tr { border-bottom: 1px solid rgba(255,255,255,0.06); }
+.bang-tuyen-duong tbody tr:last-child { border-bottom: none; }
+.bang-tuyen-duong tbody tr:hover { background: rgba(255,255,255,0.04); }
+.bang-tuyen-duong td { padding: 14px 16px; border: none; vertical-align: middle; }
+
+/* ================================================================
+   SECTION HEADINGS (Trang chủ)
+   ================================================================ */
+.section-eyebrow {
+    display: inline-block;
+    color: var(--orange);
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+.section-title {
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 12px;
+}
+.section-sub { color: var(--text-muted); font-size: 1rem; }
+
+/* ================================================================
+   TESTIMONIAL CARDS
+   ================================================================ */
+.testimonial-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    padding: 24px;
+    height: 100%;
+    transition: var(--transition);
+}
+.testimonial-card:hover { border-color: rgba(255,255,255,0.25); transform: translateY(-4px); }
+.testimonial-avatar {
+    width: 46px; height: 46px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; font-weight: 900; color: #fff;
+    flex-shrink: 0;
+}
+
+/* ================================================================
+   CART ITEM CARD
+   ================================================================ */
+.cart-item-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 14px;
+    transition: var(--transition);
+}
+.cart-item-card:hover {
+    border-color: rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.07);
+}
+.cart-ticket-type-icon {
+    width: 52px; height: 52px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+}
+
+/* ================================================================
+   MODAL (Override Bootstrap)
+   ================================================================ */
+.modal-content {
+    background: #13132a;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    overflow: hidden;
+}
+.modal-header { border-bottom: 1px solid rgba(255,255,255,0.1); }
+.modal-footer { border-top: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); }
+
+/* ================================================================
+   FOOTER
+   ================================================================ */
+footer {
+    background: rgba(0,0,0,0.5);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 60px 0 30px;
+    margin-top: 80px;
+}
+
+/* ================================================================
+   SCROLL TO TOP BUTTON
+   ================================================================ */
+#scrollTopBtn {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    width: 46px; height: 46px;
+    background: linear-gradient(135deg, var(--blue), #00c6ff);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: none;
+    align-items: center; justify-content: center;
+    box-shadow: 0 4px 20px rgba(13,110,253,0.5);
+    transition: var(--transition);
+    z-index: 998;
+}
+#scrollTopBtn:hover { transform: translateY(-4px); }
+#scrollTopBtn.show { display: flex; }
+
+/* ================================================================
+   ADMIN DASHBOARD - BIỂU ĐỒ & CARD
+   ================================================================ */
+.admin-chart-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius);
+    padding: 20px;
+}
+.admin-chart-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+}
+
+/* Mini bar chart */
+.mini-bar-chart { display: flex; align-items: flex-end; gap: 6px; height: 80px; }
+.mini-bar {
+    flex: 1;
+    border-radius: 4px 4px 0 0;
+    min-width: 16px;
+    transition: var(--transition);
+    cursor: pointer;
+    position: relative;
+}
+.mini-bar:hover { opacity: 0.8; }
+.mini-bar-label {
+    font-size: 0.6rem;
+    color: rgba(255,255,255,0.4);
+    text-align: center;
+    margin-top: 4px;
+}
+
+/* Donut chart (canvas) */
+.donut-wrap {
+    position: relative;
+    width: 140px; height: 140px;
+    margin: 0 auto;
+}
+.donut-wrap canvas { border-radius: 50%; }
+
+/* ================================================================
+   PROGRESS BARS (Thống kê tuyến đường)
+   ================================================================ */
+.progress-custom {
+    height: 8px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+.progress-custom .bar {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1s ease;
+}
+
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
+@media (max-width: 768px) {
+    .ticket-card { flex-direction: column; align-items: flex-start; }
+    .flight-route { width: 100%; justify-content: space-between; }
+    .hero-section { padding-top: calc(var(--nav-h) + 40px); }
+    .glass-panel { padding: 16px; }
+    .bang-tuyen-duong { font-size: 0.8rem; }
+    .plane-seat { width: 24px; height: 22px; font-size: 0.5rem; }
+    .train-seat { width: 34px; height: 30px; font-size: 0.55rem; }
+    .bus-bed { width: 95px; font-size: 0.6rem; }
+}
+
+@media (max-width: 576px) {
+    .section-title { font-size: 1.5rem; }
+    .hero-title { font-size: 2rem; }
+    .search-form-panel { padding: 16px; }
+    footer { padding: 40px 0 20px; }
+}

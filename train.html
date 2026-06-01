@@ -3,757 +3,275 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Viet Travel Hub - Đặt Vé Du Lịch Toàn Quốc</title>
-    <meta name="description" content="Đặt vé máy bay, tàu hỏa, xe khách toàn quốc nhanh chóng. Giá tốt nhất, giao vé tận nhà.">
-
+    <title>Đặt Vé Tàu Hỏa - Viet Travel Hub</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-
-    <!-- Internal CSS chỉ dùng cho trang chủ -->
-    <style>
-        /* Hiệu ứng parallax cho hero */
-        .glow-line {
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #f39c12, transparent);
-            margin: 40px 0;
-            animation: glowPulse 3s ease-in-out infinite;
-        }
-        @keyframes glowPulse {
-            0%, 100% { opacity: 0.4; }
-            50% { opacity: 1; }
-        }
-
-        /* Counter animation */
-        .counter-section { padding: 60px 0; }
-
-        /* Why us icons */
-        .why-item {
-            display: flex; gap: 20px; align-items: flex-start;
-            padding: 20px; border-radius: 14px;
-            transition: all 0.3s;
-        }
-        .why-item:hover { background: rgba(255,255,255,0.04); transform: translateX(6px); }
-
-        /* Promo banner */
-        .promo-banner {
-            background: linear-gradient(135deg, #0d6efd 0%, #8e44ad 100%);
-            border-radius: 20px;
-            padding: 40px;
-            position: relative; overflow: hidden;
-        }
-        .promo-banner::before {
-            content: '';
-            position: absolute; inset: 0;
-            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='20'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-        }
-        .blink-safe { animation: blink-safe 1.5s infinite; }
-        @keyframes blink-safe {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.15); }
-        }
-        #dest-carousel .carousel-item { height: 100%; }
-    </style>
 </head>
 <body>
-
-    <!-- ======================== NỀN ======================== -->
-    <ul class="slideshow-bg">
-        <li></li><li></li><li></li><li></li>
-    </ul>
+    <ul class="slideshow-bg"><li></li><li></li><li></li><li></li></ul>
     <div class="overlay"></div>
-
-    <!-- ======================== LOADING ======================== -->
     <div class="loader-curtain" id="loader">
-        <i class="bi bi-airplane-fill plane-spinner"></i>
-        <h3 class="mt-3 text-white fw-light">Đang bay đến Viet Travel Hub...</h3>
+        <i class="bi bi-train-front-fill plane-spinner" style="color:#2ecc71;"></i>
+        <h3 class="mt-3 text-white fw-light">Đang tải tuyến tàu...</h3>
     </div>
 
-    <!-- ======================== NAVBAR ======================== -->
+    <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
         <div class="container">
             <a class="navbar-brand" href="index.html" onclick="chuyenTrang(event,'index.html')">
-                <img src="jpg/Logo.jpg" alt="Logo" id="navbar-logo-img"
-                     style="height:38px; border-radius:6px;" onerror="this.style.display='none'">
+                <img src="jpg/Logo.jpg" alt="Logo" style="height:36px;border-radius:6px;" onerror="this.style.display='none'">
                 VIET TRAVEL HUB
             </a>
-
-            <button class="navbar-toggler border-0" type="button"
-                    data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
             <div class="collapse navbar-collapse justify-content-center" id="navMenu">
                 <ul class="navbar-nav align-items-lg-center gap-1 me-auto ms-lg-4">
-                    <li class="nav-item"><a class="nav-link active" href="index.html"><i class="bi bi-house-door"></i> Trang Chủ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html" onclick="chuyenTrang(event,'index.html')"><i class="bi bi-house-door"></i> Trang Chủ</a></li>
                     <li class="nav-item"><a class="nav-link" href="flight.html" onclick="chuyenTrang(event,'flight.html')"><i class="bi bi-airplane"></i> Máy Bay</a></li>
-                    <li class="nav-item"><a class="nav-link" href="train.html" onclick="chuyenTrang(event,'train.html')"><i class="bi bi-train-front"></i> Tàu Hỏa</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="train.html"><i class="bi bi-train-front"></i> Tàu Hỏa</a></li>
                     <li class="nav-item"><a class="nav-link" href="bus.html" onclick="chuyenTrang(event,'bus.html')"><i class="bi bi-bus-front"></i> Xe Khách</a></li>
                 </ul>
-
                 <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0">
-                    <!-- Giỏ hàng -->
                     <a class="btn btn-outline-warning btn-sm px-3 position-relative" href="cart.html" onclick="chuyenTrang(event,'cart.html')">
                         <i class="bi bi-cart3"></i>
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cart-count">0</span>
                     </a>
-                    <!-- Khu vực auth (JS fill vào) -->
                     <div id="navbar-auth-area" class="d-flex gap-2"></div>
                 </div>
             </div>
         </div>
     </nav>
 
-    <section class="hero-section">
-        <div class="container position-relative">
-            <div class="row align-items-center">
-                <div class="col-lg-6 mb-5 mb-lg-0">
-                    <!-- Eyebrow -->
-                    <div class="hero-badge mb-4 d-inline-flex">
-                        <i class="bi bi-airplane-fill"></i>
-                        Nền Tảng Đặt Vé Du Lịch Việt Nam #1
-                    </div>
-
-                    <h1 class="hero-title mb-4">
-                        Khám Phá <span class="highlight">Việt Nam</span><br>
-                        Theo Cách Của Bạn
-                    </h1>
-
-                    <p class="text-white opacity-75 fs-5 mb-4" style="line-height:1.7;">
-                        Đặt vé máy bay, tàu hỏa, xe khách chỉ trong vài thao tác.
-                        Giá tốt nhất thị trường – không phí ẩn – thanh toán an toàn.
-                    </p>
-
-                    <div class="d-flex flex-wrap gap-3 mb-5">
-                        <a href="flight.html" class="btn btn-custom btn-lg" onclick="chuyenTrang(event,'flight.html')">
-                            <i class="bi bi-airplane-fill me-2"></i>Đặt Vé Ngay
-                        </a>
-                        <a href="#section-diem-den" class="btn btn-outline-light btn-lg px-4">
-                            <i class="bi bi-compass me-2"></i>Khám Phá
-                        </a>
-                    </div>
-
-                    <!-- Thống kê nhỏ -->
-                    <div class="d-flex flex-wrap gap-4">
-                        <div>
-                            <div class="fw-900 fs-4 text-warning" id="count1">0</div>
-                            <div class="small text-white-50">Chuyến mỗi ngày</div>
-                        </div>
-                        <div style="width:1px;background:rgba(255,255,255,0.15);"></div>
-                        <div>
-                            <div class="fw-900 fs-4 text-warning" id="count2">0</div>
-                            <div class="small text-white-50">Khách hài lòng</div>
-                        </div>
-                        <div style="width:1px;background:rgba(255,255,255,0.15);"></div>
-                        <div>
-                            <div class="fw-900 fs-4 text-warning" id="count3">0</div>
-                            <div class="small text-white-50">Tuyến đường</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Search Box -->
-                <div class="col-lg-6">
-                    <div>
-                        <!-- Tab chọn loại vé -->
-                        <div class="search-tab-bar">
-                            <button class="search-tab-btn active" id="stab-bay" onclick="hienSearchTab('bay')">
-                                <i class="bi bi-airplane-fill"></i> Máy Bay
-                            </button>
-                            <button class="search-tab-btn" id="stab-tau" onclick="hienSearchTab('tau')">
-                                <i class="bi bi-train-front-fill"></i> Tàu Hỏa
-                            </button>
-                            <button class="search-tab-btn" id="stab-xe" onclick="hienSearchTab('xe')">
-                                <i class="bi bi-bus-front-fill"></i> Xe Khách
-                            </button>
-                        </div>
-
-                        <!-- Panel tìm Máy Bay -->
-                        <div class="search-form-panel">
-                            <div id="panel-bay" class="search-panel active">
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label class="form-label"><i class="bi bi-airplane-fill text-primary"></i> Điểm Khởi Hành</label>
-                                        <select class="form-select" id="home-bay-tu">
-                                            <option value="">-- Chọn điểm đi --</option>
-                                            <option value="SGN">✈ TP. Hồ Chí Minh (SGN)</option>
-                                            <option value="HAN">✈ Hà Nội (HAN)</option>
-                                            <option value="DAD">✈ Đà Nẵng (DAD)</option>
-                                            <option value="PQC">✈ Phú Quốc (PQC)</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label"><i class="bi bi-geo-alt-fill text-danger"></i> Điểm Đến</label>
-                                        <select class="form-select" id="home-bay-den">
-                                            <option value="">-- Chọn điểm đến --</option>
-                                            <option value="HAN">✈ Hà Nội (HAN)</option>
-                                            <option value="DAD">✈ Đà Nẵng (DAD)</option>
-                                            <option value="PQC">✈ Phú Quốc (PQC)</option>
-                                            <option value="CXR">✈ Nha Trang (CXR)</option>
-                                            <option value="SGN">✈ TP. Hồ Chí Minh (SGN)</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label"><i class="bi bi-calendar3 text-warning"></i> Ngày Đi</label>
-                                        <input type="date" class="form-control" id="home-bay-ngay">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label"><i class="bi bi-people-fill text-success"></i> Số Hành Khách</label>
-                                        <select class="form-select" id="home-bay-sl">
-                                            <option value="1">1 người lớn</option>
-                                            <option value="2">2 người lớn</option>
-                                            <option value="3">3 người lớn</option>
-                                            <option value="4">4 người lớn</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-12">
-                                        <button class="btn btn-custom w-100 py-3 fs-5" onclick="timKiemNhanh('flight')">
-                                            <i class="bi bi-search me-2"></i>Tìm Chuyến Bay
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Panel tìm Tàu Hỏa -->
-                            <div id="panel-tau" class="search-panel">
-                                <div class="row g-3">
-                                    <div class="col-12 d-flex gap-4 align-items-center mb-2">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="home-tau-trip" id="home-tau-oneway" value="oneway" checked onchange="document.getElementById('home-tau-ngayve').disabled = true">
-                                            <label class="form-check-label">Một chiều</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="home-tau-trip" id="home-tau-roundtrip" value="roundtrip" onchange="document.getElementById('home-tau-ngayve').disabled = false">
-                                            <label class="form-check-label">Khứ hồi</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label"><i class="bi bi-train-front-fill text-success"></i> Ga Đi</label>
-                                        <input type="text" class="form-control" id="home-tau-tu" list="train-stations-home" placeholder="-- Chọn ga đi --">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label"><i class="bi bi-geo-alt-fill text-danger"></i> Ga Đến</label>
-                                        <input type="text" class="form-control" id="home-tau-den" list="train-stations-home" placeholder="-- Chọn ga đến --">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label"><i class="bi bi-calendar3 text-warning"></i> Ngày Đi</label>
-                                        <input type="date" class="form-control" id="home-tau-ngay">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label"><i class="bi bi-calendar3 text-info"></i> Ngày Về</label>
-                                        <input type="date" class="form-control" id="home-tau-ngayve" disabled>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label"><i class="bi bi-person-fill text-primary"></i> Người Lớn</label>
-                                        <input type="number" class="form-control" id="home-tau-adults" value="1" min="1">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label"><i class="bi bi-person text-secondary"></i> Trẻ Em</label>
-                                        <input type="number" class="form-control" id="home-tau-children" value="0" min="0">
-                                    </div>
-                                    <div class="col-12 mt-4">
-                                        <button class="btn w-100 py-3 fs-5" style="background:linear-gradient(135deg,#2ecc71,#27ae60);color:#fff;font-weight:700;border-radius:50px;" onclick="timKiemNhanh('train')">
-                                            <i class="bi bi-search me-2"></i>Tìm Chuyến Tàu
-                                        </button>
-                                    </div>
-                                </div>
-                                <datalist id="train-stations-home">
-                                    <option value="SGN">Ga Sài Gòn (SGN)</option>
-                                    <option value="DAD">Ga Đà Nẵng (DAD)</option>
-                                    <option value="HAN">Ga Hà Nội (HAN)</option>
-                                    <option value="HUI">Ga Huế (HUI)</option>
-                                    <option value="NHA">Ga Nha Trang (NHA)</option>
-                                    <option value="SNO">Ga Sóng Thần (SNO)</option>
-                                    <option value="LCA">Ga Lào Cai (LCA)</option>
-                                </datalist>
-                            </div>
-
-                            <!-- Panel tìm Xe Khách -->
-                            <div id="panel-xe" class="search-panel">
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label class="form-label"><i class="bi bi-bus-front-fill text-danger"></i> Điểm Đi</label>
-                                        <select class="form-select" id="home-xe-tu">
-                                            <option value="">-- Chọn điểm đi --</option>
-                                            <option value="SGN">🚌 TP. Hồ Chí Minh</option>
-                                            <option value="DLI">🚌 Đà Lạt</option>
-                                            <option value="CXR">🚌 Nha Trang</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label"><i class="bi bi-geo-alt-fill text-danger"></i> Điểm Đến</label>
-                                        <select class="form-select" id="home-xe-den">
-                                            <option value="">-- Chọn điểm đến --</option>
-                                            <option value="DLI">🚌 Đà Lạt</option>
-                                            <option value="CXR">🚌 Nha Trang</option>
-                                            <option value="SGN">🚌 TP. Hồ Chí Minh</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label"><i class="bi bi-calendar3 text-warning"></i> Ngày Đi</label>
-                                        <input type="date" class="form-control" id="home-xe-ngay">
-                                    </div>
-                                    <div class="col-12">
-                                        <button class="btn w-100 py-3 fs-5" style="background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;font-weight:700;border-radius:50px;" onclick="timKiemNhanh('bus')">
-                                            <i class="bi bi-search me-2"></i>Tìm Chuyến Xe
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <section class="container" style="padding-top:110px; min-height:100vh;">
+        <!-- Tiêu đề -->
+        <div class="d-flex align-items-center gap-3 mb-4">
+            <div style="width:52px;height:52px;background:linear-gradient(135deg,#2ecc71,#27ae60);border-radius:14px;display:flex;align-items:center;justify-content:center;">
+                <i class="bi bi-train-front-fill text-white fs-3"></i>
             </div>
-        </div>
-    </section>
-
-    <div class="container"><div class="glow-line"></div></div>
-
-    <!-- ======================== TUYẾN ĐƯỜNG NỔI BẬT (TABLE) ======================== -->
-    <section class="container mb-5">
-        <div class="text-center mb-5">
-            <span class="section-eyebrow">📋 Bảng Tuyến Đường</span>
-            <h2 class="section-title">Các Tuyến Đường Phổ Biến</h2>
-            <p class="section-sub">Giá hiển thị là mức khởi điểm, có thể thay đổi theo thời điểm</p>
-        </div>
-        <div class="glass-panel p-0 overflow-hidden">
-            <table class="table bang-tuyen-duong mb-0">
-                <thead>
-                    <tr>
-                        <th><i class="bi bi-geo me-1"></i>Tuyến Đường</th>
-                        <th><i class="bi bi-tag me-1"></i>Loại</th>
-                        <th class="d-none d-md-table-cell"><i class="bi bi-clock me-1"></i>Thời Gian</th>
-                        <th><i class="bi bi-currency-exchange me-1"></i>Giá Từ</th>
-                        <th class="d-none d-lg-table-cell"><i class="bi bi-lightning me-1"></i>Tần Suất</th>
-                        <th>Đặt Vé</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><span class="fw-bold text-white">SGN <i class="bi bi-arrow-right text-warning"></i> HAN</span><br><small class="text-muted">Hồ Chí Minh - Hà Nội</small></td>
-                        <td><span class="badge bg-primary"><i class="bi bi-airplane-fill"></i> Bay thẳng</span></td>
-                        <td class="d-none d-md-table-cell">2h 15p</td>
-                        <td class="text-warning fw-bold">1.200.000 ₫</td>
-                        <td class="d-none d-lg-table-cell"><span class="badge bg-success">12 chuyến/ngày</span></td>
-                        <td><button class="btn btn-sm btn-primary rounded-pill" onclick="chuyenTrang(event,'flight.html')">Chọn</button></td>
-                    </tr>
-                    <tr>
-                        <td><span class="fw-bold text-white">SGN <i class="bi bi-arrow-right text-warning"></i> DAD</span><br><small class="text-muted">Hồ Chí Minh - Đà Nẵng</small></td>
-                        <td><span class="badge bg-primary"><i class="bi bi-airplane-fill"></i> Bay thẳng</span></td>
-                        <td class="d-none d-md-table-cell">1h 10p</td>
-                        <td class="text-warning fw-bold">1.500.000 ₫</td>
-                        <td class="d-none d-lg-table-cell"><span class="badge bg-success">10 chuyến/ngày</span></td>
-                        <td><button class="btn btn-sm btn-primary rounded-pill" onclick="chuyenTrang(event,'flight.html')">Chọn</button></td>
-                    </tr>
-                    <tr>
-                        <td><span class="fw-bold text-white">HAN <i class="bi bi-arrow-right text-success"></i> PQC</span><br><small class="text-muted">Hà Nội - Phú Quốc</small></td>
-                        <td><span class="badge bg-primary"><i class="bi bi-airplane-fill"></i> Bay thẳng</span></td>
-                        <td class="d-none d-md-table-cell">2h 10p</td>
-                        <td class="text-warning fw-bold">2.800.000 ₫</td>
-                        <td class="d-none d-lg-table-cell"><span class="badge bg-warning text-dark">5 chuyến/ngày</span></td>
-                        <td><button class="btn btn-sm btn-primary rounded-pill" onclick="chuyenTrang(event,'flight.html')">Chọn</button></td>
-                    </tr>
-                    <tr>
-                        <td><span class="fw-bold text-white">SGN <i class="bi bi-arrow-right text-success"></i> HAN</span><br><small class="text-muted">Ga Sài Gòn - Ga Hà Nội</small></td>
-                        <td><span class="badge bg-success"><i class="bi bi-train-front-fill"></i> Tàu hỏa SE</span></td>
-                        <td class="d-none d-md-table-cell">30-33h</td>
-                        <td class="text-warning fw-bold">690.000 ₫</td>
-                        <td class="d-none d-lg-table-cell"><span class="badge bg-success">2 chuyến/ngày</span></td>
-                        <td><button class="btn btn-sm btn-success rounded-pill" onclick="chuyenTrang(event,'train.html')">Chọn</button></td>
-                    </tr>
-                    <tr>
-                        <td><span class="fw-bold text-white">SGN <i class="bi bi-arrow-right text-danger"></i> DLI</span><br><small class="text-muted">TP.HCM - Đà Lạt (Xe khách)</small></td>
-                        <td><span class="badge bg-danger"><i class="bi bi-bus-front-fill"></i> Xe giường nằm</span></td>
-                        <td class="d-none d-md-table-cell">6-7h</td>
-                        <td class="text-warning fw-bold">250.000 ₫</td>
-                        <td class="d-none d-lg-table-cell"><span class="badge bg-success">8+ chuyến/ngày</span></td>
-                        <td><button class="btn btn-sm btn-danger rounded-pill" onclick="chuyenTrang(event,'bus.html')">Chọn</button></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </section>
-
-    <!-- ======================== ĐIỂM ĐẾN NỔI BẬT ======================== -->
-    <section class="container mb-5" id="section-diem-den">
-        <div class="text-center mb-5">
-            <span class="section-eyebrow">🌏 Khám Phá Ngay</span>
-            <h2 class="section-title">Điểm Đến Hấp Dẫn</h2>
-            <p class="section-sub">Những hành trình đáng nhớ đang chờ bạn</p>
-        </div>
-
-        <!-- Bootstrap Carousel điểm đến -->
-        <div id="dest-carousel" class="carousel slide mb-4" data-bs-ride="carousel" data-bs-interval="3500">
-            <div class="carousel-inner rounded-4 overflow-hidden" style="aspect-ratio: 21/9; max-height: 550px; background: #000;">
-                <div class="carousel-item active" style="height: 100%;">
-                    <img src="jpg/HCM.jpg" class="d-block w-100 h-100" style="object-fit:cover;" alt="TP. Hồ Chí Minh">
-                    <div class="carousel-caption d-block" style="bottom:30px;">
-                        <span class="badge bg-warning text-dark mb-2 px-3 py-2" style="font-size:0.85rem;">
-                            <i class="bi bi-airplane-fill"></i> Từ 1.200.000 ₫
-                        </span>
-                        <h3 class="fw-800 fs-2">TP. Hồ Chí Minh</h3>
-                        <p class="mb-3">Thành phố năng động nhất Việt Nam – Landmark 81, Bến Thành</p>
-                        <a href="flight.html" class="btn btn-warning px-4 fw-bold" onclick="chuyenTrang(event,'flight.html')">
-                            <i class="bi bi-ticket-perforated"></i> Đặt Vé Ngay
-                        </a>
-                    </div>
-                </div>
-                <div class="carousel-item" style="height: 100%;">
-                    <img src="jpg/Ha-Noi.jpg" class="d-block w-100 h-100" style="object-fit:cover;" alt="Hà Nội">
-                    <div class="carousel-caption d-block" style="bottom:30px;">
-                        <span class="badge bg-warning text-dark mb-2 px-3 py-2" style="font-size:0.85rem;">
-                            <i class="bi bi-airplane-fill"></i> Từ 1.300.000 ₫
-                        </span>
-                        <h3 class="fw-800 fs-2">Hà Nội</h3>
-                        <p class="mb-3">Thủ đô nghìn năm văn hiến – Hồ Hoàn Kiếm, Lăng Bác</p>
-                        <a href="flight.html" class="btn btn-warning px-4 fw-bold" onclick="chuyenTrang(event,'flight.html')">
-                            <i class="bi bi-ticket-perforated"></i> Đặt Vé Ngay
-                        </a>
-                    </div>
-                </div>
-                <div class="carousel-item" style="height: 100%;">
-                    <img src="jpg/Da-Nang.jpg" class="d-block w-100 h-100" style="object-fit:cover;" alt="Đà Nẵng">
-                    <div class="carousel-caption d-block" style="bottom:30px;">
-                        <span class="badge bg-warning text-dark mb-2 px-3 py-2" style="font-size:0.85rem;">
-                            <i class="bi bi-airplane-fill"></i> Từ 1.500.000 ₫
-                        </span>
-                        <h3 class="fw-800 fs-2">Đà Nẵng</h3>
-                        <p class="mb-3">Thành phố đáng sống – Cầu Rồng, Bà Nà Hills, biển Mỹ Khê</p>
-                        <a href="flight.html" class="btn btn-warning px-4 fw-bold" onclick="chuyenTrang(event,'flight.html')">
-                            <i class="bi bi-ticket-perforated"></i> Đặt Vé Ngay
-                        </a>
-                    </div>
-                </div>
-                <div class="carousel-item" style="height: 100%;">
-                    <img src="jpg/Phu-Quoc.jpg" class="d-block w-100 h-100" style="object-fit:cover;" alt="Phú Quốc">
-                    <div class="carousel-caption d-block" style="bottom:30px;">
-                        <span class="badge bg-warning text-dark mb-2 px-3 py-2" style="font-size:0.85rem;">
-                            <i class="bi bi-airplane-fill"></i> Từ 2.800.000 ₫
-                        </span>
-                        <h3 class="fw-800 fs-2">Phú Quốc</h3>
-                        <p class="mb-3">Đảo Ngọc thiên đường – Bãi Sao, VinWonders, Dinh Cậu</p>
-                        <a href="flight.html" class="btn btn-warning px-4 fw-bold" onclick="chuyenTrang(event,'flight.html')">
-                            <i class="bi bi-ticket-perforated"></i> Đặt Vé Ngay
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#dest-carousel" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon"></span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#dest-carousel" data-bs-slide="next">
-                <span class="carousel-control-next-icon"></span>
-            </button>
-            <div class="carousel-indicators">
-                <button type="button" data-bs-target="#dest-carousel" data-bs-slide-to="0" class="active"></button>
-                <button type="button" data-bs-target="#dest-carousel" data-bs-slide-to="1"></button>
-                <button type="button" data-bs-target="#dest-carousel" data-bs-slide-to="2"></button>
-                <button type="button" data-bs-target="#dest-carousel" data-bs-slide-to="3"></button>
+            <div>
+                <h2 class="fw-900 text-white mb-0">Đặt Vé Tàu Hỏa</h2>
+                <p class="text-white-50 mb-0 small">Đường Sắt Việt Nam (DSVN) – An toàn, đúng giờ, tiện nghi</p>
             </div>
         </div>
 
-        <!-- Grid điểm đến nhanh -->
-        <div class="row g-3 mt-2">
-            <div class="col-6 col-md-3">
-                <div class="dest-card" onclick="chuyenTrang(event,'flight.html')">
-                    <img src="jpg/Da-Lat.jpg" alt="Đà Lạt">
-                    <div class="dest-price-badge">Từ 1.400.000 ₫</div>
-                    <div class="dest-card-overlay">
-                        <h5>Đà Lạt</h5>
-                        <small>Thành phố mù sương</small>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 col-md-3">
-                <div class="dest-card" onclick="chuyenTrang(event,'flight.html')">
-                    <img src="jpg/Nha-Trang.jpg" alt="Nha Trang">
-                    <div class="dest-price-badge">Từ 1.200.000 ₫</div>
-                    <div class="dest-card-overlay">
-                        <h5>Nha Trang</h5>
-                        <small>Vịnh biển đẹp nhất</small>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 col-md-3">
-                <div class="dest-card" onclick="chuyenTrang(event,'flight.html')">
-                    <img src="jpg/Phu-Quoc.jpg" alt="Phú Quốc">
-                    <div class="dest-price-badge">Từ 2.400.000 ₫</div>
-                    <div class="dest-card-overlay">
-                        <h5>Phú Quốc</h5>
-                        <small>Đảo ngọc thiên đường</small>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 col-md-3">
-                <div class="dest-card" onclick="chuyenTrang(event,'train.html')">
-                    <img src="jpg/Hoi-An.jpg" alt="Hội An">
-                    <div class="dest-price-badge">Từ 850.000 ₫</div>
-                    <div class="dest-card-overlay">
-                        <h5>Hội An</h5>
-                        <small>Phố cổ thân thương</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ======================== VÌ SAO CHỌN CHÚNG TÔI ======================== -->
-    <section class="container mb-5">
-        <div class="row align-items-center g-5">
-            <div class="col-lg-5">
-                <span class="section-eyebrow">🌟 Tại Sao Chọn Chúng Tôi</span>
-                <h2 class="section-title">Trải Nghiệm Du Lịch Tuyệt Vời Nhất</h2>
-                <p class="section-sub mb-4">Chúng tôi cam kết mang đến hành trình tốt nhất với giá tốt nhất cho mọi khách hàng Việt Nam.</p>
-
-                <!-- Bootstrap Accordion -->
-                <div class="accordion accordion-flush" id="accordionTinhNang">
-                    <div class="accordion-item" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;margin-bottom:8px;">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button collapsed fw-600 text-white" type="button"
-                                    data-bs-toggle="collapse" data-bs-target="#acc1"
-                                    style="background:transparent;color:#fff;">
-                                <i class="bi bi-shield-check text-success me-2"></i>Thanh Toán An Toàn
-                            </button>
-                        </h2>
-                        <div id="acc1" class="accordion-collapse collapse" data-bs-parent="#accordionTinhNang">
-                            <div class="accordion-body text-white-50">
-                                Bảo mật SSL 256-bit, hỗ trợ thanh toán qua thẻ, ví điện tử, QR Pay. Hoàn tiền 100% nếu hủy chuyến.
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;margin-bottom:8px;">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button collapsed fw-600 text-white" type="button"
-                                    data-bs-toggle="collapse" data-bs-target="#acc2"
-                                    style="background:transparent;color:#fff;">
-                                <i class="bi bi-clock-history text-warning me-2"></i>Đặt Vé Siêu Nhanh
-                            </button>
-                        </h2>
-                        <div id="acc2" class="accordion-collapse collapse" data-bs-parent="#accordionTinhNang">
-                            <div class="accordion-body text-white-50">
-                                Chỉ cần 3 bước đơn giản: Chọn tuyến → Chọn ghế → Thanh toán. Vé được xác nhận tức thì qua email.
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button collapsed fw-600 text-white" type="button"
-                                    data-bs-toggle="collapse" data-bs-target="#acc3"
-                                    style="background:transparent;color:#fff;">
-                                <i class="bi bi-headset text-primary me-2"></i>Hỗ Trợ 24/7
-                            </button>
-                        </h2>
-                        <div id="acc3" class="accordion-collapse collapse" data-bs-parent="#accordionTinhNang">
-                            <div class="accordion-body text-white-50">
-                                Đội ngũ chăm sóc khách hàng sẵn sàng hỗ trợ 24/7 qua hotline, chat trực tiếp và email.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-7">
-                <div class="row g-3">
-                    <div class="col-6">
-                        <div class="why-item">
-                            <div class="feature-icon" style="background:rgba(13,110,253,0.15);">
-                                <i class="bi bi-airplane-fill text-primary fs-2"></i>
-                            </div>
-                            <div>
-                                <h6 class="fw-700 text-white mb-1">Giá Vé Tốt Nhất</h6>
-                                <p class="text-white-50 small mb-0">So sánh giá từ 30+ nhà cung cấp, đảm bảo rẻ nhất</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="why-item">
-                            <div class="feature-icon" style="background:rgba(46,204,113,0.15);">
-                                <i class="bi bi-phone-fill text-success fs-2"></i>
-                            </div>
-                            <div>
-                                <h6 class="fw-700 text-white mb-1">Responsive</h6>
-                                <p class="text-white-50 small mb-0">Đặt vé mượt mà trên mọi thiết bị từ điện thoại đến PC</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="why-item">
-                            <div class="feature-icon" style="background:rgba(243,156,18,0.15);">
-                                <i class="bi bi-star-fill text-warning fs-2"></i>
-                            </div>
-                            <div>
-                                <h6 class="fw-700 text-white mb-1">Đánh Giá Cao</h6>
-                                <p class="text-white-50 small mb-0">Hơn 50.000 đánh giá 5 sao từ khách hàng thực</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="why-item">
-                            <div class="feature-icon" style="background:rgba(231,76,60,0.15);">
-                                <i class="bi bi-heart-fill text-danger fs-2"></i>
-                            </div>
-                            <div>
-                                <h6 class="fw-700 text-white mb-1">Tin Tưởng</h6>
-                                <p class="text-white-50 small mb-0">Được hàng triệu hành khách Việt Nam tin dùng mỗi năm</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ======================== COUNTER SECTION ======================== -->
-    <section class="container mb-5">
-        <div class="glass-panel">
-            <div class="row g-4 text-center">
-                <div class="col-6 col-md-3">
-                    <div class="stat-counter">
-                        <div class="num" id="cnt-chuyen">0</div>
-                        <div class="lbl">Chuyến/Ngày</div>
-                    </div>
-                </div>
-                <div class="col-6 col-md-3">
-                    <div class="stat-counter">
-                        <div class="num" id="cnt-khach">0</div>
-                        <div class="lbl">Lượt Khách Hài Lòng</div>
-                    </div>
-                </div>
-                <div class="col-6 col-md-3">
-                    <div class="stat-counter">
-                        <div class="num" id="cnt-tuyen">0</div>
-                        <div class="lbl">Tuyến Đường</div>
-                    </div>
-                </div>
-                <div class="col-6 col-md-3">
-                    <div class="stat-counter">
-                        <div class="num" id="cnt-danhgia">0</div>
-                        <div class="lbl">Đánh Giá 5 ⭐</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-
-
-    <!-- ======================== TESTIMONIALS ======================== -->
-    <section class="container mb-5">
-        <div class="text-center mb-5">
-            <span class="section-eyebrow">💬 Phản Hồi</span>
-            <h2 class="section-title">Hành Khách Nói Gì?</h2>
-        </div>
         <div class="row g-4">
-            <div class="col-md-4">
-                <div class="testimonial-card">
-                    <div class="d-flex align-items-center gap-3 mb-3">
-                        <div class="testimonial-avatar">N</div>
-                        <div>
-                            <div class="fw-700 text-white">Nguyễn Minh Tuấn</div>
-                            <div class="text-warning small">⭐⭐⭐⭐⭐</div>
+            <div class="col-lg-8">
+                <!-- Form tìm tàu -->
+                <div class="glass-panel mb-4">
+                    <h6 class="fw-700 text-white mb-3"><i class="bi bi-search text-success"></i> Tìm Chuyến Tàu</h6>
+                    <form id="train-search-form" onsubmit="timTau(event)">
+                        <!-- Loại vé & Số lượng khách -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6 d-flex gap-4 align-items-center">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="train-trip-type" id="train-oneway" value="oneway" checked onchange="toggleReturnDateTrain()">
+                                    <label class="form-check-label text-white" for="train-oneway">Một chiều</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="train-trip-type" id="train-roundtrip" value="roundtrip" onchange="toggleReturnDateTrain()">
+                                    <label class="form-check-label text-white" for="train-roundtrip">Khứ hồi</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label text-white-50 small mb-1">Người lớn</label>
+                                <input type="number" class="form-control form-control-sm" id="train-adults" value="1" min="1">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label text-white-50 small mb-1">Trẻ em</label>
+                                <input type="number" class="form-control form-control-sm" id="train-children" value="0" min="0">
+                            </div>
                         </div>
+
+                        <!-- Điểm đi/đến và Ngày tháng -->
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <label class="form-label">Ga Đi</label>
+                                <input type="text" class="form-control" id="train-from" list="train-stations" placeholder="Chọn ga đi" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Ga Đến</label>
+                                <input type="text" class="form-control" id="train-to" list="train-stations" placeholder="Chọn ga đến" required>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Ngày Đi</label>
+                                <input type="date" class="form-control" id="train-date-out" required>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Ngày Về</label>
+                                <input type="date" class="form-control" id="train-date-return" disabled>
+                            </div>
+                            <div class="col-md-2 d-flex align-items-end">
+                                <button type="submit" class="btn w-100 py-2 fw-700 h-100" style="background:linear-gradient(135deg,#2ecc71,#27ae60);color:#fff;border-radius:12px;">
+                                    <i class="bi bi-search"></i> Tìm Tàu
+                                </button>
+                            </div>
+                        </div>
+
+                        <datalist id="train-stations">
+                            <option value="SGN">Ga Sài Gòn (SGN)</option>
+                            <option value="DAD">Ga Đà Nẵng (DAD)</option>
+                            <option value="HAN">Ga Hà Nội (HAN)</option>
+                            <option value="HUI">Ga Huế (HUI)</option>
+                            <option value="NHA">Ga Nha Trang (NHA)</option>
+                            <option value="SNO">Ga Sóng Thần (SNO)</option>
+                            <option value="LCA">Ga Lào Cai (LCA)</option>
+                        </datalist>
+                    </form>
+                </div>
+
+                <!-- Kết quả -->
+                <div id="train-results">
+                    <div class="text-center py-5">
+                        <i class="bi bi-train-front text-success" style="font-size:3rem;opacity:0.4;"></i>
+                        <p class="text-white-50 mt-2">Nhập thông tin và bấm Tìm Tàu</p>
                     </div>
-                    <p class="text-white-50 mb-0 fst-italic">"Đặt vé máy bay từ Sài Gòn ra Hà Nội cực kỳ nhanh và tiện. Giao diện đẹp, giá lại tốt hơn mua trực tiếp. Sẽ tiếp tục dùng!"</p>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="testimonial-card">
-                    <div class="d-flex align-items-center gap-3 mb-3">
-                        <div class="testimonial-avatar" style="background:linear-gradient(135deg,#e74c3c,#c0392b);">T</div>
-                        <div>
-                            <div class="fw-700 text-white">Trần Thị Lan Anh</div>
-                            <div class="text-warning small">⭐⭐⭐⭐⭐</div>
+
+            <div class="col-lg-4">
+                <!-- Bản đồ tuyến tàu -->
+                <div class="glass-panel mb-4">
+                    <h6 class="fw-700 text-white mb-4"><i class="bi bi-map-fill text-success"></i> Tuyến Bắc Nam</h6>
+                    <div class="position-relative" style="padding: 10px 0;">
+                        <!-- Đường ray tàu -->
+                        <div style="position:absolute;left:50%;transform:translateX(-50%);top:0;bottom:0;width:4px;background:repeating-linear-gradient(180deg,#2ecc71 0,#2ecc71 10px,#1a1a2e 10px,#1a1a2e 16px);box-shadow:0 0 12px rgba(46,204,113,0.4);border-radius:2px;"></div>
+                        <!-- Ga -->
+                        <div class="position-relative text-center mb-5">
+                            <div class="d-inline-flex align-items-center justify-content-center rounded-circle fw-800 text-white" style="width:32px;height:32px;background:#2ecc71;border:3px solid #fff;box-shadow:0 0 14px rgba(46,204,113,0.6);font-size:0.8rem;">HN</div>
+                            <div class="fw-700 text-white mt-2">Ga Hà Nội (HAN)</div>
+                            <div class="badge bg-dark text-success border border-success mt-1" style="font-size:0.7rem;">Km 0 – Đầu tuyến</div>
+                        </div>
+                        <div class="position-relative text-center mb-5">
+                            <div class="d-inline-flex align-items-center justify-content-center rounded-circle fw-800 text-white" style="width:32px;height:32px;background:#f39c12;border:3px solid #fff;box-shadow:0 0 14px rgba(243,156,18,0.6);font-size:0.8rem;">DN</div>
+                            <div class="fw-700 text-warning mt-2">Ga Đà Nẵng (DAD)</div>
+                            <div class="badge bg-dark text-warning border border-warning mt-1" style="font-size:0.7rem;">Km 791 – Miền Trung</div>
+                        </div>
+                        <div class="position-relative text-center">
+                            <div class="d-inline-flex align-items-center justify-content-center rounded-circle fw-800 text-white" style="width:32px;height:32px;background:#2ecc71;border:3px solid #fff;box-shadow:0 0 14px rgba(46,204,113,0.6);font-size:0.8rem;">SG</div>
+                            <div class="fw-700 text-white mt-2">Ga Sài Gòn (SGN)</div>
+                            <div class="badge bg-dark text-success border border-success mt-1" style="font-size:0.7rem;">Km 1726 – Cuối tuyến</div>
                         </div>
                     </div>
-                    <p class="text-white-50 mb-0 fst-italic">"Mua vé tàu SE1 từ Sài Gòn đi Đà Nẵng. Chọn được giường nằm cabin đúng ý. Website rất chuyên nghiệp và dễ sử dụng!"</p>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="testimonial-card">
-                    <div class="d-flex align-items-center gap-3 mb-3">
-                        <div class="testimonial-avatar" style="background:linear-gradient(135deg,#2ecc71,#27ae60);">H</div>
-                        <div>
-                            <div class="fw-700 text-white">Huỳnh Bảo Khánh</div>
-                            <div class="text-warning small">⭐⭐⭐⭐⭐</div>
-                        </div>
+
+                <!-- Thông tin các loại tàu -->
+                <div class="glass-panel" style="max-height: 520px; overflow-y: auto;">
+                    <h6 class="fw-700 text-white mb-3"><i class="bi bi-info-circle-fill text-warning"></i> Các Loại Tàu & Tiện Ích</h6>
+                    <div class="d-flex flex-column gap-3">
+                        <article class="p-2" style="background:rgba(255,255,255,0.05); border-radius:10px;">
+                            <h6 class="text-success fw-700 mb-1">Tàu SE & TN (VNR)</h6>
+                            <p class="text-white-50 small mb-2">Tàu Thống Nhất tiêu chuẩn do Tổng công ty Đường sắt Việt Nam vận hành. Tàu SE là tàu nhanh, còn TN là tàu chậm (dừng nhiều ga nhỏ). Tiện ích cơ bản gồm điều hòa, cổng sạc, wifi (trên SE1/SE3).</p>
+                            <figure class="m-0 text-center">
+                                <img src="img/Logo.jpg" alt="SE Train" style="width:100%; border-radius:6px; object-fit:cover; height:70px; opacity:0.8;">
+                                <figcaption class="text-white-50 mt-1" style="font-size:0.6rem;">Tàu Bắc Nam tiêu chuẩn</figcaption>
+                            </figure>
+                        </article>
+                        
+                        <article class="p-2" style="background:rgba(255,255,255,0.05); border-radius:10px;">
+                            <h6 class="text-warning fw-700 mb-1">The Vietage</h6>
+                            <p class="text-white-50 small mb-0">Chuyến tàu hỏa siêu sang nối Đà Nẵng - Quy Nhơn. Trải nghiệm thượng lưu với ẩm thực cao cấp, quầy bar và phòng trị liệu spa ngay trên tàu.</p>
+                        </article>
+                        
+                        <article class="p-2" style="background:rgba(255,255,255,0.05); border-radius:10px;">
+                            <h6 class="text-info fw-700 mb-1">Tàu Du Lịch Sapa Cao Cấp</h6>
+                            <p class="text-white-50 small mb-2">Chuyên tuyến Hà Nội - Lào Cai với các khoang giường nằm chất lượng 4-5 sao, trang trí nội thất tinh tế.</p>
+                            <ul class="text-white-50 small mb-0 ps-3">
+                                <li><strong>Chapa Express:</strong> Phong cách Tây Bắc đậm chất Sapa.</li>
+                                <li><strong>Livitrans Express:</strong> Thiết kế sang trọng, ấm cúng.</li>
+                                <li><strong>Vic Sapa / King / Sapaly:</strong> Cabin VIP 2 giường êm ái, tiện nghi cao cấp.</li>
+                                <li><strong>SJourney:</strong> Tàu du lịch cao cấp hoàn toàn mới.</li>
+                            </ul>
+                        </article>
                     </div>
-                    <p class="text-white-50 mb-0 fst-italic">"Đặt xe khách Phương Trang đi Đà Lạt. Chọn được giường nằm tầng dưới, thanh toán xong là nhận vé ngay. Quá tiện!"</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ======================== FOOTER ======================== -->
-    <footer>
-        <div class="container">
-            <div class="row g-5 mb-5">
-                <div class="col-lg-4">
-                    <div class="d-flex align-items-center gap-3 mb-3">
-                        <img src="jpg/Logo.jpg" alt="Logo" style="height:45px;border-radius:8px;" onerror="this.style.display='none'">
-                        <div>
-                            <h5 class="fw-800 text-white mb-0">VIET TRAVEL HUB</h5>
-                            <small class="text-white-50">Hành trình bắt đầu từ đây</small>
-                        </div>
+    <!-- MODAL CHI TIẾT HÀNH TRÌNH TÀU HỎA -->
+    <div class="modal fade" id="trainItineraryModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content" style="background:#1a1a2e; border: 1px solid rgba(255,255,255,0.1);">
+                <div class="modal-header" style="border-bottom:1px solid rgba(255,255,255,0.1);">
+                    <h5 class="modal-title fw-800 text-white"><i class="bi bi-map-fill text-info me-2"></i>Chi Tiết Hành Trình</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="train-itinerary-body">
+                    <!-- JS sẽ điền lộ trình vào đây -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CHỌN CHỖ TÀU HỎA -->
+    <div class="modal fade" id="trainSeatModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header" style="background:linear-gradient(135deg,#2ecc71,#27ae60);">
+                    <div>
+                        <h5 class="modal-title fw-800 text-white mb-0">
+                            <i class="bi bi-train-front-fill"></i> Chọn Chỗ Ngồi / Giường Nằm
+                        </h5>
+                        <div class="text-white opacity-75 small" id="train-modal-info">---</div>
                     </div>
-                    <p class="text-white-50 small">Nền tảng đặt vé du lịch trực tuyến hàng đầu Việt Nam. Máy bay • Tàu hỏa • Xe khách</p>
-                    <div class="d-flex gap-3 mt-3">
-                        <a href="#" class="text-white-50 fs-5"><i class="bi bi-facebook"></i></a>
-                        <a href="#" class="text-white-50 fs-5"><i class="bi bi-instagram"></i></a>
-                        <a href="#" class="text-white-50 fs-5"><i class="bi bi-youtube"></i></a>
-                        <a href="#" class="text-white-50 fs-5"><i class="bi bi-tiktok"></i></a>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" style="background:#f0f4f8;">
+                    <!-- Chọn loại toa -->
+                    <div class="d-flex justify-content-center mb-4 gap-2 flex-wrap">
+                        <button class="btn btn-success rounded-pill px-3 fw-700 btn-toa" id="btn-toa-1" onclick="doiToaTau('1', 'ghe')">
+                            Toa 1 (Ghế Mềm)
+                        </button>
+                        <button class="btn btn-outline-secondary rounded-pill px-3 fw-700 btn-toa" id="btn-toa-2" onclick="doiToaTau('2', 'ghe')">
+                            Toa 2 (Ghế Mềm)
+                        </button>
+                        <button class="btn btn-outline-secondary rounded-pill px-3 fw-700 btn-toa" id="btn-toa-3" onclick="doiToaTau('3', 'giuong')">
+                            Toa 3 (Giường)
+                        </button>
+                        <button class="btn btn-outline-warning text-dark rounded-pill px-3 fw-700 btn-toa" id="btn-toa-vip" onclick="doiToaTau('vip', 'giuong')">
+                            <i class="bi bi-star-fill text-warning"></i> Toa VIP
+                        </button>
+                    </div>
+
+                    <!-- Chú thích ghế -->
+                    <div id="train-legend-ghe" class="seat-legend mb-3">
+                        <div class="legend-item"><div class="legend-dot" style="background:#d5f5e3;border-color:#82e0aa;"></div><span>Cửa Sổ</span></div>
+                        <div class="legend-item"><div class="legend-dot" style="background:#fef9e7;border-color:#f9e79f;"></div><span>Ghế Giữa</span></div>
+                        <div class="legend-item"><div class="legend-dot" style="background:#d6eaf8;border-color:#a9cce3;"></div><span>Lối Đi</span></div>
+                        <div class="legend-item"><div class="legend-dot" style="background:repeating-linear-gradient(45deg,#eee,#eee 5px,#ddd 5px,#ddd 10px);"></div><span>Đã Đặt</span></div>
+                        <div class="legend-item"><div class="legend-dot" style="background:linear-gradient(135deg,#0d6efd,#00c6ff);border-color:#0b5ed7;"></div><span>Đang Chọn</span></div>
+                    </div>
+                    <div id="train-legend-giuong" class="seat-legend mb-3" style="display:none!important;">
+                        <div class="legend-item"><div class="legend-dot" style="background:#eafaf1;border-color:#82e0aa;"></div><span>Giường Dưới</span></div>
+                        <div class="legend-item"><div class="legend-dot" style="background:#fef9e7;border-color:#f9e79f;"></div><span>Giường Trên</span></div>
+                        <div class="legend-item"><div class="legend-dot" style="background:#fce4e4;border-color:#f1948a;"></div><span>Đã Đặt</span></div>
+                    </div>
+
+                    <!-- Container sơ đồ -->
+                    <div class="p-2" style="max-height:460px;overflow-y:auto;border-radius:10px;background:#e8ecef;">
+                        <div id="train-seat-map-container"></div>
                     </div>
                 </div>
-                <div class="col-6 col-lg-2">
-                    <h6 class="fw-700 text-white mb-3">Dịch Vụ</h6>
-                    <ul class="list-unstyled">
-                        <li class="mb-2"><a href="flight.html" class="text-white-50 text-decoration-none small" onclick="chuyenTrang(event,'flight.html')">Đặt Vé Máy Bay</a></li>
-                        <li class="mb-2"><a href="train.html" class="text-white-50 text-decoration-none small" onclick="chuyenTrang(event,'train.html')">Đặt Vé Tàu Hỏa</a></li>
-                        <li class="mb-2"><a href="bus.html" class="text-white-50 text-decoration-none small" onclick="chuyenTrang(event,'bus.html')">Đặt Vé Xe Khách</a></li>
-                        <li class="mb-2"><a href="cart.html" class="text-white-50 text-decoration-none small" onclick="chuyenTrang(event,'cart.html')">Giỏ Hàng</a></li>
-                    </ul>
-                </div>
-                <div class="col-6 col-lg-2">
-                    <h6 class="fw-700 text-white mb-3">Điểm Đến</h6>
-                    <ul class="list-unstyled">
-                        <li class="mb-2"><a href="flight.html" class="text-white-50 text-decoration-none small">Hà Nội</a></li>
-                        <li class="mb-2"><a href="flight.html" class="text-white-50 text-decoration-none small">TP. Hồ Chí Minh</a></li>
-                        <li class="mb-2"><a href="flight.html" class="text-white-50 text-decoration-none small">Đà Nẵng</a></li>
-                        <li class="mb-2"><a href="flight.html" class="text-white-50 text-decoration-none small">Phú Quốc</a></li>
-                        <li class="mb-2"><a href="flight.html" class="text-white-50 text-decoration-none small">Nha Trang</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-4">
-                    <h6 class="fw-700 text-white mb-3">Liên Hệ</h6>
-                    <div class="d-flex gap-2 mb-2 align-items-center">
-                        <i class="bi bi-telephone-fill text-warning"></i>
-                        <span class="text-white-50 small">Hotline: 1900 9999</span>
-                    </div>
-                    <div class="d-flex gap-2 mb-2 align-items-center">
-                        <i class="bi bi-envelope-fill text-warning"></i>
-                        <span class="text-white-50 small">support@vietravelhub.vn</span>
-                    </div>
-                    <div class="d-flex gap-2 mb-3 align-items-center">
-                        <i class="bi bi-geo-alt-fill text-warning"></i>
-                        <span class="text-white-50 small">123 Lý Thường Kiệt, Q.10, TP.HCM</span>
-                    </div>
+                <div class="modal-footer justify-content-between" style="background:#1a1a2e;border-top:1px solid rgba(255,255,255,0.1);">
+                    <div class="text-white-50 small" id="train-seat-info-selected">Chưa chọn chỗ</div>
                     <div class="d-flex gap-2">
-                        <input type="email" class="form-control form-control-sm" placeholder="Email nhận ưu đãi..." id="email-newsletter">
-                        <button class="btn btn-accent btn-sm px-3" onclick="dangKyNewsletter()">
-                            <i class="bi bi-send"></i>
+                        <button class="btn btn-outline-light" data-bs-dismiss="modal">Hủy</button>
+                        <button class="btn fw-700 px-4" id="btn-confirm-train" onclick="xacNhanDatTau()" disabled
+                                style="background:linear-gradient(135deg,#2ecc71,#27ae60);color:#fff;border:none;">
+                            Xác Nhận Mua
                         </button>
                     </div>
                 </div>
             </div>
-            <hr style="border-color: rgba(255,255,255,0.1);">
-            <div class="row align-items-center">
-                <div class="col-md-6">
-                    <p class="text-white-50 small mb-0">© 2024 Viet Travel Hub. Đồ án Thiết Kế Web - HUIT.</p>
-                </div>
-                <div class="col-md-6 text-md-end">
-                    <span class="text-white-50 small">Phiên bản 2.0 · Bootstrap 5 · Vanilla JS</span>
-                </div>
-            </div>
+        </div>
+    </div>
+
+    <footer style="padding:30px 0;border-top:1px solid rgba(255,255,255,0.08);margin-top:60px;">
+        <div class="container text-center">
+            <p class="text-white-50 small mb-0">© 2024 Viet Travel Hub · Đặt vé tàu hỏa Đường Sắt Việt Nam</p>
         </div>
     </footer>
 
@@ -762,138 +280,6 @@
     <script src="js/auth.js"></script>
     <script src="js/app.js"></script>
     <script src="js/cart.js"></script>
-
-    <script>
-    // ============================================================
-    // Script inline cho trang chủ (index.html)
-    // ============================================================
-
-    document.addEventListener("DOMContentLoaded", function() {
-        // Thiết lập ngày tối thiểu hôm nay cho tất cả date input
-        var homNay = new Date().toISOString().split('T')[0];
-        var tatCaNgay = document.querySelectorAll('input[type="date"]');
-        for (var i = 0; i < tatCaNgay.length; i++) {
-            tatCaNgay[i].min = homNay;
-            tatCaNgay[i].value = homNay;
-        }
-
-        // Chạy counter animation khi scroll đến section
-        khoiDongCounterKhiHienThi();
-    });
-
-    // Chuyển đổi tab tìm kiếm trên hero
-    function hienSearchTab(loai) {
-        // Ẩn tất cả panel
-        var panels = document.querySelectorAll('.search-panel');
-        for (var i = 0; i < panels.length; i++) {
-            panels[i].classList.remove('active');
-        }
-        // Bỏ active nút
-        var nutBam = document.querySelectorAll('.search-tab-btn');
-        for (var j = 0; j < nutBam.length; j++) {
-            nutBam[j].classList.remove('active');
-        }
-
-        // Hiện panel đúng
-        document.getElementById('panel-' + loai).classList.add('active');
-        document.getElementById('stab-' + loai).classList.add('active');
-    }
-
-    // Tìm kiếm nhanh rồi chuyển trang, truyền dữ liệu qua sessionStorage
-    function timKiemNhanh(loaiVe) {
-        var trang = '';
-        var duLieu = {};
-
-        if (loaiVe === 'flight') {
-            trang = 'flight.html';
-            duLieu.tuSearch  = document.getElementById('home-bay-tu').value;
-            duLieu.denSearch = document.getElementById('home-bay-den').value;
-            duLieu.ngaySearch = document.getElementById('home-bay-ngay').value;
-            duLieu.slSearch  = document.getElementById('home-bay-sl').value;
-        } else if (loaiVe === 'train') {
-            trang = 'train.html';
-            duLieu.tuSearch  = document.getElementById('home-tau-tu').value;
-            duLieu.denSearch = document.getElementById('home-tau-den').value;
-            duLieu.ngaySearch = document.getElementById('home-tau-ngay').value;
-            duLieu.ngayVeSearch = document.getElementById('home-tau-ngayve').value;
-            duLieu.khuHoi = document.getElementById('home-tau-roundtrip').checked;
-            duLieu.slNguoiLon = document.getElementById('home-tau-adults').value;
-            duLieu.slTreEm = document.getElementById('home-tau-children').value;
-        } else if (loaiVe === 'bus') {
-            trang = 'bus.html';
-            duLieu.tuSearch  = document.getElementById('home-xe-tu').value;
-            duLieu.denSearch = document.getElementById('home-xe-den').value;
-            duLieu.ngaySearch = document.getElementById('home-xe-ngay').value;
-        }
-
-        // Lưu tham số tìm kiếm vào sessionStorage để trang kía tiếp đọc
-        duLieu.loai = loaiVe;
-        sessionStorage.setItem('vth_search_params', JSON.stringify(duLieu));
-
-        window.location.href = trang;
-    }
-
-    // Newsletter
-    function dangKyNewsletter() {
-        var email = document.getElementById('email-newsletter').value.trim();
-        if (!email || email.indexOf('@') === -1) {
-            alert('Vui lòng nhập email hợp lệ!');
-            return;
-        }
-        alert('✅ Cảm ơn! Email "' + email + '" đã đăng ký nhận ưu đãi thành công!');
-        document.getElementById('email-newsletter').value = '';
-    }
-
-    // Counter animation (Intersection Observer)
-    function animateCounter(id, diemDen, hau) {
-        var el = document.getElementById(id);
-        if (!el) return;
-
-        var soHienTai = 0;
-        var buoc = Math.ceil(diemDen / 60);
-        var interval = setInterval(function() {
-            soHienTai += buoc;
-            if (soHienTai >= diemDen) {
-                soHienTai = diemDen;
-                clearInterval(interval);
-            }
-            el.innerText = soHienTai.toLocaleString('vi-VN') + (hau || '');
-        }, 25);
-    }
-
-    var daChamCounter = false;
-    function khoiDongCounterKhiHienThi() {
-        // Dùng IntersectionObserver để biết khi nào section xuất hiện
-        var section = document.querySelector('.counter-section') || document.getElementById('cnt-chuyen');
-        if (!section) return;
-
-        var observer = new IntersectionObserver(function(entries) {
-            for (var i = 0; i < entries.length; i++) {
-                if (entries[i].isIntersecting && !daChamCounter) {
-                    daChamCounter = true;
-                    animateCounter('cnt-chuyen', 500, '+');
-                    animateCounter('cnt-khach', 250000, '+');
-                    animateCounter('cnt-tuyen', 120, '+');
-                    animateCounter('cnt-danhgia', 50000, '+');
-                    // Cũng animate các counter trong hero
-                    animateCounter('count1', 500, '+');
-                    animateCounter('count2', 250000, '+');
-                    animateCounter('count3', 120, '+');
-                }
-            }
-        }, { threshold: 0.3 });
-
-        observer.observe(section.parentElement || section);
-
-        // Khởi động hero counter ngay
-        setTimeout(function() {
-            if (!daChamCounter) {
-                animateCounter('count1', 500, '+');
-                animateCounter('count2', 250000, '+');
-                animateCounter('count3', 120, '+');
-            }
-        }, 1200);
-    }
-    </script>
+    <script src="js/train.js"></script>
 </body>
 </html>
