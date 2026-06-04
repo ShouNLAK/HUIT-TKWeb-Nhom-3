@@ -139,7 +139,11 @@ function chuyenTrang(event, url) {
 // ---------------------------------------------------------------
 function capNhatSoLuongGioHang() {
     var gioHang = JSON.parse(sessionStorage.getItem('vth_gio_hang')) || [];
-    var soLuong = gioHang.length;
+    // Cộng dồn số lượng từng vé (mỗi vé có thể đặt nhiều chỗ)
+    var soLuong = 0;
+    for (var k = 0; k < gioHang.length; k++) {
+        soLuong += gioHang[k].soLuong || 1;
+    }
 
     var tatCaBadge = document.querySelectorAll('#cart-count');
     for (var i = 0; i < tatCaBadge.length; i++) {

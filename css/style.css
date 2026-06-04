@@ -853,6 +853,171 @@ footer {
 }
 
 /* ================================================================
+   GIỎ HÀNG — VÉ KIỂU "BOARDING PASS" (tự thiết kế, giảm đơn điệu Bootstrap)
+   Màu nhấn theo loại vé qua biến --bp-accent (flight/train/bus).
+   ================================================================ */
+.boarding-pass {
+    --bp-accent: #0d6efd;
+    --bp-accent2: #00c6ff;
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    background: linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
+    border: 1px solid rgba(255,255,255,0.1);
+    border-left: 5px solid var(--bp-accent);
+    border-radius: 14px;
+    margin-bottom: 16px;
+    overflow: hidden;
+    transition: var(--transition);
+}
+.boarding-pass:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    border-color: var(--bp-accent);
+}
+.boarding-pass.bp-train { --bp-accent: #2ecc71; --bp-accent2: #27ae60; }
+.boarding-pass.bp-bus   { --bp-accent: #e74c3c; --bp-accent2: #c0392b; }
+
+/* Cuống vé bên trái (chữ dọc) */
+.bp-stub {
+    flex-shrink: 0;
+    width: 56px;
+    background: linear-gradient(160deg, var(--bp-accent), var(--bp-accent2));
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 4px;
+}
+.bp-stub i { font-size: 1.5rem; }
+.bp-stub-label {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* Đường xé răng cưa (perforation) giữa cuống và thân vé */
+.bp-perf {
+    position: relative;
+    width: 0;
+    border-left: 2px dashed rgba(255,255,255,0.22);
+    margin: 12px 0;
+}
+.bp-perf::before, .bp-perf::after {
+    content: "";
+    position: absolute;
+    left: -10px;
+    width: 18px; height: 18px;
+    background: var(--dark);
+    border-radius: 50%;
+}
+.bp-perf::before { top: -18px; }
+.bp-perf::after  { bottom: -18px; }
+
+.bp-body { flex: 1; min-width: 0; padding: 16px 18px; }
+.bp-side {
+    flex-shrink: 0;
+    padding: 16px 18px;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+    border-left: 1px dashed rgba(255,255,255,0.1);
+}
+
+/* Mã vạch trang trí bằng CSS thuần */
+.bp-barcode {
+    height: 24px;
+    margin-top: 12px;
+    background-image: repeating-linear-gradient(90deg,
+        rgba(255,255,255,0.55) 0 2px, transparent 2px 4px,
+        rgba(255,255,255,0.55) 4px 5px, transparent 5px 9px);
+    border-radius: 3px;
+    opacity: 0.5;
+}
+
+/* Bộ tăng/giảm số lượng vé */
+.qty-stepper {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 30px;
+    padding: 3px;
+    align-self: flex-end;
+}
+.qty-btn {
+    width: 28px; height: 28px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    font-size: 0.8rem;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+}
+.qty-btn:hover:not(:disabled) { background: var(--blue); transform: scale(1.1); }
+.qty-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.qty-num {
+    min-width: 26px;
+    text-align: center;
+    font-weight: 800;
+    color: #fff;
+    font-size: 0.95rem;
+}
+
+/* ================================================================
+   GIỎ HÀNG — BẢNG TÓM TẮT KIỂU BIÊN LAI (thay cho table-dark mặc định)
+   ================================================================ */
+.receipt-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+.receipt-table td {
+    padding: 8px 0;
+    vertical-align: top;
+    border-bottom: 1px dashed rgba(255,255,255,0.13);
+}
+.receipt-table .receipt-name { color: rgba(255,255,255,0.78); padding-right: 10px; }
+.receipt-table .receipt-name small { color: rgba(255,255,255,0.45); }
+.receipt-table .receipt-price {
+    text-align: right;
+    white-space: nowrap;
+    color: var(--orange);
+    font-weight: 700;
+    font-family: "Courier New", Courier, monospace;
+    letter-spacing: 0.5px;
+}
+/* Số tiền dạng chữ đẳng khoảng cho cảm giác hoá đơn */
+.receipt-mono {
+    font-family: "Courier New", Courier, monospace;
+    letter-spacing: 0.5px;
+}
+/* Dấu mộc "ĐÃ XÁC NHẬN" */
+.receipt-stamp {
+    display: inline-block;
+    padding: 5px 16px;
+    border: 2px solid var(--green);
+    color: var(--green);
+    font-weight: 800;
+    font-size: 0.78rem;
+    letter-spacing: 2px;
+    border-radius: 6px;
+    transform: rotate(-8deg);
+    opacity: 0.85;
+    text-transform: uppercase;
+}
+
+/* ================================================================
    RESPONSIVE
    ================================================================ */
 @media (max-width: 768px) {
@@ -864,6 +1029,21 @@ footer {
     .plane-seat { width: 24px; height: 22px; font-size: 0.5rem; }
     .train-seat { width: 34px; height: 30px; font-size: 0.55rem; }
     .bus-bed { width: 95px; font-size: 0.6rem; }
+    /* Boarding pass: xếp dọc cột giá xuống dưới trên màn hình nhỏ */
+    .boarding-pass { flex-wrap: wrap; }
+    .bp-perf { display: none; }
+    .bp-side {
+        width: 100%;
+        text-align: left;
+        border-left: none;
+        border-top: 1px dashed rgba(255,255,255,0.12);
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .qty-stepper { align-self: center; }
 }
 
 @media (max-width: 576px) {
@@ -871,4 +1051,162 @@ footer {
     .hero-title { font-size: 2rem; }
     .search-form-panel { padding: 16px; }
     footer { padding: 40px 0 20px; }
+}
+
+/* ================================================================
+   TRANG GIỎ HÀNG — gom toàn bộ CSS nội bộ + inline của cart.html
+   (chuyển hết sang external; không dùng <style> hay style="" trong HTML)
+   ================================================================ */
+
+/* Helper ẩn phần tử — KHÔNG dùng !important để JS bật lại được bằng style.display */
+.an { display: none; }
+.flex-1 { flex: 1; }
+
+/* Khung trang */
+.cart-overlay { background: rgba(0, 0, 0, 0.82); }
+.navbar-logo { height: 36px; border-radius: 6px; }
+.cart-section { padding-top: 110px; min-height: 100vh; }
+.hr-faint { border-color: rgba(255, 255, 255, 0.1); }
+.cart-footer { padding: 30px 0; border-top: 1px solid rgba(255, 255, 255, 0.08); margin-top: 60px; }
+.txt-sm { font-size: 0.78rem; }
+
+/* Tiêu đề trang giỏ hàng */
+.cart-title-icon {
+    width: 52px; height: 52px;
+    background: linear-gradient(135deg, #f39c12, #e67e22);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+}
+
+/* Trạng thái giỏ trống */
+.cart-empty-panel { max-width: 600px; margin-top: 40px; }
+.cart-empty-icon { font-size: 4rem; opacity: 0.35; }
+
+/* Form thông tin hành khách */
+.order-form-label {
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 500; font-size: 0.88rem;
+    margin-bottom: 5px;
+}
+.req-star { color: #e74c3c; margin-left: 2px; }
+
+/* Thẻ tóm tắt đơn hàng */
+.summary-card {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+    padding: 24px;
+    position: sticky; top: 100px;
+}
+.uudai-box { background: rgba(46, 204, 113, 0.08); border: 1px solid rgba(46, 204, 113, 0.2); }
+
+/* Phương thức thanh toán */
+.payment-method {
+    display: flex; align-items: center; gap: 12px;
+    padding: 13px 15px; border-radius: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer; transition: all 0.22s;
+    margin-bottom: 10px;
+    background: rgba(255, 255, 255, 0.03);
+}
+.payment-method:has(input:checked) {
+    border-color: #0d6efd;
+    background: rgba(13, 110, 253, 0.12);
+    box-shadow: 0 0 0 1px rgba(13, 110, 253, 0.3);
+}
+.payment-method input { width: 18px; height: 18px; accent-color: #0d6efd; flex-shrink: 0; }
+.payment-logo {
+    width: 40px; height: 40px;
+    border-radius: 8px;
+    object-fit: contain;
+    flex-shrink: 0;
+    background: #fff;
+    padding: 3px;
+}
+.payment-logo-svg {
+    width: 40px; height: 40px;
+    border-radius: 8px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+}
+.payment-text { flex: 1; }
+.payment-name { font-size: 0.9rem; }
+.badge-mini { font-size: 0.62rem; }
+.txt-momo { color: #f06; }
+.txt-zalo { color: #00ADFF; }
+
+/* Modal đổi chỗ ngồi */
+.modal-narrow { max-width: 420px; }
+.dc-header-default { background: linear-gradient(135deg, #0d6efd, #00c6ff); }
+.seat-modal-body { background: #f0f4f8; }
+.dc-seat-map { display: inline-block; min-width: 200px; }
+.seat-modal-footer {
+    background: #1a1a2e;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+    padding: 12px 16px;
+}
+
+/* ================================================================
+   TRANG HÓA ĐƠN ĐIỆN TỬ (hoadon.html) — nền sáng, in được.
+   Scope dưới .hoadon-page để KHÔNG ảnh hưởng các trang theme tối.
+   ================================================================ */
+body.hoadon-page {
+    background: #e9edf1 !important;
+    font-family: 'Inter', Arial, sans-serif;
+    color: #1a1a2e;
+}
+.hoadon-page .invoice-wrap { max-width: 920px; margin: 30px auto; padding: 0 16px; }
+.hoadon-page .invoice-paper {
+    background: #fff;
+    border: 1px solid #d4dae0;
+    border-radius: 8px;
+    padding: 40px 44px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+}
+/* Letterhead */
+.hoadon-page .inv-head { display: flex; align-items: center; gap: 20px; }
+.hoadon-page .inv-head img { height: 70px; width: auto; border-radius: 8px; }
+.hoadon-page .inv-company-name { color: #0d6efd; font-weight: 900; font-size: 1.5rem; line-height: 1.2; }
+.hoadon-page .inv-company-info { font-size: 0.82rem; color: #444; line-height: 1.6; }
+.hoadon-page .inv-company-info a { color: #0d6efd; text-decoration: none; }
+.hoadon-page .inv-divider { height: 3px; background: linear-gradient(90deg, #0d6efd, #00c6ff); border: none; border-radius: 2px; margin: 14px 0 24px; }
+.hoadon-page .inv-title { text-align: center; font-weight: 900; font-size: 1.5rem; letter-spacing: 1px; margin-bottom: 6px; }
+.hoadon-page .inv-meta { text-align: right; font-size: 0.85rem; color: #333; }
+.hoadon-page .inv-meta em { color: #666; }
+/* Khối thông tin khách hàng */
+.hoadon-page .inv-customer {
+    background: #f5f8fb;
+    border: 1px solid #e1e8ef;
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 0.88rem;
+    margin: 18px 0 22px;
+}
+.hoadon-page .inv-customer .row > div { padding: 3px 0; }
+.hoadon-page .inv-customer b { color: #0d6efd; }
+/* Bảng hóa đơn */
+.hoadon-page .inv-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.hoadon-page .inv-table th, .hoadon-page .inv-table td { border: 1px solid #c9d2db; padding: 9px 10px; vertical-align: top; }
+.hoadon-page .inv-table thead th { background: #eef3f8; font-weight: 700; text-align: left; }
+.hoadon-page .inv-table td.num, .hoadon-page .inv-table th.num { text-align: right; white-space: nowrap; }
+.hoadon-page .inv-table td.center, .hoadon-page .inv-table th.center { text-align: center; }
+.hoadon-page .inv-table tfoot td { background: #f5f8fb; font-weight: 700; }
+.hoadon-page .inv-table tfoot td.tong { background: #dbeafe; color: #0a3d62; font-size: 1.02rem; }
+.hoadon-page .inv-table .ten-dv { font-weight: 600; }
+.hoadon-page .inv-table .chi-tiet { color: #555; font-size: 0.8rem; }
+.hoadon-page .inv-note { font-size: 0.82rem; color: #444; margin-top: 22px; line-height: 1.7; }
+.hoadon-page .inv-note b { color: #c0392b; }
+.hoadon-page .inv-actions { text-align: center; margin: 26px 0 50px; }
+
+/* KỸ THUẬT MỚI: CSS in ấn (@media print) — chỉ in phần hóa đơn */
+@media print {
+    body.hoadon-page { background: #fff !important; }
+    .hoadon-page .no-print { display: none !important; }
+    .hoadon-page .invoice-wrap { margin: 0; max-width: 100%; padding: 0; }
+    .hoadon-page .invoice-paper { border: none; box-shadow: none; border-radius: 0; padding: 0; }
+    @page { margin: 14mm; }
 }

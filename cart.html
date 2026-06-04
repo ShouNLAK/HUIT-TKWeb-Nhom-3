@@ -8,54 +8,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-    <style>
-        /* Internal CSS cho trang giỏ hàng */
-        .order-form-label {
-            color: rgba(255,255,255,0.7);
-            font-weight: 500; font-size: 0.88rem;
-            margin-bottom: 5px;
-        }
-        .summary-card {
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 16px;
-            padding: 24px;
-            position: sticky; top: 100px;
-        }
-        .payment-method {
-            display: flex; align-items: center; gap: 12px;
-            padding: 13px 15px; border-radius: 12px;
-            border: 2px solid rgba(255,255,255,0.1);
-            cursor: pointer; transition: all 0.22s;
-            margin-bottom: 10px;
-            background: rgba(255,255,255,0.03);
-        }
-        .payment-method:has(input:checked) {
-            border-color: #0d6efd;
-            background: rgba(13,110,253,0.12);
-            box-shadow: 0 0 0 1px rgba(13,110,253,0.3);
-        }
-        .payment-method input { width: 18px; height: 18px; accent-color: #0d6efd; flex-shrink: 0; }
-        .payment-logo {
-            width: 40px; height: 40px;
-            border-radius: 8px;
-            object-fit: contain;
-            flex-shrink: 0;
-            background: #fff;
-            padding: 3px;
-        }
-        .payment-logo-svg {
-            width: 40px; height: 40px;
-            border-radius: 8px;
-            flex-shrink: 0;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.5rem;
-        }
-    </style>
 </head>
 <body>
     <ul class="slideshow-bg"><li></li><li></li><li></li><li></li></ul>
-    <div class="overlay" style="background:rgba(0,0,0,0.82);"></div>
+    <div class="overlay cart-overlay"></div>
 
     <div class="loader-curtain" id="loader">
         <i class="bi bi-cart3 plane-spinner"></i>
@@ -66,7 +22,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolled" id="mainNav">
         <div class="container">
             <a class="navbar-brand" href="index.html" onclick="chuyenTrang(event,'index.html')">
-                <img src="jpg/Logo.jpg" alt="Logo" style="height:36px;border-radius:6px;" onerror="this.style.display='none'">
+                <img src="jpg/Logo.jpg" alt="Logo" class="navbar-logo" onerror="this.style.display='none'">
                 VIET TRAVEL HUB
             </a>
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
@@ -91,11 +47,11 @@
     </nav>
 
     <!-- NỘI DUNG GIỎ HÀNG -->
-    <section class="container" style="padding-top:110px; min-height:100vh;">
+    <section class="container cart-section">
 
         <!-- Tiêu đề -->
         <div class="d-flex align-items-center gap-3 mb-5">
-            <div style="width:52px;height:52px;background:linear-gradient(135deg,#f39c12,#e67e22);border-radius:14px;display:flex;align-items:center;justify-content:center;">
+            <div class="cart-title-icon">
                 <i class="bi bi-cart3-fill text-white fs-3"></i>
             </div>
             <div>
@@ -110,9 +66,9 @@
         </div>
 
         <!-- Trạng thái giỏ trống -->
-        <div id="empty-cart-msg" style="display:none;">
-            <div class="glass-panel text-center py-5 mx-auto" style="max-width:600px; margin-top:40px;">
-                <i class="bi bi-cart-x text-white-50" style="font-size:4rem; opacity:0.35;"></i>
+        <div id="empty-cart-msg" class="an">
+            <div class="glass-panel text-center py-5 mx-auto cart-empty-panel">
+                <i class="bi bi-cart-x text-white-50 cart-empty-icon"></i>
                 <h4 class="text-white mt-3 mb-2 fw-700">Giỏ hàng trống!</h4>
                 <p class="text-white-50 mb-4">Hãy khám phá và chọn chuyến đi yêu thích của bạn</p>
                 <div class="d-flex justify-content-center gap-2 flex-wrap">
@@ -129,7 +85,7 @@
             </div>
         </div>
 
-        <div id="khung-dat-hang" style="display:none;">
+        <div id="khung-dat-hang" class="an">
             <div class="row g-4">
                 <!-- CỘT TRÁI: Danh sách vé + Form hành khách -->
                 <div class="col-lg-7">
@@ -147,11 +103,6 @@
                         <h5 class="fw-700 text-white mb-4">
                             <i class="bi bi-person-vcard-fill text-primary me-2"></i>Thông Tin Hành Khách
                         </h5>
-
-                        <!-- Inline style cho label -->
-                        <style>
-                            .req-star { color: #e74c3c; margin-left: 2px; }
-                        </style>
 
                         <div class="row g-3">
                             <div class="col-md-6">
@@ -201,38 +152,38 @@
                         </h5>
                         <!-- Phương thức thanh toán -->
                         <label class="payment-method">
-                            <input type="radio" name="thanh-toan" value="bank" checked>
+                            <input type="radio" name="thanh-toan" value="bank" checked onchange="capNhatTongThanhToan()">
                             <!-- Logo Ngân Hàng -->
                             <img src="jpg/Vi-VNPay.jpg" class="payment-logo" alt="VNPAY">
-                            <div style="flex:1;">
-                                <div class="fw-600 text-white" style="font-size:0.9rem;">Chuyển Khoản Ngân Hàng</div>
+                            <div class="payment-text">
+                                <div class="fw-600 text-white payment-name">Chuyển Khoản Ngân Hàng</div>
                                 <div class="text-white-50 small">VCB &middot; Techcombank &middot; BIDV &middot; MB Bank</div>
                             </div>
                         </label>
                         <label class="payment-method">
-                            <input type="radio" name="thanh-toan" value="momo">
+                            <input type="radio" name="thanh-toan" value="momo" onchange="capNhatTongThanhToan()">
                             <!-- Logo MoMo -->
                             <img src="jpg/Vi-Momo.jpg" class="payment-logo" alt="MoMo">
-                            <div style="flex:1;">
-                                <div class="fw-600 text-white" style="font-size:0.9rem;"><span style="color:#f06;">Mo</span><span style="color:#f06;">Mo</span></div>
-                                <div class="text-white-50 small">Thanh toán nhanh qua QR • Không cần thẻ</div>
+                            <div class="payment-text">
+                                <div class="fw-600 text-white payment-name"><span class="txt-momo">Mo</span><span class="txt-momo">Mo</span> <span class="badge bg-success ms-1 badge-mini">-5%</span></div>
+                                <div class="text-white-50 small">Giảm ngay 5% tổng đơn • Thanh toán qua QR</div>
                             </div>
                         </label>
                         <label class="payment-method">
-                            <input type="radio" name="thanh-toan" value="card">
+                            <input type="radio" name="thanh-toan" value="card" onchange="capNhatTongThanhToan()">
                             <!-- Logo Visa/Mastercard -->
                             <img src="jpg/Logo.jpg" class="payment-logo" alt="Visa">
-                            <div style="flex:1;">
-                                <div class="fw-600 text-white" style="font-size:0.9rem;">Thẻ Tín Dụng / Ghi Nợ</div>
+                            <div class="payment-text">
+                                <div class="fw-600 text-white payment-name">Thẻ Tín Dụng / Ghi Nợ</div>
                                 <div class="text-white-50 small">Visa &middot; Mastercard &middot; JCB &middot; NAPAS</div>
                             </div>
                         </label>
                         <label class="payment-method">
-                            <input type="radio" name="thanh-toan" value="zalopay">
+                            <input type="radio" name="thanh-toan" value="zalopay" onchange="capNhatTongThanhToan()">
                             <!-- Logo ZaloPay -->
                             <img src="jpg/Vi-ZaloPay.jpg" class="payment-logo" alt="ZaloPay">
-                            <div style="flex:1;">
-                                <div class="fw-600 text-white" style="font-size:0.9rem;"><span style="color:#00ADFF;">Zalo</span><span style="color:#fff;">Pay</span></div>
+                            <div class="payment-text">
+                                <div class="fw-600 text-white payment-name"><span class="txt-zalo">Zalo</span><span class="text-white">Pay</span></div>
                                 <div class="text-white-50 small">Thanh toán qua ứng dụng Zalo</div>
                             </div>
                         </label>
@@ -246,19 +197,19 @@
                             <i class="bi bi-receipt text-warning me-2"></i>Tóm Tắt Đơn Hàng
                         </h5>
 
-                        <!-- Bảng tóm tắt -->
-                        <table class="table table-dark table-borderless" id="bang-tom-tat">
+                        <!-- Bảng tóm tắt kiểu biên lai (tự thiết kế, không dùng table-dark mặc định) -->
+                        <table class="receipt-table" id="bang-tom-tat">
                             <tbody id="tom-tat-body">
                                 <!-- cart.js render -->
                             </tbody>
                         </table>
 
-                        <hr style="border-color:rgba(255,255,255,0.1);">
+                        <hr class="hr-faint">
 
                         <!-- Phí dịch vụ -->
                         <div class="d-flex justify-content-between mb-2">
                             <span class="text-white-50 small">Giá vé</span>
-                            <span class="text-white fw-700" id="tong-tien-gioHang" style="white-space:nowrap;">0 ₫</span>
+                            <span class="text-white fw-700 receipt-mono text-nowrap" id="tong-tien-gioHang">0 ₫</span>
                         </div>
                         <div class="d-flex justify-content-between mb-2">
                             <span class="text-white-50 small">Phí dịch vụ</span>
@@ -268,12 +219,22 @@
                             <span class="text-white-50 small">Thuế VAT</span>
                             <span class="text-success small fw-600">Đã bao gồm</span>
                         </div>
+                        <!-- Dòng giảm giá MoMo (ẩn khi không áp dụng — JS bật bằng style.display) -->
+                        <div class="justify-content-between mb-2 an" id="dong-giam-gia">
+                            <span class="text-white-50 small"><i class="bi bi-piggy-bank-fill text-success me-1"></i>Giảm giá MoMo (5%)</span>
+                            <span class="text-success fw-700 receipt-mono text-nowrap" id="tien-giam-gia">-0 ₫</span>
+                        </div>
 
-                        <hr style="border-color:rgba(255,255,255,0.1);">
+                        <hr class="hr-faint">
 
-                        <div class="d-flex justify-content-between mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
                             <span class="fw-700 text-white">Tổng Thanh Toán</span>
-                            <span class="fw-900 text-warning fs-5" id="tong-thanh-toan" style="white-space:nowrap;">0 ₫</span>
+                            <span class="fw-900 text-warning fs-5 receipt-mono text-nowrap" id="tong-thanh-toan">0 ₫</span>
+                        </div>
+
+                        <!-- Dấu mộc biên lai -->
+                        <div class="text-center mb-4">
+                            <span class="receipt-stamp"><i class="bi bi-patch-check"></i> Viet Travel Hub</span>
                         </div>
 
                         <!-- Nút đặt hàng -->
@@ -281,13 +242,13 @@
                             <i class="bi bi-check2-circle me-2"></i>Hoàn Tất Đặt Vé
                         </button>
 
-                        <p class="text-white-50 text-center" style="font-size:0.78rem;">
+                        <p class="text-white-50 text-center txt-sm">
                             <i class="bi bi-shield-check text-success me-1"></i>
                             Thanh toán được bảo mật bởi SSL 256-bit
                         </p>
 
                         <!-- Ưu đãi -->
-                        <div class="p-3 rounded mt-2" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);">
+                        <div class="p-3 rounded mt-2 uudai-box">
                             <div class="fw-600 text-success small mb-1"><i class="bi bi-gift-fill me-1"></i>Ưu Đãi Hiện Tại</div>
                             <div class="text-white-50 small">Miễn phí đặt vé · Không phí ẩn · Hoàn tiền 100% nếu hủy đúng hạn</div>
                         </div>
@@ -304,8 +265,11 @@
                 <div class="modal-body p-4" id="modal-success-body">
                     <!-- cart.js fill vào -->
                 </div>
-                <div class="modal-footer justify-content-center gap-3" style="border-top:1px solid rgba(255,255,255,0.1);">
+                <div class="modal-footer justify-content-center gap-3">
                     <button class="btn btn-outline-light" data-bs-dismiss="modal">Đóng</button>
+                    <a class="btn btn-success px-4 fw-700" id="btn-xem-hoadon" href="hoadon.html">
+                        <i class="bi bi-receipt-cutoff"></i> Xem &amp; In Hóa Đơn
+                    </a>
                     <button class="btn btn-custom px-4 fw-700" onclick="chuyenTrang(event,'index.html')">
                         <i class="bi bi-house-door"></i> Về Trang Chủ
                     </button>
@@ -314,7 +278,43 @@
         </div>
     </div>
 
-    <footer style="padding:30px 0;border-top:1px solid rgba(255,255,255,0.08);margin-top:60px;">
+    <!-- MODAL ĐỔI CHỖ NGỒI (ngay trong giỏ hàng – hỗ trợ máy bay/tàu/xe) -->
+    <div class="modal fade" id="modal-doi-cho" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-narrow">
+            <div class="modal-content">
+                <div class="modal-header dc-header-default" id="doi-cho-modal-header">
+                    <div>
+                        <h5 class="modal-title fw-800 text-white mb-0">
+                            <i class="bi bi-arrow-left-right"></i> Đổi Chỗ Ngồi
+                        </h5>
+                        <div class="text-white opacity-75 small" id="doi-cho-info">---</div>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-3 seat-modal-body">
+                    <!-- Chú thích chỗ ngồi – cart.js điền theo loại vé -->
+                    <div id="doi-cho-legend" class="seat-legend mb-3"></div>
+
+                    <!-- Sơ đồ chỗ ngồi – cart.js vẽ vào đây -->
+                    <div class="d-flex justify-content-center">
+                        <div id="doi-cho-seat-map" class="dc-seat-map"></div>
+                    </div>
+                </div>
+                <div class="modal-footer seat-modal-footer">
+                    <div id="doi-cho-seat-info" class="text-white-50 small text-center">Chưa chọn ghế mới</div>
+                    <div class="d-flex gap-2 justify-content-between">
+                        <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Hủy</button>
+                        <button type="button" class="btn btn-custom px-4 fw-700 flex-1"
+                                id="btn-confirm-doi-cho" onclick="xacNhanDoiCho()" disabled>
+                            <i class="bi bi-check2-circle me-1"></i> Xác Nhận Đổi Chỗ
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="cart-footer">
         <div class="container text-center">
             <p class="text-white-50 small mb-0">© 2024 Viet Travel Hub · Giỏ hàng an toàn – Thanh toán bảo mật</p>
         </div>
