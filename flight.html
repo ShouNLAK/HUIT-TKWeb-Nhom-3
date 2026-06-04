@@ -59,6 +59,29 @@
         .filter-chip:hover, .filter-chip.active {
             background: #0d6efd; border-color: #0d6efd; color: #fff;
         }
+
+	@media (max-width: 991.98px) {
+    	.navbar-collapse {
+        	background: rgba(20, 20, 35, 0.98); /* Tạo nền tối đồng bộ với website để che phần chữ phía dưới */
+        	backdrop-filter: blur(10px); /* Hiệu ứng mờ kính cao cấp */
+        	border: 1px solid rgba(255, 255, 255, 0.1); /* Viền mỏng định hình khung */
+        	border-radius: 12px; /* Bo góc thành một khối layout đẹp mắt */
+        	padding: 20px;
+        	margin-top: 10px;
+        	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Đổ bóng tạo chiều sâu */
+    		}
+    
+    	/* Làm các mục menu cách nhau rõ ràng hơn trên di động */
+    	.navbar-nav .nav-item {
+        	border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        	padding-bottom: 8px;
+        	margin-bottom: 8px;
+    		}
+    	.navbar-nav .nav-item:last-child {
+        	border-bottom: none;
+        	margin-bottom: 0;
+    		}
+	}
     </style>
 </head>
 <body>
