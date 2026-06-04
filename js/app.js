@@ -7,7 +7,7 @@
 document.addEventListener("DOMContentLoaded", function() {
 
     // 1. Hiệu ứng loader curtain (biến mất sau khi load)
-    var loader = document.getElementById('loader');
+    var loader = document.getElementById('manHinhCho');
     if (loader) {
         setTimeout(function() {
             loader.classList.add('hidden');
@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // 2. Navbar scroll effect (thêm class 'scrolled' khi cuộn)
-    var navbar = document.getElementById('mainNav');
+    var navbar = document.getElementById('thanhDieuHuong');
     if (navbar) {
         window.addEventListener('scroll', function() {
             if (window.scrollY > 50) {
@@ -64,9 +64,9 @@ document.addEventListener("DOMContentLoaded", function() {
 // ---------------------------------------------------------------
 function apDungSearchParamsBay(params) {
     setTimeout(function() {
-        var elTu = document.getElementById('flight-from');
-        var elDen = document.getElementById('flight-to');
-        var elNgay = document.getElementById('flight-date');
+        var elTu = document.getElementById('chuyenBayTu');
+        var elDen = document.getElementById('chuyenBayDen');
+        var elNgay = document.getElementById('chuyenBayNgay');
 
         if (elTu && params.tuSearch)   elTu.value   = params.tuSearch;
         if (elDen && params.denSearch) elDen.value  = params.denSearch;
@@ -84,9 +84,9 @@ function apDungSearchParamsBay(params) {
 // ---------------------------------------------------------------
 function apDungSearchParamsTau(params) {
     setTimeout(function() {
-        var elTu = document.getElementById('train-from');
-        var elDen = document.getElementById('train-to');
-        var elNgay = document.getElementById('train-date-out');
+        var elTu = document.getElementById('tauHoaTu');
+        var elDen = document.getElementById('tauHoaDen');
+        var elNgay = document.getElementById('tauHoaNgayDi');
 
         if (elTu && params.tuSearch)   elTu.value   = params.tuSearch;
         if (elDen && params.denSearch) elDen.value  = params.denSearch;
@@ -103,9 +103,9 @@ function apDungSearchParamsTau(params) {
 // ---------------------------------------------------------------
 function apDungSearchParamsXe(params) {
     setTimeout(function() {
-        var elTu = document.getElementById('bus-from');
-        var elDen = document.getElementById('bus-to');
-        var elNgay = document.getElementById('bus-date');
+        var elTu = document.getElementById('xeKhachTu');
+        var elDen = document.getElementById('xeKhachDen');
+        var elNgay = document.getElementById('xeKhachNgay');
 
         if (elTu && params.tuSearch)   elTu.value   = params.tuSearch;
         if (elDen && params.denSearch) elDen.value  = params.denSearch;
@@ -123,7 +123,7 @@ function apDungSearchParamsXe(params) {
 function chuyenTrang(event, url) {
     if (event) event.preventDefault();
 
-    var loader = document.getElementById('loader');
+    var loader = document.getElementById('manHinhCho');
     if (loader) {
         loader.classList.remove('hidden');
         setTimeout(function() {
@@ -145,7 +145,7 @@ function capNhatSoLuongGioHang() {
         soLuong += gioHang[k].soLuong || 1;
     }
 
-    var tatCaBadge = document.querySelectorAll('#cart-count');
+    var tatCaBadge = document.querySelectorAll('#soLuongGioHang');
     for (var i = 0; i < tatCaBadge.length; i++) {
         tatCaBadge[i].innerText = soLuong > 0 ? soLuong : '';
         tatCaBadge[i].style.display = soLuong > 0 ? 'inline-flex' : 'none';
@@ -173,10 +173,10 @@ function capNhatNavActive() {
 // ---------------------------------------------------------------
 function khoiDongScrollTop() {
     // Tạo nút nếu chưa có trong HTML
-    var btn = document.getElementById('scrollTopBtn');
+    var btn = document.getElementById('nutLenDauTrang');
     if (!btn) {
         btn = document.createElement('button');
-        btn.id = 'scrollTopBtn';
+        btn.id = 'nutLenDauTrang';
         btn.innerHTML = '<i class="bi bi-arrow-up-short"></i>';
         btn.title = 'Lên đầu trang';
         document.body.appendChild(btn);

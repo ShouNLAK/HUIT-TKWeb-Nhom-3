@@ -10,7 +10,7 @@ var giuongXeDangChon = null;
 
 document.addEventListener("DOMContentLoaded", function() {
     var homNay = new Date().toISOString().split('T')[0];
-    var inputNgay = document.getElementById('bus-date');
+    var inputNgay = document.getElementById('xeKhachNgay');
     if (inputNgay) {
         inputNgay.min = homNay;
         inputNgay.value = homNay;
@@ -25,18 +25,18 @@ document.addEventListener("DOMContentLoaded", function() {
 function timXe(event) {
     if (event) event.preventDefault();
 
-    var tu = document.getElementById('bus-from').value;
-    var den = document.getElementById('bus-to').value;
-    var inputNgay = document.getElementById('bus-date');
+    var tu = document.getElementById('xeKhachTu').value;
+    var den = document.getElementById('xeKhachDen').value;
+    var inputNgay = document.getElementById('xeKhachNgay');
     ngayDiXe = inputNgay ? inputNgay.value : '';
 
     if (!ngayDiXe) {
-        document.getElementById('bus-results').innerHTML =
+        document.getElementById('ketQuaXeKhach').innerHTML =
             '<div class="alert alert-warning fw-600"><i class="bi bi-exclamation-triangle-fill me-2"></i>Vui lòng chọn Ngày Đi!</div>';
         return;
     }
     if (tu !== '' && den !== '' && tu === den) {
-        document.getElementById('bus-results').innerHTML =
+        document.getElementById('ketQuaXeKhach').innerHTML =
             '<div class="alert alert-warning fw-600"><i class="bi bi-exclamation-triangle-fill me-2"></i>Điểm Đi và Điểm Đến không được trùng nhau!</div>';
         return;
     }
@@ -65,7 +65,7 @@ function timXe(event) {
 // HÀM: Render danh sách xe khách
 // ---------------------------------------------------------------
 function hienThiDanhSachXe(danhSach) {
-    var container = document.getElementById('bus-results');
+    var container = document.getElementById('ketQuaXeKhach');
     if (!container) return;
 
     if (danhSach.length === 0) {
@@ -174,18 +174,18 @@ function moModalChonGiuong(idXe) {
 
     var b = xeDangChon;
     var gioParts = b.time.split(' - ');
-    document.getElementById('bus-modal-info').innerHTML =
+    document.getElementById('thongTinGheXe').innerHTML =
         b.company + ' · ' + b.name + ' · ' + (gioParts[0]||'') + ' → ' + (gioParts[1]||'') + ' · ' + dinhDangNgay(ngayDiXe);
 
-    var nutXN = document.getElementById('btn-confirm-bus');
+    var nutXN = document.getElementById('xacNhanXeKhach');
     if (nutXN) { nutXN.disabled = true; nutXN.innerText = 'Xác Nhận Đặt'; }
-    document.getElementById('bus-seat-info-selected').innerText = 'Chưa chọn giường';
+    document.getElementById('thongTinGheXeDaChon').innerText = 'Chưa chọn giường';
 
     // Vẽ sơ đồ tầng dưới và tầng trên
-    veSoDoXe('lower', document.getElementById('bus-map-lower'));
-    veSoDoXe('upper', document.getElementById('bus-map-upper'));
+    veSoDoXe('lower', document.getElementById('xeKhachTangDuoi'));
+    veSoDoXe('upper', document.getElementById('xeKhachTangTren'));
 
-    var modal = new bootstrap.Modal(document.getElementById('busSeatModal'));
+    var modal = new bootstrap.Modal(document.getElementById('modalGheXeKhach'));
     modal.show();
 }
 
@@ -264,12 +264,12 @@ function chonGiuongXe(phanTu, maGiuong, tang) {
 
     giuongXeDangChon = { maGiuong: maGiuong, tang: tenTang, gia: gia };
 
-    document.getElementById('bus-seat-info-selected').innerHTML =
+    document.getElementById('thongTinGheXeDaChon').innerHTML =
         'Giường <strong class="text-white">' + maGiuong + '</strong>' +
         ' <span class="badge bg-danger ms-1">' + tenTang + '</span>' +
         ' <span class="text-warning ms-2 fw-700">' + gia.toLocaleString('vi-VN') + ' ₫</span>';
 
-    var nutXN = document.getElementById('btn-confirm-bus');
+    var nutXN = document.getElementById('xacNhanXeKhach');
     if (nutXN) { nutXN.disabled = false; nutXN.innerHTML = '<i class="bi bi-check2-circle me-1"></i>Xác Nhận – ' + maGiuong; }
 }
 
@@ -294,6 +294,6 @@ function xacNhanDatXe() {
         );
     }
 
-    var modal = bootstrap.Modal.getInstance(document.getElementById('busSeatModal'));
+    var modal = bootstrap.Modal.getInstance(document.getElementById('modalGheXeKhach'));
     if (modal) modal.hide();
 }

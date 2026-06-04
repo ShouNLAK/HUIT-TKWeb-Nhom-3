@@ -1,0 +1,102 @@
+/* ================================================================
+   SƠ ĐỒ TÀU HỎA
+   ================================================================ */
+.train-coach-container {
+    background: #fff;
+    border: 3px solid #2c3e50;
+    border-radius: 12px;
+    padding: 16px;
+    max-width: 380px;
+    margin: 0 auto;
+}
+.train-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 4px;
+    gap: 4px;
+}
+.train-seat-grp { display: flex; gap: 3px; }
+.train-seat {
+    width: 40px;
+    height: 36px;
+    border-radius: 6px 6px 4px 4px;
+    font-size: 0.6rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+    border: 2px solid;
+    color: #333;
+}
+.train-seat.window  { background: #d5f5e3; border-color: #82e0aa; }
+.train-seat.middle  { background: #fef9e7; border-color: #f9e79f; }
+.train-seat.aisle   { background: #d6eaf8; border-color: #a9cce3; }
+.train-seat.booked  { background: repeating-linear-gradient(45deg,#eee,#eee 4px,#ddd 4px,#ddd 8px); border-color:#bbb; cursor:not-allowed; }
+.train-seat.selected { background: linear-gradient(135deg,var(--blue),#00c6ff)!important; border-color:var(--blue)!important; color:#fff!important; }
+.train-seat:not(.booked):hover { transform: scale(1.1); }
+.train-divider {
+    font-size: 0.6rem;
+    color: #999;
+    text-align: center;
+    width: 36px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+.train-aisle-label {
+    width: 40px;
+    text-align: center;
+    font-size: 0.65rem;
+    color: #999;
+    font-weight: 700;
+}
+
+/* Cabin giường nằm */
+.cabin-container { max-width: 480px; margin: 0 auto; }
+.cabin-box {
+    background: #f5f5f5;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    overflow: hidden;
+}
+.cabin-header {
+    background: #2c3e50;
+    color: #fff;
+    padding: 8px 14px;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+.cabin-beds { display: flex; padding: 10px; gap: 8px; justify-content: center; }
+.cabin-col { display: flex; flex-direction: column; gap: 6px; }
+.cabin-aisle-div {
+    display: flex;
+    align-items: center;
+    writing-mode: vertical-rl;
+    font-size: 0.6rem;
+    color: #999;
+    font-weight: 700;
+    padding: 0 4px;
+}
+.train-bed {
+    width: 100px;
+    height: 34px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+    border: 2px solid;
+    color: #333;
+}
+.train-bed.lower  { background: #eafaf1; border-color: #82e0aa; }
+.train-bed.upper  { background: #fef9e7; border-color: #f9e79f; }
+.train-bed.booked { background: #fce4e4; border-color: #f1948a; cursor: not-allowed; color: #aaa; }
+.train-bed.selected { background: linear-gradient(135deg,var(--blue),#00c6ff)!important; border-color:var(--blue)!important; color:#fff!important; }
+.train-bed:not(.booked):hover { transform: scale(1.04); }
+

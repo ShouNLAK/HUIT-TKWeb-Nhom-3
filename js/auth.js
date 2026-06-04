@@ -146,7 +146,8 @@ function dangXuat() {
     sessionStorage.removeItem('vth_current_user');
     sessionStorage.removeItem('admin_session');
     // Giỏ hàng giữ lại để tiện lần đăng nhập sau
-    window.location.href = 'login.html';
+    var inRoot = window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/');
+    window.location.href = inRoot ? 'html/login.html' : 'login.html';
 }
 
 // ---------------------------------------------------------------
@@ -157,7 +158,8 @@ function yeuCauDangNhap() {
     if (!daoDangNhap()) {
         // Lưu trang hiện tại để redirect về sau khi login
         sessionStorage.setItem('redirect_after_login', window.location.href);
-        window.location.href = 'login.html';
+        var inRoot = window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/');
+        window.location.href = inRoot ? 'html/login.html' : 'login.html';
         return false;
     }
     return true;
@@ -169,12 +171,14 @@ function yeuCauDangNhap() {
 function yeuCauAdmin() {
     if (!daoDangNhap()) {
         sessionStorage.setItem('redirect_after_login', window.location.href);
-        window.location.href = 'login.html';
+        var inRoot = window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/');
+        window.location.href = inRoot ? 'html/login.html' : 'login.html';
         return false;
     }
     if (!laAdmin()) {
         alert('Bạn không có quyền truy cập trang này!');
-        window.location.href = 'index.html';
+        var inRoot = window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/');
+        window.location.href = inRoot ? 'index.html' : '../index.html';
         return false;
     }
     return true;
@@ -188,16 +192,19 @@ function capNhatNavbarAuth() {
     var user = layUserHienTai();
 
     // Tìm khu vực auth trên navbar
-    var khungAuth = document.getElementById('navbar-auth-area');
+    var khungAuth = document.getElementById('khuVucDangNhap');
     if (!khungAuth) return;
+
+    var inRoot = window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/');
+    var prefix = inRoot ? 'html/' : '';
 
     if (!user) {
         // Chưa đăng nhập: Hiện nút Đăng Nhập / Đăng Ký
         khungAuth.innerHTML =
-            '<a href="login.html" class="btn btn-outline-light btn-sm me-2" onclick="chuyenTrang(event,\'login.html\')">' +
+            '<a href="' + prefix + 'login.html" class="btn btn-outline-light btn-sm me-2">' +
             '  <i class="bi bi-person"></i> Đăng Nhập' +
             '</a>' +
-            '<a href="register.html" class="btn btn-accent btn-sm" onclick="chuyenTrang(event,\'register.html\')">' +
+            '<a href="' + prefix + 'register.html" class="btn btn-accent btn-sm">' +
             '  <i class="bi bi-person-plus"></i> Đăng Ký' +
             '</a>';
     } else {
@@ -221,7 +228,7 @@ function capNhatNavbarAuth() {
             '    <li><span class="dropdown-item-text small text-secondary">' + user.email + '</span></li>' +
             '    <li><hr class="dropdown-divider"></li>' +
             (user.vaiTro === 'admin'
-                ? '<li><a class="dropdown-item" href="admin.html" onclick="chuyenTrang(event,\'admin.html\')"><i class="bi bi-speedometer2 me-2"></i>Quản Trị</a></li>'
+                ? '<li><a class="dropdown-item" href="' + prefix + 'admin.html"><i class="bi bi-speedometer2 me-2"></i>Quản Trị</a></li>'
                 : '') +
             '    <li><a class="dropdown-item" href="#" onclick="xemThongTinCaNhan()"><i class="bi bi-person me-2"></i>Tài Khoản</a></li>' +
             '    <li><hr class="dropdown-divider"></li>' +

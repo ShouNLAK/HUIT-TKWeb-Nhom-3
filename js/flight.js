@@ -16,7 +16,7 @@ var danhSachHienThi = [];
 document.addEventListener("DOMContentLoaded", function() {
     // Thiết lập ngày tối thiểu hôm nay
     var homNay = new Date().toISOString().split('T')[0];
-    var inputNgay = document.getElementById('flight-date');
+    var inputNgay = document.getElementById('chuyenBayNgay');
     if (inputNgay) {
         inputNgay.min = homNay;
         inputNgay.value = homNay;
@@ -34,9 +34,9 @@ document.addEventListener("DOMContentLoaded", function() {
 function timChuyenBay(event) {
     if (event) event.preventDefault();
 
-    var tu = document.getElementById('flight-from').value;
-    var den = document.getElementById('flight-to').value;
-    var inputNgay = document.getElementById('flight-date');
+    var tu = document.getElementById('chuyenBayTu').value;
+    var den = document.getElementById('chuyenBayDen').value;
+    var inputNgay = document.getElementById('chuyenBayNgay');
     ngayBay = inputNgay ? inputNgay.value : '';
 
     // Validation
@@ -106,7 +106,7 @@ function locHang(phanTu, tenHang) {
 // HÀM: Hiển thị cảnh báo
 // ---------------------------------------------------------------
 function hienCanhBao(noiDung) {
-    var container = document.getElementById('flight-results');
+    var container = document.getElementById('ketQuaChuyenBay');
     container.innerHTML = '<div class="alert alert-warning fw-600"><i class="bi bi-exclamation-triangle-fill me-2"></i>' + noiDung + '</div>';
 }
 
@@ -114,7 +114,7 @@ function hienCanhBao(noiDung) {
 // HÀM: Render danh sách chuyến bay
 // ---------------------------------------------------------------
 function hienThiKetQua(danhSach) {
-    var container = document.getElementById('flight-results');
+    var container = document.getElementById('ketQuaChuyenBay');
     var elSoKQ = document.getElementById('so-ket-qua');
 
     if (elSoKQ) elSoKQ.innerText = 'Tìm thấy ' + danhSach.length + ' chuyến bay';
@@ -131,6 +131,9 @@ function hienThiKetQua(danhSach) {
     }
 
     var html = '';
+    
+    var isInRoot = window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/');
+    var prefix = isInRoot ? '' : '../';
 
     for (var i = 0; i < danhSach.length; i++) {
         var f = danhSach[i];
@@ -150,7 +153,7 @@ function hienThiKetQua(danhSach) {
         // Logo hãng - compact box
         html += '<div class="airline-logo-box" style="flex-shrink:0;">';
         if (f.logoUrl) {
-            html += '<img src="' + f.logoUrl + '" alt="' + f.airline + '" onerror="this.style.display=\'none\';this.nextSibling.style.display=\'flex\';">';
+            html += '<img src="' + prefix + f.logoUrl + '" alt="' + f.airline + '" onerror="this.style.display=\'none\';this.nextSibling.style.display=\'flex\';">';
             html += '<div style="display:none;width:100%;height:100%;background:' + mauHang + ';border-radius:8px;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:0.85rem;">' + tenVietTat + '</div>';
         } else {
             html += '<div style="width:100%;height:100%;background:' + mauHang + ';border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;">' + tenVietTat + '</div>';
@@ -260,17 +263,20 @@ function moChiTietChuyenBay(idChuyen) {
     var f = chuyenBayDangChon;
     var diemDenInfo = (typeof destinations !== 'undefined' && destinations[f.to]) || {
         name: tenDiemDen(f.to),
-        img: 'jpg/Da-Nang.jpg',
+        img: 'img/Da-Nang.jpg',
         desc: 'Điểm đến tuyệt vời tại Việt Nam.'
     };
 
     var gioParts = f.time.split(' - ');
+    
+    var isInRoot = window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/');
+    var prefix = isInRoot ? '' : '../';
 
-    document.getElementById('flight-detail-body').innerHTML =
+    document.getElementById('chiTietChuyenBayBody').innerHTML =
         '<div class="row g-4">' +
         '  <div class="col-md-5">' +
         '    <div class="position-relative h-100" style="min-height:280px;">' +
-        '      <img src="' + diemDenInfo.img + '" class="img-fluid rounded-3 w-100" style="height:100%; position:absolute; object-fit:cover;">' +
+        '      <img src="' + prefix + diemDenInfo.img + '" class="img-fluid rounded-3 w-100" style="height:100%; position:absolute; object-fit:cover;">' +
         '      <div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,0.8),transparent);border-radius:12px;"></div>' +
         '      <div style="position:absolute;bottom:20px;left:20px;right:20px;">' +
         '        <h4 class="fw-900 text-white mb-2">' + diemDenInfo.name + '</h4>' +
@@ -281,7 +287,7 @@ function moChiTietChuyenBay(idChuyen) {
         '  <div class="col-md-7">' +
         '    <div class="p-4 rounded-3 h-100" style="background:rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);">' +
         '      <div class="d-flex align-items-center justify-content-between mb-4 border-bottom border-secondary pb-3">' +
-        '        <img src="jpg/' + f.airline.replace(/\s+/g, '-') + '.jpg" style="height:45px; border-radius:6px; background:#fff; padding:5px; object-fit:contain;" alt="' + f.airline + '" onerror="this.style.display=\'none\'">' +
+        '        <img src="' + prefix + 'img/' + f.airline.replace(/\s+/g, '-') + '.jpg" style="height:45px; border-radius:6px; background:#fff; padding:5px; object-fit:contain;" alt="' + f.airline + '" onerror="this.style.display=\'none\'">' +
         '        <div class="text-end">' +
         '           <div class="fw-800 text-warning fs-5">' + (f.price).toLocaleString('vi-VN') + ' ₫</div>' +
         '           <div class="text-white-50 small">Phổ thông / khách</div>' +
@@ -310,7 +316,7 @@ function moChiTietChuyenBay(idChuyen) {
         '  </div>' +
         '</div>';
 
-    var modal = new bootstrap.Modal(document.getElementById('flightDetailModal'));
+    var modal = new bootstrap.Modal(document.getElementById('modalChiTietChuyenBay'));
     modal.show();
 }
 
@@ -318,7 +324,7 @@ function moChiTietChuyenBay(idChuyen) {
 // HÀM: Tiếp tục sang bước chọn ghế
 // ---------------------------------------------------------------
 function tiepTucChonGhe() {
-    var modalDT = bootstrap.Modal.getInstance(document.getElementById('flightDetailModal'));
+    var modalDT = bootstrap.Modal.getInstance(document.getElementById('modalChiTietChuyenBay'));
     if (modalDT) modalDT.hide();
 
     setTimeout(function() {
@@ -345,22 +351,22 @@ function moModalChonGhe(idChuyen) {
     // Cập nhật thông tin modal
     var f = chuyenBayDangChon;
     var gioParts = f.time.split(' - ');
-    document.getElementById('modal-flight-info').innerHTML =
+    document.getElementById('thongTinMayBayModal').innerHTML =
         f.airline + ' · ' + f.code + ' · ' + (gioParts[0]||'') + ' → ' + (gioParts[1]||'') +
         ' · ' + f.from + ' → ' + f.to + ' · ' + dinhDangNgay(ngayBay);
 
     // Reset nút xác nhận
-    var nutXN = document.getElementById('btn-confirm-flight');
+    var nutXN = document.getElementById('xacNhanMayBay');
     if (nutXN) {
         nutXN.disabled = true;
         nutXN.innerText = 'Xác Nhận Mua';
     }
-    document.getElementById('flight-seat-info-selected').innerText = 'Chưa chọn ghế';
+    document.getElementById('thongTinGheMayBayDaChon').innerText = 'Chưa chọn ghế';
 
     // Vẽ sơ đồ máy bay
     veDoHoaMayBay();
 
-    var modal = new bootstrap.Modal(document.getElementById('flightSeatModal'));
+    var modal = new bootstrap.Modal(document.getElementById('modalGheMayBay'));
     modal.show();
 }
 
@@ -368,7 +374,7 @@ function moModalChonGhe(idChuyen) {
 // HÀM: Vẽ sơ đồ ghế máy bay 2D (cấu hình A320: 3-3, 30 hàng)
 // ---------------------------------------------------------------
 function veDoHoaMayBay() {
-    var container = document.getElementById('aircraft-seat-map');
+    var container = document.getElementById('soDoGheMayBay');
     if (!container) return;
 
     // Ghế đã đặt ngẫu nhiên (cố định để demo)
@@ -466,14 +472,14 @@ function chonGheMayBay(phanTu, maGhe, hangGhe) {
     gheDangChon = { maGhe: maGhe, hangGhe: tenHang, gia: giaFinal };
 
     // Cập nhật thông tin
-    var elInfo = document.getElementById('flight-seat-info-selected');
+    var elInfo = document.getElementById('thongTinGheMayBayDaChon');
     if (elInfo) {
         elInfo.innerHTML = '<span class="text-white fw-700">Ghế ' + maGhe + '</span>' +
             ' <span class="badge bg-secondary ms-1">' + tenHang + '</span>' +
             ' <span class="text-warning ms-2 fw-700">' + giaFinal.toLocaleString('vi-VN') + ' ₫</span>';
     }
 
-    var nutXN = document.getElementById('btn-confirm-flight');
+    var nutXN = document.getElementById('xacNhanMayBay');
     if (nutXN) {
         nutXN.disabled = false;
         nutXN.innerHTML = '<i class="bi bi-check2-circle me-1"></i>Xác Nhận – Ghế ' + maGhe;
@@ -501,6 +507,6 @@ function xacNhanChonGhe() {
         );
     }
 
-    var modal = bootstrap.Modal.getInstance(document.getElementById('flightSeatModal'));
+    var modal = bootstrap.Modal.getInstance(document.getElementById('modalGheMayBay'));
     if (modal) modal.hide();
 }

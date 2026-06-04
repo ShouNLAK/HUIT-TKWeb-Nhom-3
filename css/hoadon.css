@@ -1,0 +1,60 @@
+/* ================================================================
+   TRANG HÓA ĐƠN ĐIỆN TỬ (hoadon.html) — nền sáng, in được.
+   Scope dưới .hoadon-page để KHÔNG ảnh hưởng các trang theme tối.
+   ================================================================ */
+body.hoadon-page {
+    background: #e9edf1 !important;
+    font-family: 'Inter', Arial, sans-serif;
+    color: #1a1a2e;
+}
+.hoadon-page .invoice-wrap { max-width: 920px; margin: 30px auto; padding: 0 16px; }
+.hoadon-page .invoice-paper {
+    background: #fff;
+    border: 1px solid #d4dae0;
+    border-radius: 8px;
+    padding: 40px 44px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+}
+/* Letterhead */
+.hoadon-page .inv-head { display: flex; align-items: center; gap: 20px; }
+.hoadon-page .inv-head img { height: 70px; width: auto; border-radius: 8px; }
+.hoadon-page .inv-company-name { color: #0d6efd; font-weight: 900; font-size: 1.5rem; line-height: 1.2; }
+.hoadon-page .inv-company-info { font-size: 0.82rem; color: #444; line-height: 1.6; }
+.hoadon-page .inv-company-info a { color: #0d6efd; text-decoration: none; }
+.hoadon-page .inv-divider { height: 3px; background: linear-gradient(90deg, #0d6efd, #00c6ff); border: none; border-radius: 2px; margin: 14px 0 24px; }
+.hoadon-page .inv-title { text-align: center; font-weight: 900; font-size: 1.5rem; letter-spacing: 1px; margin-bottom: 6px; }
+.hoadon-page .inv-meta { text-align: right; font-size: 0.85rem; color: #333; }
+.hoadon-page .inv-meta em { color: #666; }
+/* Khối thông tin khách hàng */
+.hoadon-page .inv-customer {
+    background: #f5f8fb;
+    border: 1px solid #e1e8ef;
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 0.88rem;
+    margin: 18px 0 22px;
+}
+.hoadon-page .inv-customer .row > div { padding: 3px 0; }
+.hoadon-page .inv-customer b { color: #0d6efd; }
+/* Bảng hóa đơn */
+.hoadon-page .inv-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.hoadon-page .inv-table th, .hoadon-page .inv-table td { border: 1px solid #c9d2db; padding: 9px 10px; vertical-align: top; }
+.hoadon-page .inv-table thead th { background: #eef3f8; font-weight: 700; text-align: left; }
+.hoadon-page .inv-table td.num, .hoadon-page .inv-table th.num { text-align: right; white-space: nowrap; }
+.hoadon-page .inv-table td.center, .hoadon-page .inv-table th.center { text-align: center; }
+.hoadon-page .inv-table tfoot td { background: #f5f8fb; font-weight: 700; }
+.hoadon-page .inv-table tfoot td.tong { background: #dbeafe; color: #0a3d62; font-size: 1.02rem; }
+.hoadon-page .inv-table .ten-dv { font-weight: 600; }
+.hoadon-page .inv-table .chi-tiet { color: #555; font-size: 0.8rem; }
+.hoadon-page .inv-note { font-size: 0.82rem; color: #444; margin-top: 22px; line-height: 1.7; }
+.hoadon-page .inv-note b { color: #c0392b; }
+.hoadon-page .inv-actions { text-align: center; margin: 26px 0 50px; }
+
+/* KỸ THUẬT MỚI: CSS in ấn (@media print) — chỉ in phần hóa đơn */
+@media print {
+    body.hoadon-page { background: #fff !important; }
+    .hoadon-page .no-print { display: none !important; }
+    .hoadon-page .invoice-wrap { margin: 0; max-width: 100%; padding: 0; }
+    .hoadon-page .invoice-paper { border: none; box-shadow: none; border-radius: 0; padding: 0; }
+    @page { margin: 14mm; }
+}

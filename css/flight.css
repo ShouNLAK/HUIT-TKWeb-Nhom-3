@@ -1,0 +1,119 @@
+
+/* Logo hãng */
+.airline-logo-box {
+    width: 72px;
+    height: 52px;
+    border-radius: 10px;
+    overflow: hidden;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.08);
+}
+.airline-logo-box img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
+
+/* Route */
+.flight-route { display: flex; align-items: center; flex-shrink: 0; }
+.flight-city-code { font-size: 1.5rem; font-weight: 900; white-space: nowrap; }
+.flight-arrow { text-align: center; }
+.flight-arrow-line {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    border-radius: 1px;
+    min-width: 50px;
+}
+
+/* ================================================================
+   SƠ ĐỒ MÁY BAY 2D
+   ================================================================ */
+.aircraft-nose {
+    text-align: center;
+    padding: 10px;
+    background: linear-gradient(180deg, #3498db, #1a5276);
+    border-radius: 50% 50% 0 0 / 30% 30% 0 0;
+    color: #fff;
+    font-size: 1.5rem;
+    margin-bottom: 6px;
+}
+.aircraft-wing {
+    height: 18px;
+    background: linear-gradient(90deg, #2980b9, #aed6f1, #2980b9);
+    margin: 6px -10px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+.plane-class-label {
+    text-align: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.5);
+    padding: 4px;
+    border: 1px dashed rgba(255,255,255,0.15);
+    border-radius: 6px;
+    margin: 6px 0;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+.seat-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 3px;
+    gap: 4px;
+}
+.row-num {
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.3);
+    width: 20px;
+    text-align: center;
+}
+.seat-grp { display: flex; gap: 3px; }
+.seat-aisle { width: 22px; }
+.plane-seat {
+    width: 30px;
+    height: 26px;
+    border-radius: 5px 5px 3px 3px;
+    font-size: 0.58rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: var(--transition);
+    line-height: 1;
+}
+.plane-seat.economy {
+    background: #d5f5e3;
+    border-color: #82e0aa;
+    color: #1a5e38;
+}
+.plane-seat.business {
+    background: #fdebd0;
+    border-color: #f0b27a;
+    color: #784212;
+}
+.plane-seat.booked {
+    background: repeating-linear-gradient(45deg, #eee, #eee 5px, #ddd 5px, #ddd 10px);
+    border-color: #bbb;
+    color: #aaa;
+    cursor: not-allowed;
+}
+.plane-seat:not(.booked):hover {
+    transform: scale(1.15);
+    box-shadow: 0 0 10px rgba(13, 110, 253, 0.5);
+}
+.plane-seat.selected {
+    background: linear-gradient(135deg, var(--blue), #00c6ff) !important;
+    border-color: var(--blue) !important;
+    color: #fff !important;
+    box-shadow: 0 0 14px rgba(13, 110, 253, 0.7);
+}
+

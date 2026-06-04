@@ -1,0 +1,149 @@
+/* ================================================================
+   HERO SECTION
+   ================================================================ */
+.hero-section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: calc(var(--nav-h) + 20px) 0 60px;
+}
+.hero-title {
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 900;
+    line-height: 1.15;
+}
+.hero-title .highlight {
+    background: linear-gradient(135deg, var(--orange), #e74c3c);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.hero-badge {
+    background: rgba(243, 156, 18, 0.15);
+    border: 1px solid rgba(243, 156, 18, 0.4);
+    color: var(--orange);
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    gap: 8px;
+    letter-spacing: 0.3px;
+}
+
+/* ================================================================
+   SEARCH FORM (Trang chủ - Hero)
+   ================================================================ */
+.search-tab-bar {
+    display: flex;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 14px 14px 0 0;
+    padding: 8px;
+    gap: 6px;
+    border: 1px solid var(--glass-border);
+    border-bottom: none;
+}
+.search-tab-btn {
+    flex: 1;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    background: transparent;
+    color: rgba(255,255,255,0.5);
+    transition: var(--transition);
+}
+.search-tab-btn:hover { background: rgba(255,255,255,0.07); color: #fff; }
+.search-tab-btn.active { background: var(--blue); color: #fff; }
+
+.search-form-panel {
+    background: rgba(10, 10, 30, 0.85);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 0 0 var(--radius) var(--radius);
+    padding: 28px;
+}
+.search-panel { display: none; }
+.search-panel.active { display: block; }
+
+/* ================================================================
+   ĐIỂM ĐẾN - CARD & CAROUSEL
+   ================================================================ */
+.dest-card {
+    position: relative;
+    border-radius: var(--radius);
+    overflow: hidden;
+    cursor: pointer;
+    aspect-ratio: 1;
+    transition: var(--transition);
+}
+.dest-card:hover { transform: translateY(-6px) scale(1.02); box-shadow: var(--shadow); }
+.dest-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+.dest-card:hover img { transform: scale(1.08); }
+.dest-card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, rgba(0,0,0,0.75) 0%, transparent 60%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 16px;
+}
+.dest-card-overlay h5 { font-weight: 800; margin: 0; color: #fff; font-size: 1rem; }
+.dest-card-overlay small { color: rgba(255,255,255,0.7); }
+.dest-price-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--orange);
+    color: #fff;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 50px;
+}
+
+/* ================================================================
+   TABLE (Bảng tuyến đường, admin, ...)
+   ================================================================ */
+.bang-tuyen-duong {
+    background: transparent;
+    color: rgba(255,255,255,0.8);
+    font-size: 0.9rem;
+}
+.bang-tuyen-duong thead th {
+    background: rgba(255,255,255,0.07);
+    color: rgba(255,255,255,0.6);
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: none;
+    padding: 14px 16px;
+}
+.bang-tuyen-duong tbody tr { border-bottom: 1px solid rgba(255,255,255,0.06); }
+.bang-tuyen-duong tbody tr:last-child { border-bottom: none; }
+.bang-tuyen-duong tbody tr:hover { background: rgba(255,255,255,0.04); }
+.bang-tuyen-duong td { padding: 14px 16px; border: none; vertical-align: middle; }
+
+/* ================================================================
+   TESTIMONIAL CARDS
+   ================================================================ */
+.testimonial-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    padding: 24px;
+    height: 100%;
+    transition: var(--transition);
+}
+.testimonial-card:hover { border-color: rgba(255,255,255,0.25); transform: translateY(-4px); }
+.testimonial-avatar {
+    width: 46px; height: 46px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; font-weight: 900; color: #fff;
+    flex-shrink: 0;
+}
+

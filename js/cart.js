@@ -91,7 +91,7 @@ function hienThiGioHang() {
     var gioHang = JSON.parse(sessionStorage.getItem('vth_gio_hang')) || [];
     var container = document.getElementById('gio-hang-container');
     var elTong = document.getElementById('tong-tien-gioHang');
-    var elRong = document.getElementById('empty-cart-msg');
+    var elRong = document.getElementById('thongBaoGioRong');
     var elKhungDat = document.getElementById('khung-dat-hang');
     var elSoVe = document.getElementById('so-ve-text');
 
@@ -573,7 +573,7 @@ function _thietLapModalDoiCho(loaiMau, infoText, legendHtml) {
     var elLegend = document.getElementById('doi-cho-legend');
     if (elLegend) elLegend.innerHTML = legendHtml;
 
-    var nutXN = document.getElementById('btn-confirm-doi-cho');
+    var nutXN = document.getElementById('xacNhanDoiCho');
     if (nutXN) { nutXN.disabled = true; nutXN.innerHTML = '<i class="bi bi-check2-circle me-1"></i> Xác Nhận Đổi Chỗ'; }
 }
 
@@ -713,7 +713,7 @@ function _hienChoMoi(ma, badge, gia, nhanNut) {
             ' <span class="badge bg-secondary ms-1">' + badge + '</span>' +
             ' <span class="text-warning ms-2 fw-700">' + gia.toLocaleString('vi-VN') + ' ₫</span>';
     }
-    var nutXN = document.getElementById('btn-confirm-doi-cho');
+    var nutXN = document.getElementById('xacNhanDoiCho');
     if (nutXN) { nutXN.disabled = false; nutXN.innerHTML = '<i class="bi bi-check2-circle me-1"></i> ' + nhanNut; }
 }
 

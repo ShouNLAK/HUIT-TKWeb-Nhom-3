@@ -1,0 +1,427 @@
+/* ================================================================
+   VIET TRAVEL HUB - css/overlay.css
+   CSS dùng chung toàn website (Navbar, Loader, Glass, Button...)
+   ================================================================ */
+
+/* ---- Import font Google ---- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+/* ---- CSS Variables (Biến CSS) ---- */
+:root {
+    --blue: #0d6efd;
+    --orange: #f39c12;
+    --green: #2ecc71;
+    --red: #e74c3c;
+    --dark: #0a0a1a;
+    --glass: rgba(255, 255, 255, 0.06);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --text-muted: rgba(255, 255, 255, 0.5);
+    --nav-h: 72px;
+    --radius: 16px;
+    --shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ================================================================
+   RESET & CƠ BẢN
+   ================================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--dark);
+    color: #fff;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Font weight utilities */
+.fw-600 { font-weight: 600 !important; }
+.fw-700 { font-weight: 700 !important; }
+.fw-800 { font-weight: 800 !important; }
+.fw-900 { font-weight: 900 !important; }
+
+/* Utility: Ẩn phần tử (dùng chung – JS bật/tắt bằng .style.display) */
+.an { display: none; }
+
+/* ================================================================
+   NỀN SLIDESHOW (Ảnh local từ thư mục img/)
+   ================================================================ */
+.slideshow-bg {
+    list-style: none;
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    margin: 0;
+    padding: 0;
+}
+.slideshow-bg li {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0;
+    animation: slideshowFade 20s infinite;
+}
+.slideshow-bg li:nth-child(1) {
+    background-image: url('../img/Background-1.jpg');
+    animation-delay: 0s;
+}
+.slideshow-bg li:nth-child(2) {
+    background-image: url('../img/Background-2.jpg');
+    animation-delay: 5s;
+}
+.slideshow-bg li:nth-child(3) {
+    background-image: url('../img/Background-3.jpg');
+    animation-delay: 10s;
+}
+.slideshow-bg li:nth-child(4) {
+    background-image: url('../img/Background-4.jpg');
+    animation-delay: 15s;
+}
+@keyframes slideshowFade {
+    0%   { opacity: 0; transform: scale(1.05); }
+    8%   { opacity: 1; transform: scale(1); }
+    25%  { opacity: 1; transform: scale(1); }
+    33%  { opacity: 0; transform: scale(0.98); }
+    100% { opacity: 0; }
+}
+
+/* ---- Overlay tối ---- */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.72);
+    z-index: -1;
+}
+
+/* ================================================================
+   LOADER / CURTAIN
+   ================================================================ */
+.loader-curtain {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #050510, #0a0a2e);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+.loader-curtain.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+.plane-spinner {
+    font-size: 3rem;
+    color: var(--orange);
+    animation: spinFly 1.2s linear infinite;
+}
+@keyframes spinFly {
+    0%   { transform: rotate(0deg) scale(1); }
+    50%  { transform: rotate(180deg) scale(1.2); }
+    100% { transform: rotate(360deg) scale(1); }
+}
+
+/* ================================================================
+   NAVBAR
+   ================================================================ */
+#thanhDieuHuong {
+    background: transparent;
+    backdrop-filter: blur(0px);
+    border-bottom: 1px solid transparent;
+    transition: var(--transition);
+    height: var(--nav-h);
+}
+#thanhDieuHuong.scrolled {
+    background: rgba(10, 10, 26, 0.92) !important;
+    backdrop-filter: blur(20px);
+    border-bottom-color: var(--glass-border);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+.navbar-brand {
+    font-weight: 900;
+    font-size: 1.2rem;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.nav-link {
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 8px 14px !important;
+    border-radius: 8px;
+    transition: var(--transition);
+    position: relative;
+}
+.nav-link:hover, .nav-link.active {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: #fff !important;
+}
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 16px;
+    height: 2px;
+    background: var(--orange);
+    border-radius: 1px;
+}
+
+/* Navbar mobile: khi mở collapse có nền mờ */
+@media (max-width: 991.98px) {
+    .navbar-collapse {
+        background: rgba(10, 10, 26, 0.97);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 14px;
+        padding: 16px 20px;
+        margin-top: 10px;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+    }
+    .navbar-collapse .nav-item {
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .navbar-collapse .nav-item:last-child { border-bottom: none; }
+    .nav-link { padding: 10px 12px !important; }
+}
+
+/* ================================================================
+   GLASS PANEL (Dùng chung nhiều trang)
+   ================================================================ */
+.glass-panel {
+    background: var(--glass);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    padding: 24px;
+    transition: var(--transition);
+}
+.glass-panel:hover { border-color: rgba(255, 255, 255, 0.2); }
+
+/* ================================================================
+   FORM CONTROLS (Bootstrap override cho nền tối)
+   ================================================================ */
+.form-control, .form-select {
+    background: rgba(255, 255, 255, 0.07) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    color: #fff !important;
+    border-radius: 10px !important;
+    padding: 10px 14px !important;
+    font-size: 0.9rem;
+    transition: var(--transition);
+}
+.form-control:focus, .form-select:focus {
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.3) !important;
+    border-color: var(--blue) !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    outline: none;
+}
+.form-control::placeholder { color: rgba(255,255,255,0.3) !important; }
+.form-select option { background: #1a1a2e; color: #fff; }
+.form-label {
+    color: rgba(255,255,255,0.7);
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+textarea.form-control { resize: vertical; min-height: 80px; }
+
+/* ================================================================
+   BUTTONS
+   ================================================================ */
+.btn-custom {
+    background: linear-gradient(135deg, var(--blue), #00c6ff);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    font-weight: 700;
+    padding: 10px 24px;
+    transition: var(--transition);
+    box-shadow: 0 4px 20px rgba(13, 110, 253, 0.4);
+}
+.btn-custom:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(13, 110, 253, 0.6);
+    color: #fff;
+}
+.btn-custom:active { transform: translateY(0); }
+
+.btn-accent {
+    background: linear-gradient(135deg, var(--orange), #e67e22);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    transition: var(--transition);
+}
+.btn-accent:hover { transform: translateY(-1px); color: #fff; opacity: 0.9; }
+
+/* ================================================================
+   TICKET CARD (Dùng ở flight.html, train.html, bus.html)
+   ================================================================ */
+.ticket-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: var(--transition);
+    flex-wrap: nowrap; /* Không xuống dòng trên PC */
+    overflow: hidden;
+}
+.ticket-card:hover {
+    border-color: rgba(13, 110, 253, 0.4);
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+.ticket-card.train:hover { border-color: rgba(46, 204, 113, 0.4); }
+.ticket-card.bus:hover   { border-color: rgba(231, 76, 60, 0.4); }
+/* ================================================================
+   LEGEND GHẾ (chú thích)
+   ================================================================ */
+.seat-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    padding: 8px 16px;
+    background: #fff;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #333;
+}
+.legend-item { display: flex; align-items: center; gap: 6px; }
+.legend-dot {
+    width: 22px;
+    height: 18px;
+    border-radius: 4px;
+    border: 2px solid;
+}
+
+/* ================================================================
+   SECTION HEADINGS (Trang chủ)
+   ================================================================ */
+.section-eyebrow {
+    display: inline-block;
+    color: var(--orange);
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+.section-title {
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 12px;
+}
+.section-sub { color: var(--text-muted); font-size: 1rem; }
+
+/* ================================================================
+   MODAL (Override Bootstrap)
+   ================================================================ */
+.modal-content {
+    background: #13132a;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    overflow: hidden;
+}
+.modal-header { border-bottom: 1px solid rgba(255,255,255,0.1); }
+.modal-footer { border-top: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); }
+
+/* ================================================================
+   FOOTER
+   ================================================================ */
+footer {
+    background: rgba(0,0,0,0.5);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 60px 0 30px;
+    margin-top: 80px;
+}
+/* Footer gọn cho các trang con (flight, train, bus) */
+.trang-footer {
+    padding: 30px 0;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    margin-top: 60px;
+    background: rgba(0,0,0,0.3);
+}
+
+/* ================================================================
+   SCROLL TO TOP BUTTON
+   ================================================================ */
+#nutLenDauTrang {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    width: 46px; height: 46px;
+    background: linear-gradient(135deg, var(--blue), #00c6ff);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: none;
+    align-items: center; justify-content: center;
+    box-shadow: 0 4px 20px rgba(13,110,253,0.5);
+    transition: var(--transition);
+    z-index: 998;
+}
+#nutLenDauTrang:hover { transform: translateY(-4px); }
+#nutLenDauTrang.show { display: flex; }
+
+
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
+@media (max-width: 768px) {
+    .ticket-card { flex-direction: column; align-items: flex-start; }
+    .flight-route { width: 100%; justify-content: space-between; }
+    .hero-section { padding-top: calc(var(--nav-h) + 40px); }
+    .glass-panel { padding: 16px; }
+    .bang-tuyen-duong { font-size: 0.8rem; }
+    .plane-seat { width: 24px; height: 22px; font-size: 0.5rem; }
+    .train-seat { width: 34px; height: 30px; font-size: 0.55rem; }
+    .bus-bed { width: 95px; font-size: 0.6rem; }
+    /* Boarding pass: xếp dọc cột giá xuống dưới trên màn hình nhỏ */
+    .boarding-pass { flex-wrap: wrap; }
+    .bp-perf { display: none; }
+    .bp-side {
+        width: 100%;
+        text-align: left;
+        border-left: none;
+        border-top: 1px dashed rgba(255,255,255,0.12);
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .qty-stepper { align-self: center; }
+    /* Cart: tóm tắt đơn hàng luôn hiển thị đầy đủ trên mobile */
+    .summary-card { margin-top: 16px; }
+}
+
+@media (max-width: 576px) {
+    .section-title { font-size: 1.5rem; }
+    .hero-title { font-size: 2rem; }
+    .search-form-panel { padding: 16px; }
+    footer { padding: 40px 0 20px; }
+    .trang-footer { padding: 20px 0; }
+    /* Ẩn bớt cột trên bảng tuyến đường ở mobile */
+    .bang-tuyen-duong .d-none-xs { display: none !important; }
+}

@@ -10,32 +10,32 @@
 var destinations = {
     'SGN': {
         name: 'TP. Hồ Chí Minh',
-        img: 'jpg/HCM.jpg',
+        img: 'img/HCM.jpg',
         desc: 'Thành phố mang tên Bác sôi động bậc nhất Việt Nam với Landmark 81, Nhà thờ Đức Bà cổ kính, chợ Bến Thành nhộn nhịp và ẩm thực đường phố phong phú.'
     },
     'HAN': {
         name: 'Hà Nội',
-        img: 'jpg/Ha-Noi.jpg',
+        img: 'img/Ha-Noi.jpg',
         desc: 'Thủ đô nghìn năm văn hiến với Hồ Hoàn Kiếm, đền Ngọc Sơn, 36 phố phường cổ kính và hương vị Phở truyền thống trứ danh.'
     },
     'DAD': {
         name: 'Đà Nẵng',
-        img: 'jpg/Da-Nang.jpg',
+        img: 'img/Da-Nang.jpg',
         desc: 'Thành phố đáng sống nhất Việt Nam, sở hữu Cầu Rồng phun lửa, Bà Nà Hills hùng vĩ và bãi biển Mỹ Khê trong xanh trải dài.'
     },
     'PQC': {
         name: 'Phú Quốc',
-        img: 'jpg/Phu-Quoc.jpg',
+        img: 'img/Phu-Quoc.jpg',
         desc: 'Đảo Ngọc thiên đường với các bãi biển cát trắng mịn màng như Bãi Sao, hoàng hôn tuyệt mỹ tại Dinh Cậu và khu nghỉ dưỡng đẳng cấp.'
     },
     'DLI': {
         name: 'Đà Lạt',
-        img: 'jpg/Da-Lat.jpg',
+        img: 'img/Da-Lat.jpg',
         desc: 'Thành phố sương mù thơ mộng trên cao nguyên Lâm Viên với khí hậu ôn đới mát mẻ quanh năm, những đồi thông reo và ngàn hoa khoe sắc.'
     },
     'CXR': {
         name: 'Nha Trang',
-        img: 'jpg/Nha-Trang.jpg',
+        img: 'img/Nha-Trang.jpg',
         desc: 'Vịnh biển đẹp nhất Việt Nam với làn nước ấm áp, rạn san hô rực rỡ tại Hòn Mun và khu vui chơi VinWonders đẳng cấp.'
     }
 };
@@ -57,7 +57,7 @@ var mockFlights = [
         time: '06:00 - 08:15',
         price: 2500000,
         stops: 0,
-        logoUrl: 'jpg/Vietnam-Airlines.jpg',
+        logoUrl: 'img/Vietnam-Airlines.jpg',
         color: '#0a3d62'
     },
     {
@@ -70,7 +70,7 @@ var mockFlights = [
         time: '08:30 - 10:45',
         price: 1150000,
         stops: 0,
-        logoUrl: 'jpg/Vietjet-Air.jpg',
+        logoUrl: 'img/Vietjet-Air.jpg',
         color: '#ed1c24'
     },
     {
@@ -83,7 +83,7 @@ var mockFlights = [
         time: '11:00 - 13:15',
         price: 1380000,
         stops: 0,
-        logoUrl: 'jpg/Bamboo-Airways.jpg',
+        logoUrl: 'img/Bamboo-Airways.jpg',
         color: '#10ac84'
     },
     {
@@ -96,7 +96,7 @@ var mockFlights = [
         time: '14:30 - 16:45',
         price: 2950000,
         stops: 0,
-        logoUrl: 'jpg/Vietnam-Airlines.jpg',
+        logoUrl: 'img/Vietnam-Airlines.jpg',
         color: '#0a3d62'
     },
     // --- HAN → SGN ---
@@ -110,7 +110,7 @@ var mockFlights = [
         time: '07:00 - 09:15',
         price: 2700000,
         stops: 0,
-        logoUrl: 'jpg/Vietnam-Airlines.jpg',
+        logoUrl: 'img/Vietnam-Airlines.jpg',
         color: '#0a3d62'
     },
     {
@@ -123,7 +123,7 @@ var mockFlights = [
         time: '12:00 - 14:10',
         price: 990000,
         stops: 0,
-        logoUrl: 'jpg/Vietjet-Air.jpg',
+        logoUrl: 'img/Vietjet-Air.jpg',
         color: '#ed1c24'
     },
     {
@@ -136,7 +136,7 @@ var mockFlights = [
         time: '18:00 - 20:10',
         price: 1350000,
         stops: 0,
-        logoUrl: 'jpg/Bamboo-Airways.jpg',
+        logoUrl: 'img/Bamboo-Airways.jpg',
         color: '#10ac84'
     },
     // --- SGN → DAD ---
@@ -150,7 +150,7 @@ var mockFlights = [
         time: '07:30 - 08:40',
         price: 1750000,
         stops: 0,
-        logoUrl: 'jpg/Vietnam-Airlines.jpg',
+        logoUrl: 'img/Vietnam-Airlines.jpg',
         color: '#0a3d62'
     },
     {
@@ -163,7 +163,7 @@ var mockFlights = [
         time: '09:00 - 10:10',
         price: 1500000,
         stops: 0,
-        logoUrl: 'jpg/Bamboo-Airways.jpg',
+        logoUrl: 'img/Bamboo-Airways.jpg',
         color: '#10ac84'
     },
     {
@@ -176,7 +176,7 @@ var mockFlights = [
         time: '06:00 - 07:10',
         price: 1100000,
         stops: 0,
-        logoUrl: 'jpg/Vietjet-Air.jpg',
+        logoUrl: 'img/Vietjet-Air.jpg',
         color: '#ed1c24'
     },
     // --- DAD → SGN ---
@@ -190,7 +190,7 @@ var mockFlights = [
         time: '10:30 - 11:45',
         price: 1800000,
         stops: 0,
-        logoUrl: 'jpg/Vietnam-Airlines.jpg',
+        logoUrl: 'img/Vietnam-Airlines.jpg',
         color: '#0a3d62'
     },
     {
@@ -203,7 +203,7 @@ var mockFlights = [
         time: '16:00 - 17:10',
         price: 1050000,
         stops: 0,
-        logoUrl: 'jpg/Vietjet-Air.jpg',
+        logoUrl: 'img/Vietjet-Air.jpg',
         color: '#ed1c24'
     },
     // --- HAN → PQC ---
@@ -217,7 +217,7 @@ var mockFlights = [
         time: '06:30 - 08:40',
         price: 3200000,
         stops: 0,
-        logoUrl: 'jpg/Vietnam-Airlines.jpg',
+        logoUrl: 'img/Vietnam-Airlines.jpg',
         color: '#0a3d62'
     },
     {
@@ -230,7 +230,7 @@ var mockFlights = [
         time: '10:00 - 12:10',
         price: 2600000,
         stops: 0,
-        logoUrl: 'jpg/Bamboo-Airways.jpg',
+        logoUrl: 'img/Bamboo-Airways.jpg',
         color: '#10ac84'
     },
     // --- SGN → PQC ---
@@ -244,7 +244,7 @@ var mockFlights = [
         time: '09:20 - 10:30',
         price: 2100000,
         stops: 0,
-        logoUrl: 'jpg/Vietnam-Airlines.jpg',
+        logoUrl: 'img/Vietnam-Airlines.jpg',
         color: '#0a3d62'
     },
     {
@@ -257,7 +257,7 @@ var mockFlights = [
         time: '14:00 - 15:05',
         price: 1450000,
         stops: 0,
-        logoUrl: 'jpg/Vietjet-Air.jpg',
+        logoUrl: 'img/Vietjet-Air.jpg',
         color: '#ed1c24'
     },
     // --- SGN → CXR ---
@@ -271,7 +271,7 @@ var mockFlights = [
         time: '07:30 - 08:30',
         price: 1800000,
         stops: 0,
-        logoUrl: 'jpg/Vietnam-Airlines.jpg',
+        logoUrl: 'img/Vietnam-Airlines.jpg',
         color: '#0a3d62'
     },
     {
@@ -284,7 +284,7 @@ var mockFlights = [
         time: '13:00 - 14:05',
         price: 1550000,
         stops: 0,
-        logoUrl: 'jpg/Bamboo-Airways.jpg',
+        logoUrl: 'img/Bamboo-Airways.jpg',
         color: '#10ac84'
     },
     // --- SGN → DLI ---
@@ -298,7 +298,7 @@ var mockFlights = [
         time: '09:00 - 09:55',
         price: 1650000,
         stops: 0,
-        logoUrl: 'jpg/Vietnam-Airlines.jpg',
+        logoUrl: 'img/Vietnam-Airlines.jpg',
         color: '#0a3d62'
     },
     // --- HAN → DAD ---
@@ -312,7 +312,7 @@ var mockFlights = [
         time: '07:45 - 08:55',
         price: 1900000,
         stops: 0,
-        logoUrl: 'jpg/Vietnam-Airlines.jpg',
+        logoUrl: 'img/Vietnam-Airlines.jpg',
         color: '#0a3d62'
     },
     {
@@ -325,7 +325,7 @@ var mockFlights = [
         time: '15:00 - 16:10',
         price: 1200000,
         stops: 0,
-        logoUrl: 'jpg/Vietjet-Air.jpg',
+        logoUrl: 'img/Vietjet-Air.jpg',
         color: '#ed1c24'
     }
 ];
@@ -646,7 +646,7 @@ var mockOrders = [
                 gia: 2500000,
                 chiTiet: 'Ghế 12A · Hạng Phổ Thông · Airbus A321 Neo · 06:00 - 08:15',
                 loai: 'flight',
-                logoUrl: 'jpg/Vietnam-Airlines.jpg',
+                logoUrl: 'img/Vietnam-Airlines.jpg',
                 thoiGianThem: '2/12/2025, 08:25:00'
             }
         ],
@@ -664,7 +664,7 @@ var mockOrders = [
                 gia: 1150000,
                 chiTiet: 'Ghế 5C · Hạng Phổ Thông · Airbus A320 · 08:30 - 10:45',
                 loai: 'flight',
-                logoUrl: 'jpg/Vietjet-Air.jpg',
+                logoUrl: 'img/Vietjet-Air.jpg',
                 thoiGianThem: '10/12/2025, 14:05:00'
             },
             {
@@ -674,7 +674,7 @@ var mockOrders = [
                 gia: 1150000,
                 chiTiet: 'Ghế 5D · Hạng Phổ Thông · Airbus A320 · 08:30 - 10:45',
                 loai: 'flight',
-                logoUrl: 'jpg/Vietjet-Air.jpg',
+                logoUrl: 'img/Vietjet-Air.jpg',
                 thoiGianThem: '10/12/2025, 14:05:00'
             }
         ],
@@ -738,7 +738,7 @@ var mockOrders = [
                 gia: 1750000,
                 chiTiet: 'Ghế 8A · Hạng Thương Gia · Airbus A321 · 07:30 - 08:40',
                 loai: 'flight',
-                logoUrl: 'jpg/Vietnam-Airlines.jpg',
+                logoUrl: 'img/Vietnam-Airlines.jpg',
                 thoiGianThem: '28/12/2025, 10:15:00'
             },
             {
@@ -748,7 +748,7 @@ var mockOrders = [
                 gia: 1750000,
                 chiTiet: 'Ghế 8B · Hạng Thương Gia · Airbus A321 · 07:30 - 08:40',
                 loai: 'flight',
-                logoUrl: 'jpg/Vietnam-Airlines.jpg',
+                logoUrl: 'img/Vietnam-Airlines.jpg',
                 thoiGianThem: '28/12/2025, 10:15:00'
             },
             {
@@ -758,7 +758,7 @@ var mockOrders = [
                 gia: 1750000,
                 chiTiet: 'Ghế 8C · Hạng Thương Gia · Airbus A321 · 07:30 - 08:40',
                 loai: 'flight',
-                logoUrl: 'jpg/Vietnam-Airlines.jpg',
+                logoUrl: 'img/Vietnam-Airlines.jpg',
                 thoiGianThem: '28/12/2025, 10:15:00'
             }
         ],
@@ -794,7 +794,7 @@ var mockOrders = [
                 gia: 1500000,
                 chiTiet: 'Ghế 15A · Hạng Phổ Thông · Boeing 787-9 · 09:00 - 10:10',
                 loai: 'flight',
-                logoUrl: 'jpg/Bamboo-Airways.jpg',
+                logoUrl: 'img/Bamboo-Airways.jpg',
                 thoiGianThem: '12/1/2026, 07:55:00'
             },
             {
@@ -804,7 +804,7 @@ var mockOrders = [
                 gia: 1500000,
                 chiTiet: 'Ghế 15B · Hạng Phổ Thông · Boeing 787-9 · 09:00 - 10:10',
                 loai: 'flight',
-                logoUrl: 'jpg/Bamboo-Airways.jpg',
+                logoUrl: 'img/Bamboo-Airways.jpg',
                 thoiGianThem: '12/1/2026, 07:55:00'
             }
         ],
@@ -850,7 +850,7 @@ var mockOrders = [
                 gia: 3200000,
                 chiTiet: 'Ghế 3A · Hạng Thương Gia · Boeing 787-10 · 06:30 - 08:40',
                 loai: 'flight',
-                logoUrl: 'jpg/Vietnam-Airlines.jpg',
+                logoUrl: 'img/Vietnam-Airlines.jpg',
                 thoiGianThem: '25/1/2026, 09:40:00'
             }
         ],
@@ -944,7 +944,7 @@ var mockOrders = [
                 gia: 2700000,
                 chiTiet: 'Ghế 1A · Hạng Thương Gia · Boeing 787-10 · 07:00 - 09:15',
                 loai: 'flight',
-                logoUrl: 'jpg/Vietnam-Airlines.jpg',
+                logoUrl: 'img/Vietnam-Airlines.jpg',
                 thoiGianThem: '14/2/2026, 09:55:00'
             },
             {
@@ -954,7 +954,7 @@ var mockOrders = [
                 gia: 2700000,
                 chiTiet: 'Ghế 1B · Hạng Thương Gia · Boeing 787-10 · 07:00 - 09:15',
                 loai: 'flight',
-                logoUrl: 'jpg/Vietnam-Airlines.jpg',
+                logoUrl: 'img/Vietnam-Airlines.jpg',
                 thoiGianThem: '14/2/2026, 09:55:00'
             }
         ],
@@ -990,7 +990,7 @@ var mockOrders = [
                 gia: 990000,
                 chiTiet: 'Ghế 22F · Hạng Phổ Thông · Airbus A321 · 12:00 - 14:10',
                 loai: 'flight',
-                logoUrl: 'jpg/Vietjet-Air.jpg',
+                logoUrl: 'img/Vietjet-Air.jpg',
                 thoiGianThem: '28/2/2026, 08:45:00'
             },
             {
@@ -1000,7 +1000,7 @@ var mockOrders = [
                 gia: 990000,
                 chiTiet: 'Ghế 22E · Hạng Phổ Thông · Airbus A321 · 12:00 - 14:10',
                 loai: 'flight',
-                logoUrl: 'jpg/Vietjet-Air.jpg',
+                logoUrl: 'img/Vietjet-Air.jpg',
                 thoiGianThem: '28/2/2026, 08:45:00'
             }
         ],
@@ -1036,7 +1036,7 @@ var mockOrders = [
                 gia: 2100000,
                 chiTiet: 'Ghế 7A · Hạng Thương Gia · Airbus A321 · 09:20 - 10:30',
                 loai: 'flight',
-                logoUrl: 'jpg/Vietnam-Airlines.jpg',
+                logoUrl: 'img/Vietnam-Airlines.jpg',
                 thoiGianThem: '12/3/2026, 14:25:00'
             },
             {
@@ -1046,7 +1046,7 @@ var mockOrders = [
                 gia: 2100000,
                 chiTiet: 'Ghế 7B · Hạng Thương Gia · Airbus A321 · 09:20 - 10:30',
                 loai: 'flight',
-                logoUrl: 'jpg/Vietnam-Airlines.jpg',
+                logoUrl: 'img/Vietnam-Airlines.jpg',
                 thoiGianThem: '12/3/2026, 14:25:00'
             },
             {
@@ -1056,7 +1056,7 @@ var mockOrders = [
                 gia: 2100000,
                 chiTiet: 'Ghế 7C · Hạng Thương Gia · Airbus A321 · 09:20 - 10:30',
                 loai: 'flight',
-                logoUrl: 'jpg/Vietnam-Airlines.jpg',
+                logoUrl: 'img/Vietnam-Airlines.jpg',
                 thoiGianThem: '12/3/2026, 14:25:00'
             },
             {
@@ -1066,7 +1066,7 @@ var mockOrders = [
                 gia: 2100000,
                 chiTiet: 'Ghế 7D · Hạng Thương Gia · Airbus A321 · 09:20 - 10:30',
                 loai: 'flight',
-                logoUrl: 'jpg/Vietnam-Airlines.jpg',
+                logoUrl: 'img/Vietnam-Airlines.jpg',
                 thoiGianThem: '12/3/2026, 14:25:00'
             }
         ],
@@ -1140,7 +1140,7 @@ var mockOrders = [
                 gia: 2600000,
                 chiTiet: 'Ghế 11A · Hạng Phổ Thông · Airbus A320 Neo · 10:00 - 12:10',
                 loai: 'flight',
-                logoUrl: 'jpg/Bamboo-Airways.jpg',
+                logoUrl: 'img/Bamboo-Airways.jpg',
                 thoiGianThem: '10/4/2026, 07:55:00'
             }
         ],
@@ -1186,7 +1186,7 @@ var mockOrders = [
                 gia: 1200000,
                 chiTiet: 'Ghế 18C · Hạng Phổ Thông · Airbus A320 · 15:00 - 16:10',
                 loai: 'flight',
-                logoUrl: 'jpg/Vietjet-Air.jpg',
+                logoUrl: 'img/Vietjet-Air.jpg',
                 thoiGianThem: '25/4/2026, 10:55:00'
             },
             {
@@ -1196,7 +1196,7 @@ var mockOrders = [
                 gia: 1200000,
                 chiTiet: 'Ghế 18D · Hạng Phổ Thông · Airbus A320 · 15:00 - 16:10',
                 loai: 'flight',
-                logoUrl: 'jpg/Vietjet-Air.jpg',
+                logoUrl: 'img/Vietjet-Air.jpg',
                 thoiGianThem: '25/4/2026, 10:55:00'
             },
             {
@@ -1206,7 +1206,7 @@ var mockOrders = [
                 gia: 1200000,
                 chiTiet: 'Ghế 18E · Hạng Phổ Thông · Airbus A320 · 15:00 - 16:10',
                 loai: 'flight',
-                logoUrl: 'jpg/Vietjet-Air.jpg',
+                logoUrl: 'img/Vietjet-Air.jpg',
                 thoiGianThem: '25/4/2026, 10:55:00'
             }
         ],
@@ -1242,7 +1242,7 @@ var mockOrders = [
                 gia: 1650000,
                 chiTiet: 'Ghế 5A · Hạng Phổ Thông · Airbus A321 · 09:00 - 09:55',
                 loai: 'flight',
-                logoUrl: 'jpg/Vietnam-Airlines.jpg',
+                logoUrl: 'img/Vietnam-Airlines.jpg',
                 thoiGianThem: '10/5/2026, 15:15:00'
             },
             {
@@ -1252,7 +1252,7 @@ var mockOrders = [
                 gia: 1650000,
                 chiTiet: 'Ghế 5B · Hạng Phổ Thông · Airbus A321 · 09:00 - 09:55',
                 loai: 'flight',
-                logoUrl: 'jpg/Vietnam-Airlines.jpg',
+                logoUrl: 'img/Vietnam-Airlines.jpg',
                 thoiGianThem: '10/5/2026, 15:15:00'
             }
         ],
@@ -1308,7 +1308,7 @@ var mockOrders = [
                 gia: 1380000,
                 chiTiet: 'Ghế 25A · Hạng Phổ Thông · Airbus A320 Neo · 11:00 - 13:15',
                 loai: 'flight',
-                logoUrl: 'jpg/Bamboo-Airways.jpg',
+                logoUrl: 'img/Bamboo-Airways.jpg',
                 thoiGianThem: '22/5/2026, 11:55:00'
             },
             {
@@ -1318,7 +1318,7 @@ var mockOrders = [
                 gia: 1380000,
                 chiTiet: 'Ghế 25B · Hạng Phổ Thông · Airbus A320 Neo · 11:00 - 13:15',
                 loai: 'flight',
-                logoUrl: 'jpg/Bamboo-Airways.jpg',
+                logoUrl: 'img/Bamboo-Airways.jpg',
                 thoiGianThem: '22/5/2026, 11:55:00'
             }
         ],
@@ -1364,7 +1364,7 @@ var mockOrders = [
                 gia: 1450000,
                 chiTiet: 'Ghế 20A · Hạng Phổ Thông · Airbus A320 · 14:00 - 15:05',
                 loai: 'flight',
-                logoUrl: 'jpg/Vietjet-Air.jpg',
+                logoUrl: 'img/Vietjet-Air.jpg',
                 thoiGianThem: '29/5/2026, 08:25:00'
             }
         ],
@@ -1420,7 +1420,7 @@ var mockOrders = [
                 gia: 1900000,
                 chiTiet: 'Ghế 4A · Hạng Phổ Thông · Airbus A321 Neo · 07:45 - 08:55',
                 loai: 'flight',
-                logoUrl: 'jpg/Vietnam-Airlines.jpg',
+                logoUrl: 'img/Vietnam-Airlines.jpg',
                 thoiGianThem: '30/5/2026, 13:55:00'
             }
         ],
@@ -1486,7 +1486,7 @@ var mockOrders = [
                 gia: 1150000,
                 chiTiet: 'Ghế 14D · Hạng Phổ Thông · Airbus A320 · 08:30 - 10:45',
                 loai: 'flight',
-                logoUrl: 'jpg/Vietjet-Air.jpg',
+                logoUrl: 'img/Vietjet-Air.jpg',
                 thoiGianThem: '8/12/2025, 10:25:00'
             }
         ],
@@ -1550,7 +1550,7 @@ var mockOrders = [
                 gia: 1380000,
                 chiTiet: 'Ghế 12E · Hạng Phổ Thông · Airbus A320 Neo · 11:00 - 13:15',
                 loai: 'flight',
-                logoUrl: 'jpg/Bamboo-Airways.jpg',
+                logoUrl: 'img/Bamboo-Airways.jpg',
                 thoiGianThem: '29/1/2026, 16:35:00'
             },
             {
@@ -1560,7 +1560,7 @@ var mockOrders = [
                 gia: 1380000,
                 chiTiet: 'Ghế 12F · Hạng Phổ Thông · Airbus A320 Neo · 11:00 - 13:15',
                 loai: 'flight',
-                logoUrl: 'jpg/Bamboo-Airways.jpg',
+                logoUrl: 'img/Bamboo-Airways.jpg',
                 thoiGianThem: '29/1/2026, 16:35:00'
             }
         ],
@@ -1652,7 +1652,7 @@ var mockOrders = [
                 gia: 2950000,
                 chiTiet: 'Ghế 3C · Hạng Thương Gia · Boeing 787-9 · 14:30 - 16:45',
                 loai: 'flight',
-                logoUrl: 'jpg/Vietnam-Airlines.jpg',
+                logoUrl: 'img/Vietnam-Airlines.jpg',
                 thoiGianThem: '18/3/2026, 09:15:00'
             }
         ],
@@ -1726,7 +1726,7 @@ var mockOrders = [
                 gia: 1100000,
                 chiTiet: 'Ghế 8E · Hạng Phổ Thông · Airbus A321 · 06:00 - 07:10',
                 loai: 'flight',
-                logoUrl: 'jpg/Vietjet-Air.jpg',
+                logoUrl: 'img/Vietjet-Air.jpg',
                 thoiGianThem: '15/4/2026, 11:40:00'
             },
             {
@@ -1736,7 +1736,7 @@ var mockOrders = [
                 gia: 1100000,
                 chiTiet: 'Ghế 8F · Hạng Phổ Thông · Airbus A321 · 06:00 - 07:10',
                 loai: 'flight',
-                logoUrl: 'jpg/Vietjet-Air.jpg',
+                logoUrl: 'img/Vietjet-Air.jpg',
                 thoiGianThem: '15/4/2026, 11:40:00'
             }
         ],
@@ -1800,7 +1800,7 @@ var mockOrders = [
                 gia: 1800000,
                 chiTiet: 'Ghế 12A · Hạng Phổ Thông · Airbus A350 · 07:30 - 08:30',
                 loai: 'flight',
-                logoUrl: 'jpg/Vietnam-Airlines.jpg',
+                logoUrl: 'img/Vietnam-Airlines.jpg',
                 thoiGianThem: '18/5/2026, 14:45:00'
             }
         ],
@@ -1855,11 +1855,12 @@ var mockOrders = [
         localStorage.setItem(KEY_LICHSU, JSON.stringify(mockOrders));
     }
 
-    // Seed tuyến đường quản lý: chỉ seed nếu chưa có
+    // Seed tuyến đường quản lý: chỉ seed nếu chưa có hoặc có quá ít (để đảm bảo lấy đủ tuyến mặc định)
     var KEY_TUYEN = 'vth_admin_tuyen';
-    if (!localStorage.getItem(KEY_TUYEN)) {
+    var tuyenHienTai = JSON.parse(localStorage.getItem(KEY_TUYEN)) || [];
+    if (tuyenHienTai.length < 23) {
         var tuyenMacDinh = [
-            { id: 1, tenTuyen: 'SGN → HAN', loai: 'Máy Bay', thoiGian: '2h 15p', giaTu: 990000 },
+            { id: 1, tenTuyen: 'SGN → HAN', loai: 'Máy Bay', thoiGian: '2h 15p', giaTu: 1150000 },
             { id: 2, tenTuyen: 'HAN → SGN', loai: 'Máy Bay', thoiGian: '2h 15p', giaTu: 990000 },
             { id: 3, tenTuyen: 'SGN → DAD', loai: 'Máy Bay', thoiGian: '1h 10p', giaTu: 1100000 },
             { id: 4, tenTuyen: 'DAD → SGN', loai: 'Máy Bay', thoiGian: '1h 15p', giaTu: 1050000 },
@@ -1868,15 +1869,20 @@ var mockOrders = [
             { id: 7, tenTuyen: 'SGN → CXR', loai: 'Máy Bay', thoiGian: '1h 00p', giaTu: 1550000 },
             { id: 8, tenTuyen: 'SGN → DLI', loai: 'Máy Bay', thoiGian: '0h 55p', giaTu: 1650000 },
             { id: 9, tenTuyen: 'HAN → DAD', loai: 'Máy Bay', thoiGian: '1h 10p', giaTu: 1200000 },
-            { id: 10, tenTuyen: 'SGN → HAN (SE1)', loai: 'Tàu Hỏa', thoiGian: '31h', giaTu: 850000 },
-            { id: 11, tenTuyen: 'HAN → SGN (SE2)', loai: 'Tàu Hỏa', thoiGian: '32h', giaTu: 820000 },
-            { id: 12, tenTuyen: 'SGN → DAD (SE7)', loai: 'Tàu Hỏa', thoiGian: '17h 15p', giaTu: 690000 },
-            { id: 13, tenTuyen: 'DAD → HAN (SE8)', loai: 'Tàu Hỏa', thoiGian: '19h 30p', giaTu: 920000 },
-            { id: 14, tenTuyen: 'SGN → NHA (SE22)', loai: 'Tàu Hỏa', thoiGian: '8h', giaTu: 450000 },
-            { id: 15, tenTuyen: 'SGN → Đà Lạt (FUTA)', loai: 'Xe Khách', thoiGian: '7h', giaTu: 230000 },
-            { id: 16, tenTuyen: 'SGN → Nha Trang (FUTA)', loai: 'Xe Khách', thoiGian: '9h', giaTu: 250000 },
-            { id: 17, tenTuyen: 'HAN → Đà Nẵng (Hoàng Long)', loai: 'Xe Khách', thoiGian: '12h', giaTu: 380000 },
-            { id: 18, tenTuyen: 'SGN → Đà Nẵng (Thành Bưởi)', loai: 'Xe Khách', thoiGian: '14h', giaTu: 480000 }
+            { id: 10, tenTuyen: 'SGN → HAN', loai: 'Tàu Hỏa', thoiGian: '31h 00p', giaTu: 780000 },
+            { id: 11, tenTuyen: 'HAN → SGN', loai: 'Tàu Hỏa', thoiGian: '32h 00p', giaTu: 750000 },
+            { id: 12, tenTuyen: 'SGN → DAD', loai: 'Tàu Hỏa', thoiGian: '17h 15p', giaTu: 690000 },
+            { id: 13, tenTuyen: 'DAD → HAN', loai: 'Tàu Hỏa', thoiGian: '19h 30p', giaTu: 920000 },
+            { id: 14, tenTuyen: 'HAN → DAD', loai: 'Tàu Hỏa', thoiGian: '19h 00p', giaTu: 880000 },
+            { id: 15, tenTuyen: 'SGN → NHA', loai: 'Tàu Hỏa', thoiGian: '8h 00p', giaTu: 420000 },
+            { id: 16, tenTuyen: 'NHA → SGN', loai: 'Tàu Hỏa', thoiGian: '8h 00p', giaTu: 430000 },
+            { id: 17, tenTuyen: 'HAN → NHA', loai: 'Tàu Hỏa', thoiGian: '24h 30p', giaTu: 760000 },
+            { id: 18, tenTuyen: 'SGN → DLI', loai: 'Xe Khách', thoiGian: '7h 00p', giaTu: 230000 },
+            { id: 19, tenTuyen: 'SGN → CXR', loai: 'Xe Khách', thoiGian: '9h 00p', giaTu: 250000 },
+            { id: 20, tenTuyen: 'HAN → DAD', loai: 'Xe Khách', thoiGian: '12h 00p', giaTu: 380000 },
+            { id: 21, tenTuyen: 'DAD → SGN', loai: 'Xe Khách', thoiGian: '14h 00p', giaTu: 320000 },
+            { id: 22, tenTuyen: 'SGN → DAD', loai: 'Xe Khách', thoiGian: '14h 00p', giaTu: 480000 },
+            { id: 23, tenTuyen: 'HAN → SGN', loai: 'Xe Khách', thoiGian: '24h 00p', giaTu: 700000 }
         ];
         localStorage.setItem(KEY_TUYEN, JSON.stringify(tuyenMacDinh));
     }

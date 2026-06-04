@@ -8,7 +8,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../css/overlay.css">
+    <link rel="stylesheet" href="../css/flight.css">
     <style>
         /* Màu đặc trưng trang máy bay */
         .page-accent { color: #0d6efd; }
@@ -88,34 +89,34 @@
     <ul class="slideshow-bg"><li></li><li></li><li></li><li></li></ul>
     <div class="overlay"></div>
 
-    <div class="loader-curtain" id="loader">
+    <div class="loader-curtain" id="manHinhCho">
         <i class="bi bi-airplane-fill plane-spinner"></i>
         <h3 class="mt-3 text-white fw-light">Đang tải chuyến bay...</h3>
     </div>
 
     <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="thanhDieuHuong">
         <div class="container">
-            <a class="navbar-brand" href="index.html" onclick="chuyenTrang(event,'index.html')">
-                <img src="jpg/Logo.jpg" alt="Logo" style="height:36px;border-radius:6px;" onerror="this.style.display='none'">
+            <a class="navbar-brand" href="../index.html" >
+                <img src="../img/Logo.jpg" alt="Logo" style="height:36px;border-radius:6px;" onerror="this.style.display='none'">
                 VIET TRAVEL HUB
             </a>
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#menuChinh">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse justify-content-center" id="navMenu">
+            <div class="collapse navbar-collapse justify-content-center" id="menuChinh">
                 <ul class="navbar-nav align-items-lg-center gap-1 me-auto ms-lg-4">
-                    <li class="nav-item"><a class="nav-link" href="index.html" onclick="chuyenTrang(event,'index.html')"><i class="bi bi-house-door"></i> Trang Chủ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../index.html" ><i class="bi bi-house-door"></i> Trang Chủ</a></li>
                     <li class="nav-item"><a class="nav-link active" href="flight.html"><i class="bi bi-airplane"></i> Máy Bay</a></li>
-                    <li class="nav-item"><a class="nav-link" href="train.html" onclick="chuyenTrang(event,'train.html')"><i class="bi bi-train-front"></i> Tàu Hỏa</a></li>
-                    <li class="nav-item"><a class="nav-link" href="bus.html" onclick="chuyenTrang(event,'bus.html')"><i class="bi bi-bus-front"></i> Xe Khách</a></li>
+                    <li class="nav-item"><a class="nav-link" href="train.html" ><i class="bi bi-train-front"></i> Tàu Hỏa</a></li>
+                    <li class="nav-item"><a class="nav-link" href="bus.html" ><i class="bi bi-bus-front"></i> Xe Khách</a></li>
                 </ul>
                 <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0">
-                    <a class="btn btn-outline-warning btn-sm px-3 position-relative" href="cart.html" onclick="chuyenTrang(event,'cart.html')">
+                    <a class="btn btn-outline-warning btn-sm px-3 position-relative" href="cart.html" >
                         <i class="bi bi-cart3"></i>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cart-count">0</span>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="soLuongGioHang">0</span>
                     </a>
-                    <div id="navbar-auth-area" class="d-flex gap-2"></div>
+                    <div id="khuVucDangNhap" class="d-flex gap-2"></div>
                 </div>
             </div>
         </div>
@@ -141,11 +142,11 @@
                 <!-- FORM TÌM KIẾM -->
                 <div class="glass-panel mb-4">
                     <h6 class="fw-700 text-white mb-3"><i class="bi bi-search text-primary"></i> Tìm Chuyến Bay</h6>
-                    <form id="flight-search-form" onsubmit="timChuyenBay(event)">
+                    <form id="formTimChuyenBay" onsubmit="timChuyenBay(event)">
                         <div class="row g-3">
                             <div class="col-md-3">
                                 <label class="form-label">Điểm Khởi Hành</label>
-                                <select class="form-select" id="flight-from">
+                                <select class="form-select" id="chuyenBayTu">
                                     <option value="">-- Điểm đi --</option>
                                     <option value="SGN">✈ TP.HCM (SGN)</option>
                                     <option value="HAN">✈ Hà Nội (HAN)</option>
@@ -155,7 +156,7 @@
                             </div>
                             <div class="col-md-3">
                                 <label class="form-label">Điểm Đến</label>
-                                <select class="form-select" id="flight-to">
+                                <select class="form-select" id="chuyenBayDen">
                                     <option value="">-- Điểm đến --</option>
                                     <option value="HAN">✈ Hà Nội (HAN)</option>
                                     <option value="DAD">✈ Đà Nẵng (DAD)</option>
@@ -166,7 +167,7 @@
                             </div>
                             <div class="col-md-3">
                                 <label class="form-label">Ngày Bay</label>
-                                <input type="date" class="form-control" id="flight-date">
+                                <input type="date" class="form-control" id="chuyenBayNgay">
                             </div>
                             <div class="col-md-3 d-flex align-items-end">
                                 <button type="submit" class="btn btn-custom w-100 py-3 fw-700">
@@ -188,7 +189,7 @@
                 </div>
 
                 <!-- KẾT QUẢ CHUYẾN BAY -->
-                <div id="flight-results">
+                <div id="ketQuaChuyenBay">
                     <div class="text-center py-5">
                         <i class="bi bi-airplane text-primary fs-1 opacity-50"></i>
                         <p class="text-white-50 mt-2">Nhập thông tin và bấm Tìm Bay để xem chuyến</p>
@@ -264,7 +265,7 @@
     </section>
 
     <!-- MODAL CHỌN GHẾ MÁY BAY -->
-    <div class="modal fade" id="flightSeatModal" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="modalGheMayBay" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width:420px;">
             <div class="modal-content">
                 <div class="modal-header" style="background:linear-gradient(135deg,#0d6efd,#00c6ff);">
@@ -272,7 +273,7 @@
                         <h5 class="modal-title fw-800 text-white mb-0">
                             <i class="bi bi-airplane-fill"></i> Chọn Ghế Ngồi
                         </h5>
-                        <div class="text-white opacity-75 small" id="modal-flight-info">---</div>
+                        <div class="text-white opacity-75 small" id="thongTinMayBayModal">---</div>
                     </div>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
@@ -300,18 +301,18 @@
 
                     <!-- THÂN MÁY BAY 2D – căn giữa -->
                     <div style="display:flex; justify-content:center;">
-                        <div id="aircraft-seat-map" style="display:inline-block; min-width:200px;"></div>
+                        <div id="soDoGheMayBay" style="display:inline-block; min-width:200px;"></div>
                     </div>
                 </div>
                 <div class="modal-footer" style="background:#1a1a2e;border-top:1px solid rgba(255,255,255,0.1); flex-direction:column; gap:8px; align-items:stretch; padding:12px 16px;">
                     <!-- Thông tin ghế đã chọn -->
-                    <div id="flight-seat-info-selected" class="text-white-50 small text-center">Chưa chọn ghế nào</div>
+                    <div id="thongTinGheMayBayDaChon" class="text-white-50 small text-center">Chưa chọn ghế nào</div>
                     <!-- Nút hành động -->
                     <div class="d-flex gap-2 justify-content-between">
                         <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Hủy</button>
                         <button type="button" class="btn btn-custom px-4 fw-700 flex-1"
-                                id="btn-confirm-flight" onclick="xacNhanChonGhe()" disabled>
-                            <i class="bi bi-check2-circle me-1"></i> Xác Nhận – <span id="btn-seat-label">Ghế</span>
+                                id="xacNhanMayBay" onclick="xacNhanChonGhe()" disabled>
+                            <i class="bi bi-check2-circle me-1"></i> Xác Nhận – <span id="nhanGhe">Ghế</span>
                         </button>
                     </div>
                 </div>
@@ -321,14 +322,14 @@
 
 
     <!-- MODAL CHI TIẾT CHUYẾN BAY -->
-    <div class="modal fade" id="flightDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="modalChiTietChuyenBay" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header border-0">
                     <h5 class="modal-title fw-800 text-white">Chi Tiết Chuyến Bay</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body" id="flight-detail-body"></div>
+                <div class="modal-body" id="chiTietChuyenBayBody"></div>
                 <div class="modal-footer" style="border-top:1px solid rgba(255,255,255,0.1);">
                     <button class="btn btn-outline-light" data-bs-dismiss="modal">Đóng</button>
                     <button class="btn btn-custom px-4 fw-700" onclick="tiepTucChonGhe()">
@@ -346,10 +347,10 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-    <script src="js/data.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/app.js"></script>
-    <script src="js/cart.js"></script>
-    <script src="js/flight.js"></script>
+    <script src="../js/data.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/app.js"></script>
+    <script src="../js/cart.js"></script>
+    <script src="../js/flight.js"></script>
 </body>
 </html>

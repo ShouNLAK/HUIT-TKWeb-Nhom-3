@@ -1,0 +1,60 @@
+/* ================================================================
+   ADMIN DASHBOARD - BIỂU ĐỒ & CARD
+   ================================================================ */
+.admin-chart-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius);
+    padding: 20px;
+}
+.admin-chart-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+}
+
+/* Mini bar chart */
+.mini-bar-chart { display: flex; align-items: flex-end; gap: 6px; height: 80px; }
+.mini-bar {
+    flex: 1;
+    border-radius: 4px 4px 0 0;
+    min-width: 16px;
+    transition: var(--transition);
+    cursor: pointer;
+    position: relative;
+}
+.mini-bar:hover { opacity: 0.8; }
+.mini-bar-label {
+    font-size: 0.6rem;
+    color: rgba(255,255,255,0.4);
+    text-align: center;
+    margin-top: 4px;
+}
+
+/* Donut chart (canvas) */
+.donut-wrap {
+    position: relative;
+    width: 140px; height: 140px;
+    margin: 0 auto;
+}
+.donut-wrap canvas { border-radius: 50%; }
+
+/* ================================================================
+   PROGRESS BARS (Thống kê tuyến đường)
+   ================================================================ */
+.progress-custom {
+    height: 8px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+.progress-custom .bar {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1s ease;
+}
+

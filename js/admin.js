@@ -132,26 +132,26 @@ function taiDashboard() {
     }
 
     // Cập nhật số liệu lên DOM
-    animateNumber('stat-don-hang', tongDon);
-    animateNumber('stat-ve-da-ban', tongVe);
+    animateNumber('thongKeDonHang', tongDon);
+    animateNumber('thongKeVeDaBan', tongVe);
 
-    var elDT = document.getElementById('stat-doanh-thu');
+    var elDT = document.getElementById('thongKeDoanhThu');
     if (elDT) {
         var dtDisplay = tongDT >= 1000000 ? (tongDT / 1000000).toFixed(1) + 'M' : tongDT.toLocaleString('vi-VN');
         elDT.innerText = dtDisplay;
     }
 
-    var elTuyen = document.getElementById('stat-tuyen');
+    var elTuyen = document.getElementById('thongKeTuyen');
     if (elTuyen) elTuyen.innerText = danhSachTuyen.length;
 
     // Cập nhật progress bars loại vé
-    setProgressBar('prog-flight', demLoai.flight, tongVe);
-    setProgressBar('prog-train', demLoai.train, tongVe);
-    setProgressBar('prog-bus', demLoai.bus, tongVe);
+    setProgressBar('tienDoMayBay', demLoai.flight, tongVe);
+    setProgressBar('tienDoTauHoa', demLoai.train, tongVe);
+    setProgressBar('tienDoXeKhach', demLoai.bus, tongVe);
 
-    var elLabelFlight = document.getElementById('count-flight');
-    var elLabelTrain  = document.getElementById('count-train');
-    var elLabelBus    = document.getElementById('count-bus');
+    var elLabelFlight = document.getElementById('demMayBay');
+    var elLabelTrain  = document.getElementById('demTauHoa');
+    var elLabelBus    = document.getElementById('demXeKhach');
     if (elLabelFlight) elLabelFlight.innerText = demLoai.flight + ' vé';
     if (elLabelTrain)  elLabelTrain.innerText  = demLoai.train  + ' vé';
     if (elLabelBus)    elLabelBus.innerText    = demLoai.bus    + ' vé';
@@ -304,7 +304,7 @@ function veDoanhThuBieuDo() {
 // HÀM: Vẽ biểu đồ tròn (Donut Chart) bằng canvas - kỹ thuật mới
 // ---------------------------------------------------------------
 function veDonutBieuDo() {
-    var canvas = document.getElementById('donut-chart');
+    var canvas = document.getElementById('bieuDoTron');
     if (!canvas || !canvas.getContext) return;
 
     var lichSu = JSON.parse(localStorage.getItem(KEY_LICHSU)) || [];
@@ -654,7 +654,16 @@ function luuSuaTuyen() {
 
     if (!tenMoi || tenMoi.length < 3) { alert('Tên tuyến phải có ít nhất 3 ký tự!'); return; }
     if (!loaiMoi) { alert('Vui lòng chọn loại!'); return; }
+    if (!tgMoi) { alert('Vui lòng nhập thời gian chạy!'); return; }
     if (isNaN(giaMoi) || giaMoi < 10000) { alert('Giá không hợp lệ (ít nhất 10.000 ₫)!'); return; }
+
+    // Kiểm tra trùng tên tuyến khi sửa (bỏ qua tuyến hiện tại)
+    for (var k = 0; k < danhSach.length; k++) {
+        if (k !== chiSo && danhSach[k].tenTuyen.toLowerCase() === tenMoi.toLowerCase()) {
+            alert('Tuyến đường này đã tồn tại!');
+            return;
+        }
+    }
 
     danhSach[chiSo].tenTuyen = tenMoi;
     danhSach[chiSo].loai     = loaiMoi;
@@ -710,8 +719,8 @@ function luuThongTinAdmin() {
         alert('Vui lòng nhập Họ và Tên (ít nhất 2 ký tự)!');
         return;
     }
-    if (email && email.indexOf('@') === -1) {
-        alert('Email không hợp lệ!');
+    if (email && (email.indexOf('@') === -1 || email.indexOf('.') === -1)) {
+        alert('Email không hợp lệ! (phải có @ và dấu .)');
         return;
     }
     if (matkhau && matkhau.length > 0 && matkhau.length < 6) {
@@ -804,4 +813,17 @@ function hienToast(noiDung, loai) {
         var toast = new bootstrap.Toast(toastEl, { delay: 3500 });
         toast.show();
     }
+}
+
+// ---------------------------------------------------------------
+// HÀM: Chuyển tab qua MOBILE DROPDOWN (dùng cho màn hình nhỏ)
+// Gọi hienTab() và cập nhật nhãn nút dropdown
+// ---------------------------------------------------------------
+function hienTabMobile(tenTab, tenHienThi) {
+    // Cập nhật nhãn nút dropdown hiển thị tab đang chọn
+    var elTen = document.getElementById('tenTabHienTai');
+    if (elTen) elTen.innerText = tenHienThi;
+
+    // Gọi lại hienTab với null (không cần cập nhật sidebar trên mobile)
+    hienTab(tenTab, null);
 }

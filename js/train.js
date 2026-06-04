@@ -11,8 +11,8 @@ var kieuToa = 'ghe'; // 'ghe' hoặc 'giuong'
 
 document.addEventListener("DOMContentLoaded", function() {
     var homNay = new Date().toISOString().split('T')[0];
-    var inputNgay = document.getElementById('train-date-out');
-    var inputNgayVe = document.getElementById('train-date-return');
+    var inputNgay = document.getElementById('tauHoaNgayDi');
+    var inputNgayVe = document.getElementById('ngayVeTauHoa');
     
     if (inputNgay) {
         inputNgay.min = homNay;
@@ -29,21 +29,21 @@ document.addEventListener("DOMContentLoaded", function() {
     if (paramsStr) {
         var params = JSON.parse(paramsStr);
         if (params.loai === 'train') {
-            if (document.getElementById('train-from')) document.getElementById('train-from').value = params.tuSearch || '';
-            if (document.getElementById('train-to')) document.getElementById('train-to').value = params.denSearch || '';
-            if (document.getElementById('train-date-out') && params.ngaySearch) {
-                document.getElementById('train-date-out').value = params.ngaySearch;
+            if (document.getElementById('tauHoaTu')) document.getElementById('tauHoaTu').value = params.tuSearch || '';
+            if (document.getElementById('tauHoaDen')) document.getElementById('tauHoaDen').value = params.denSearch || '';
+            if (document.getElementById('tauHoaNgayDi') && params.ngaySearch) {
+                document.getElementById('tauHoaNgayDi').value = params.ngaySearch;
                 ngayDiTau = params.ngaySearch;
             }
-            if (document.getElementById('train-roundtrip') && params.khuHoi) {
-                document.getElementById('train-roundtrip').checked = true;
-                if (document.getElementById('train-date-return')) {
-                    document.getElementById('train-date-return').disabled = false;
-                    document.getElementById('train-date-return').value = params.ngayVeSearch || '';
+            if (document.getElementById('khuHoiTauHoa') && params.khuHoi) {
+                document.getElementById('khuHoiTauHoa').checked = true;
+                if (document.getElementById('ngayVeTauHoa')) {
+                    document.getElementById('ngayVeTauHoa').disabled = false;
+                    document.getElementById('ngayVeTauHoa').value = params.ngayVeSearch || '';
                 }
             }
-            if (document.getElementById('train-adults') && params.slNguoiLon) document.getElementById('train-adults').value = params.slNguoiLon;
-            if (document.getElementById('train-children') && params.slTreEm) document.getElementById('train-children').value = params.slTreEm;
+            if (document.getElementById('nguoiLonTauHoa') && params.slNguoiLon) document.getElementById('nguoiLonTauHoa').value = params.slNguoiLon;
+            if (document.getElementById('treEmTauHoa') && params.slTreEm) document.getElementById('treEmTauHoa').value = params.slTreEm;
             
             // Tự động tìm kiếm
             timTau();
@@ -61,8 +61,8 @@ document.addEventListener("DOMContentLoaded", function() {
 // HÀM: Toggle trường Ngày Về
 // ---------------------------------------------------------------
 function toggleReturnDateTrain() {
-    var rdOneway = document.getElementById('train-oneway');
-    var inputNgayVe = document.getElementById('train-date-return');
+    var rdOneway = document.getElementById('motChieuTauHoa');
+    var inputNgayVe = document.getElementById('ngayVeTauHoa');
     if (!rdOneway || !inputNgayVe) return;
     
     if (rdOneway.checked) {
@@ -70,7 +70,7 @@ function toggleReturnDateTrain() {
         inputNgayVe.value = '';
     } else {
         inputNgayVe.disabled = false;
-        var inputNgayDi = document.getElementById('train-date-out');
+        var inputNgayDi = document.getElementById('tauHoaNgayDi');
         if (inputNgayDi && inputNgayDi.value) {
             inputNgayVe.min = inputNgayDi.value;
             inputNgayVe.value = inputNgayDi.value;
@@ -84,11 +84,11 @@ function toggleReturnDateTrain() {
 function timTau(event) {
     if (event) event.preventDefault();
 
-    var tu = document.getElementById('train-from').value;
-    var den = document.getElementById('train-to').value;
-    var inputNgay = document.getElementById('train-date-out');
-    var inputNgayVe = document.getElementById('train-date-return');
-    var rdRoundtrip = document.getElementById('train-roundtrip');
+    var tu = document.getElementById('tauHoaTu').value;
+    var den = document.getElementById('tauHoaDen').value;
+    var inputNgay = document.getElementById('tauHoaNgayDi');
+    var inputNgayVe = document.getElementById('ngayVeTauHoa');
+    var rdRoundtrip = document.getElementById('khuHoiTauHoa');
     ngayDiTau = inputNgay ? inputNgay.value : '';
 
     if (!ngayDiTau) {
@@ -121,8 +121,8 @@ function timTau(event) {
     if(lichSuTK.length > 5) lichSuTK.pop();
     localStorage.setItem('lichSuTimKiemTau', JSON.stringify(lichSuTK));
 
-    var slNguoiLon = parseInt(document.getElementById('train-adults').value) || 1;
-    var slTreEm = parseInt(document.getElementById('train-children').value) || 0;
+    var slNguoiLon = parseInt(document.getElementById('nguoiLonTauHoa').value) || 1;
+    var slTreEm = parseInt(document.getElementById('treEmTauHoa').value) || 0;
     sessionStorage.setItem('trainAdults', slNguoiLon);
     sessionStorage.setItem('trainChildren', slTreEm);
     sessionStorage.setItem('trainIsRoundTrip', rdRoundtrip ? rdRoundtrip.checked : false);
@@ -168,7 +168,7 @@ function timTau(event) {
 }
 
 function hienCanhBaoTau(msg) {
-    document.getElementById('train-results').innerHTML =
+    document.getElementById('ketQuaTauHoa').innerHTML =
         '<div class="alert alert-warning fw-600"><i class="bi bi-exclamation-triangle-fill me-2"></i>' + msg + '</div>';
 }
 
@@ -176,7 +176,7 @@ function hienCanhBaoTau(msg) {
 // HÀM: Render danh sách tàu
 // ---------------------------------------------------------------
 function hienThiDanhSachTau(danhSach) {
-    var container = document.getElementById('train-results');
+    var container = document.getElementById('ketQuaTauHoa');
     if (!container) return;
 
     if (danhSach.length === 0) {
@@ -316,8 +316,8 @@ function xemChiTietHanhTrinh(idTau) {
 
     html += '</div></div>';
     
-    document.getElementById('train-itinerary-body').innerHTML = html;
-    var myModal = new bootstrap.Modal(document.getElementById('trainItineraryModal'));
+    document.getElementById('lichTrinhTauHoa').innerHTML = html;
+    var myModal = new bootstrap.Modal(document.getElementById('modalLichTrinhTau'));
     myModal.show();
 }
 
@@ -341,15 +341,15 @@ function moModalChonChoTau(idTau) {
 
     var t = tauDangChon;
     var gioParts = t.time.split(' - ');
-    document.getElementById('train-modal-info').innerHTML =
+    document.getElementById('thongTinGheTau').innerHTML =
         t.code + ' · ' + t.name + ' · ' + (gioParts[0]||'') + ' → ' + (gioParts[1]||'') + ' · ' + dinhDangNgay(ngayDiTau);
 
     // Reset
-    var nutXN = document.getElementById('btn-confirm-train');
+    var nutXN = document.getElementById('xacNhanTauHoa');
     if (nutXN) { nutXN.disabled = true; nutXN.innerText = 'Xác Nhận Mua'; }
-    document.getElementById('train-seat-info-selected').innerText = 'Chưa chọn chỗ';
+    document.getElementById('thongTinGheTauDaChon').innerText = 'Chưa chọn chỗ';
 
-    var myModal = new bootstrap.Modal(document.getElementById('trainSeatModal'));
+    var myModal = new bootstrap.Modal(document.getElementById('modalGheTau'));
     myModal.show();
     setTimeout(function() { doiToaTau('1', 'ghe'); }, 200);
 }
@@ -368,29 +368,29 @@ function doiToaTau(soToa, kieu) {
     });
 
     var activeBtn = document.getElementById('btn-toa-' + soToa);
-    var nutXN = document.getElementById('btn-confirm-train');
+    var nutXN = document.getElementById('xacNhanTauHoa');
 
     if (kieu === 'ghe') {
         if(activeBtn) activeBtn.className = 'btn btn-success rounded-pill px-3 fw-700 btn-toa';
-        document.getElementById('train-legend-ghe').style.display = 'flex';
-        document.getElementById('train-legend-giuong').style.display = 'none';
+        document.getElementById('chuThichGheTau').style.display = 'flex';
+        document.getElementById('chuThichGiuongTau').style.display = 'none';
         veToaGheMem();
     } else {
         if(activeBtn) activeBtn.className = (soToa === 'vip') ? 'btn btn-warning rounded-pill px-3 fw-700 btn-toa text-dark' : 'btn btn-success rounded-pill px-3 fw-700 btn-toa';
-        document.getElementById('train-legend-ghe').style.display = 'none';
-        document.getElementById('train-legend-giuong').style.display = 'flex';
+        document.getElementById('chuThichGheTau').style.display = 'none';
+        document.getElementById('chuThichGiuongTau').style.display = 'flex';
         veCabinGiuong();
     }
 
     if (nutXN) { nutXN.disabled = true; nutXN.innerText = 'Xác Nhận Mua'; }
-    document.getElementById('train-seat-info-selected').innerText = 'Chưa chọn chỗ';
+    document.getElementById('thongTinGheTauDaChon').innerText = 'Chưa chọn chỗ';
 }
 
 // ---------------------------------------------------------------
 // HÀM: Vẽ toa ghế mềm (4 ghế/hàng: 2-2, 20 hàng)
 // ---------------------------------------------------------------
 function veToaGheMem() {
-    var container = document.getElementById('train-seat-map-container');
+    var container = document.getElementById('khungSoDoGheTau');
     if (!container) return;
 
     var gheDaDat = ['3A','3B','7C','7D','11A','14C','16D'];
@@ -449,7 +449,7 @@ function veToaGheMem() {
 // HÀM: Vẽ cabin giường nằm (5 cabin, mỗi cabin 6 giường: 3 trên + 3 dưới)
 // ---------------------------------------------------------------
 function veCabinGiuong() {
-    var container = document.getElementById('train-seat-map-container');
+    var container = document.getElementById('khungSoDoGheTau');
     if (!container) return;
 
     var giuongDaDat = ['1-A1U', '2-B2L', '3-A3U', '4-B1U'];
@@ -567,13 +567,13 @@ function chonGiuongTau(phanTu, cabin, cot, tang) {
 }
 
 function capNhatThongTinChonCho() {
-    var nutXN = document.getElementById('btn-confirm-train');
+    var nutXN = document.getElementById('xacNhanTauHoa');
     var slNguoiLon = parseInt(sessionStorage.getItem('trainAdults')) || 1;
     var slTreEm = parseInt(sessionStorage.getItem('trainChildren')) || 0;
     var tongHanhKhach = slNguoiLon + slTreEm;
 
     if (gheTauDangChonList.length === 0) {
-        document.getElementById('train-seat-info-selected').innerText = 'Chưa chọn chỗ';
+        document.getElementById('thongTinGheTauDaChon').innerText = 'Chưa chọn chỗ';
         if (nutXN) { nutXN.disabled = true; nutXN.innerHTML = 'Xác Nhận Mua'; }
         return;
     }
@@ -586,7 +586,7 @@ function capNhatThongTinChonCho() {
         gheText += '<span class="badge bg-secondary me-1">' + ghe.ma + '</span>';
     }
 
-    document.getElementById('train-seat-info-selected').innerHTML =
+    document.getElementById('thongTinGheTauDaChon').innerHTML =
         'Đã chọn: ' + gheText +
         ' <span class="text-warning ms-2 fw-700">Tổng: ' + tongTien.toLocaleString('vi-VN') + ' ₫</span>';
 
@@ -624,6 +624,6 @@ function xacNhanDatTau() {
         }
     }
 
-    var modal = bootstrap.Modal.getInstance(document.getElementById('trainSeatModal'));
+    var modal = bootstrap.Modal.getInstance(document.getElementById('modalGheTau'));
     if (modal) modal.hide();
 }
