@@ -7,6 +7,8 @@
 var ngayDiXe = '';
 var xeDangChon = null;
 var giuongXeDangChon = null;
+var locHangXeHienTai = '';
+var danhSachXeHienThi = [];
 
 document.addEventListener("DOMContentLoaded", function() {
     var homNay = new Date().toISOString().split('T')[0];
@@ -16,7 +18,10 @@ document.addEventListener("DOMContentLoaded", function() {
         inputNgay.value = homNay;
         ngayDiXe = homNay;
     }
-    hienThiDanhSachXe(mockBuses);
+    
+    // Khởi tạo danh sách mặc định
+    danhSachXeHienThi = mockBuses;
+    hienThiDanhSachXe(danhSachXeHienThi);
 });
 
 // ---------------------------------------------------------------
@@ -31,12 +36,12 @@ function timXe(event) {
     ngayDiXe = inputNgay ? inputNgay.value : '';
 
     if (!ngayDiXe) {
-        document.getElementById('ketQuaXeKhach').innerHTML =
+        document.getElementById('bus-results').innerHTML =
             '<div class="alert alert-warning fw-600"><i class="bi bi-exclamation-triangle-fill me-2"></i>Vui lòng chọn Ngày Đi!</div>';
         return;
     }
     if (tu !== '' && den !== '' && tu === den) {
-        document.getElementById('ketQuaXeKhach').innerHTML =
+        document.getElementById('bus-results').innerHTML =
             '<div class="alert alert-warning fw-600"><i class="bi bi-exclamation-triangle-fill me-2"></i>Điểm Đi và Điểm Đến không được trùng nhau!</div>';
         return;
     }
@@ -58,6 +63,57 @@ function timXe(event) {
         ketQua = loc2;
     }
 
+    danhSachXeHienThi = ketQua;
+    locHangXeHienTai = '';
+
+    // Reset active cho các filter chips bằng cách quét hàm click
+    var chips = document.querySelectorAll('.filter-chip');
+    for (var k = 0; k < chips.length; k++) {
+        chips[k].classList.remove('active');
+        var oc = chips[k].getAttribute('onclick') || '';
+        if (oc.indexOf("''") > -1 || oc.indexOf('""') > -1) {
+            chips[k].classList.add('active');
+        }
+    }
+
+    hienThiDanhSachXe(danhSachXeHienThi);
+}
+
+// ---------------------------------------------------------------
+// HÀM: Chuyển chuỗi tiếng Việt sang không dấu, viết thường để so sánh an toàn
+// ---------------------------------------------------------------
+function xoaDauTiengViet(str) {
+    if (!str) return '';
+    return str.normalize('NFD')
+              .replace(/[\u0300-\u036f]/g, '')
+              .replace(/đ/g, 'd')
+              .replace(/Đ/g, 'd')
+              .toLowerCase()
+              .trim();
+}
+
+// ---------------------------------------------------------------
+// HÀM: Lọc theo nhà xe
+// ---------------------------------------------------------------
+function locHang(phanTu, tenHang) {
+    var chips = document.querySelectorAll('.filter-chip');
+    for (var i = 0; i < chips.length; i++) {
+        chips[i].classList.remove('active');
+    }
+    phanTu.classList.add('active');
+
+    locHangXeHienTai = tenHang;
+
+    var ketQua = [];
+    var tenHangKhongDau = xoaDauTiengViet(tenHang);
+
+    for (var j = 0; j < danhSachXeHienThi.length; j++) {
+        var companyKhongDau = xoaDauTiengViet(danhSachXeHienThi[j].company);
+        if (tenHang === '' || companyKhongDau === tenHangKhongDau) {
+            ketQua.push(danhSachXeHienThi[j]);
+        }
+    }
+
     hienThiDanhSachXe(ketQua);
 }
 
@@ -65,11 +121,18 @@ function timXe(event) {
 // HÀM: Render danh sách xe khách
 // ---------------------------------------------------------------
 function hienThiDanhSachXe(danhSach) {
-    var container = document.getElementById('ketQuaXeKhach');
+    var container = document.getElementById('bus-results');
+    var elSoKQ = document.getElementById('so-ket-qua');
+
+    if (elSoKQ) elSoKQ.innerText = 'Tìm thấy ' + danhSach.length + ' chuyến xe';
     if (!container) return;
 
     if (danhSach.length === 0) {
-        container.innerHTML = '<div class="text-center py-5"><i class="bi bi-bus-front text-danger" style="font-size:3rem;opacity:0.3;"></i><p class="text-white-50 mt-3">Không có chuyến xe phù hợp.</p></div>';
+        container.innerHTML = 
+            '<div class="text-center py-5">' +
+            '  <i class="bi bi-bus-front text-white-50" style="font-size:3rem;opacity:0.3;"></i>' +
+            '  <p class="text-white-50 mt-3">Không có chuyến xe phù hợp.<br>Thử chọn tuyến khác hoặc bỏ bộ lọc.</p>' +
+            '</div>';
         return;
     }
 
@@ -86,55 +149,65 @@ function hienThiDanhSachXe(danhSach) {
         var b = danhSach[i];
         var gioParts = b.time.split(' - ');
         var mau = mauHang[b.company] || '#e74c3c';
+        var tenVietTat = b.company === 'Phương Trang' ? 'FUTA' : (b.company === 'Thành Bưởi' ? 'TB' : (b.company === 'Hạnh Cafe' ? 'HC' : 'HL'));
 
         html += '<div class="ticket-card bus" style="animation:fadeInUp 0.4s ease both;animation-delay:' + (i * 0.08) + 's;">';
 
-        // Logo xe
-        html +=   '<div class="text-center">';
-        html +=     '<div style="width:68px;height:68px;background:' + mau + ';border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:0.75rem;line-height:1.2;">';
-        html +=       '<i class="bi bi-bus-front-fill fs-3"></i>';
-        html +=     '</div>';
-        html +=     '<div class="fw-700 text-white mt-1 small">' + b.company.split(' ')[0] + '</div>';
+        // Logo xe - compact box
+        html +=   '<div class="airline-logo-box" style="flex-shrink:0; background:' + mau + '; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:0.9rem; width:64px; height:64px; border-radius:12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">';
+        html +=     tenVietTat;
         html +=   '</div>';
 
-        // Thông tin
-        html +=   '<div style="flex:1;">';
-        html +=     '<div class="fw-700 text-white mb-1">' + b.name + '</div>';
-        html +=     '<div class="d-flex align-items-center gap-3 mb-2">';
-        html +=       '<div class="text-center">';
-        html +=         '<div class="fw-900 text-white fs-4">' + (gioParts[0] || '') + '</div>';
-        html +=         '<div class="text-white-50 small">' + tenDiemXe(b.from) + '</div>';
-        html +=       '</div>';
-        html +=       '<div class="text-center flex-1">';
-        html +=         '<div class="text-white-50 small">' + (b.duration || '---') + '</div>';
-        html +=         '<div style="height:2px;background:linear-gradient(90deg,#e74c3c,#c0392b);border-radius:1px;margin:4px 0;position:relative;">';
-        html +=           '<i class="bi bi-bus-front-fill text-danger position-absolute" style="right:-2px;top:-7px;font-size:0.65rem;"></i>';
-        html +=         '</div>';
-        html +=         '<div class="badge" style="background:rgba(231,76,60,0.15);color:#e74c3c;font-size:0.68rem;">Thẳng</div>';
-        html +=       '</div>';
-        html +=       '<div class="text-center">';
-        html +=         '<div class="fw-900 text-white fs-4">' + (gioParts[1] || '') + '</div>';
-        html +=         '<div class="text-white-50 small">' + tenDiemXe(b.to) + '</div>';
-        html +=       '</div>';
+        // Tên hãng & thông tin
+        html +=   '<div style="flex-shrink:0; min-width:130px; max-width:150px;">';
+        html +=     '<div class="fw-800 text-white" style="font-size:0.95rem;line-height:1.2;">' + b.company + '</div>';
+        html +=     '<span class="badge bg-danger" style="font-size:0.65rem; background:#e74c3c!important;">' + b.name.split(' ')[0] + '</span>';
+        html +=     '<div class="text-white-50" style="font-size:0.72rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:140px; margin-top:2px;">' + b.type + '</div>';
+        html +=     '<span class="badge bg-success" style="font-size:0.62rem; margin-top:2px;">Tuyến thẳng</span>';
+        html +=   '</div>';
+
+        // Route lộ trình
+        html +=   '<div class="flight-route" style="flex:1; justify-content:center; gap:8px;">';
+        html +=     '<div class="text-center">';
+        html +=       '<div class="flight-city-code text-white" style="font-size: 1.8rem; font-weight: 900; line-height: 1;">' + (gioParts[0] || '') + '</div>';
+        html +=       '<div class="text-white-50 small" style="white-space:nowrap;">' + tenDiemXe(b.from) + '</div>';
         html +=     '</div>';
-        // Tiện ích
-        html +=     '<div class="d-flex flex-wrap gap-1">';
+        html +=     '<div class="flight-arrow mx-2 text-center" style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px;">';
+        html +=       '<div class="text-white-50" style="font-size:0.68rem;white-space:nowrap;">' + (b.duration || '---') + '</div>';
+        html +=       '<div class="flight-arrow-line my-1" style="width: 100%; height: 1px; background: linear-gradient(90deg, rgba(255,255,255,0.1), rgba(231,76,60,0.5), rgba(255,255,255,0.1)); position: relative;">';
+        html +=         '<i class="bi bi-bus-front-fill text-danger position-absolute" style="left:50%; transform:translateX(-50%); top:-8px; font-size:0.85rem;"></i>';
+        html +=       '</div>';
+        html +=       '<div class="badge" style="background:rgba(231,76,60,0.12);color:#e74c3c;font-size:0.62rem;white-space:nowrap;">Giường nằm</div>';
+        html +=     '</div>';
+        html +=     '<div class="text-center">';
+        html +=       '<div class="flight-city-code text-white" style="font-size: 1.8rem; font-weight: 900; line-height: 1;">' + (gioParts[1] || '') + '</div>';
+        html +=       '<div class="text-white-50 small" style="white-space:nowrap;">' + tenDiemXe(b.to) + '</div>';
+        html +=     '</div>';
+        html +=   '</div>';
+
+        // Tiện ích cột ẩn trên mobile
+        html +=   '<div class="d-none d-xl-flex flex-column justify-content-center gap-1 mx-2" style="flex-shrink:0; min-width:110px;">';
         var tienIch = (b.amenities || ['Giường nằm', 'WiFi', 'Điều hòa']);
         for (var ti = 0; ti < tienIch.length; ti++) {
-            html += '<span class="badge" style="background:rgba(231,76,60,0.12);color:#e74c3c;font-size:0.68rem;">' + tienIch[ti] + '</span>';
+            var icon = 'bi-check-circle-fill';
+            if (tienIch[ti].indexOf('WiFi') > -1) icon = 'bi-wifi';
+            else if (tienIch[ti].indexOf('Điều hòa') > -1) icon = 'bi-snow';
+            else if (tienIch[ti].indexOf('Sạc') > -1 || tienIch[ti].indexOf('cổng') > -1) icon = 'bi-plug';
+            else if (tienIch[ti].indexOf('Cabin') > -1) icon = 'bi-person-workspace';
+            else if (tienIch[ti].indexOf('nằm') > -1) icon = 'bi-moon-stars';
+            else if (tienIch[ti].indexOf('Nước') > -1) icon = 'bi-water';
+            html += '<span class="text-white-50" style="font-size:0.75rem;"><i class="bi ' + icon + ' text-danger me-1"></i>' + tienIch[ti] + '</span>';
         }
-        html +=     '</div>';
         html +=   '</div>';
 
-        // Số chỗ trống + giá + nút
-        html +=   '<div class="text-end">';
-        html +=     '<div class="text-white-50 small">Giường nằm</div>';
-        html +=     '<div class="fw-900 text-warning" style="font-size:1.5rem;">' + (b.price/1000).toFixed(0) + 'K</div>';
-        html +=     '<div class="text-white-50 small mb-1">' + b.price.toLocaleString('vi-VN') + ' ₫</div>';
-        html +=     '<div class="badge bg-success mb-2" style="font-size:0.7rem;">' + (b.available || '20') + ' chỗ trống</div>';
-        html +=     '<br>';
-        html +=     '<button class="btn btn-sm fw-700" style="background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;border-radius:50px;padding:6px 18px;border:none;" onclick="moModalChonGiuong(\'' + b.id + '\')">';
-        html +=       'Chọn Giường <i class="bi bi-arrow-right"></i>';
+        // Giá vé và nút đặt
+        html +=   '<div class="text-end" style="flex-shrink:0; min-width:110px;">';
+        html +=     '<div class="text-white-50" style="font-size:0.68rem;">Giá từ</div>';
+        html +=     '<div class="fw-900 text-warning" style="font-size:1.5rem;line-height:1.1;">' + (b.price/1000).toFixed(0) + 'K</div>';
+        html +=     '<div class="text-white-50" style="font-size:0.72rem; margin-bottom:4px;">' + b.price.toLocaleString('vi-VN') + ' ₫</div>';
+        html +=     '<span class="badge bg-success mb-2" style="font-size:0.62rem;">' + (b.available || '20') + ' giường trống</span><br>';
+        html +=     '<button class="btn btn-sm btn-custom fw-700 px-3" onclick="moModalChonGiuong(\'' + b.id + '\')" style="background:linear-gradient(135deg,#e74c3c,#c0392b); border-color:#e74c3c; box-shadow:0 4px 15px rgba(231,76,60,0.4); white-space:nowrap;">';
+        html +=       'Chọn Vé <i class="bi bi-arrow-right"></i>';
         html +=     '</button>';
         html +=   '</div>';
 
@@ -174,18 +247,18 @@ function moModalChonGiuong(idXe) {
 
     var b = xeDangChon;
     var gioParts = b.time.split(' - ');
-    document.getElementById('thongTinGheXe').innerHTML =
+    document.getElementById('bus-modal-info').innerHTML =
         b.company + ' · ' + b.name + ' · ' + (gioParts[0]||'') + ' → ' + (gioParts[1]||'') + ' · ' + dinhDangNgay(ngayDiXe);
 
-    var nutXN = document.getElementById('xacNhanXeKhach');
+    var nutXN = document.getElementById('btn-confirm-bus');
     if (nutXN) { nutXN.disabled = true; nutXN.innerText = 'Xác Nhận Đặt'; }
-    document.getElementById('thongTinGheXeDaChon').innerText = 'Chưa chọn giường';
+    document.getElementById('bus-seat-info-selected').innerText = 'Chưa chọn giường';
 
     // Vẽ sơ đồ tầng dưới và tầng trên
-    veSoDoXe('lower', document.getElementById('xeKhachTangDuoi'));
-    veSoDoXe('upper', document.getElementById('xeKhachTangTren'));
+    veSoDoXe('lower', document.getElementById('bus-map-lower'));
+    veSoDoXe('upper', document.getElementById('bus-map-upper'));
 
-    var modal = new bootstrap.Modal(document.getElementById('modalGheXeKhach'));
+    var modal = new bootstrap.Modal(document.getElementById('busSeatModal'));
     modal.show();
 }
 
@@ -206,8 +279,8 @@ function veSoDoXe(tang, container) {
 
     var html = '';
 
-    // Vẽ 9 hàng (mỗi hàng 2 giường: trái và phải)
-    for (var hang = 1; hang <= 9; hang++) {
+    // Vẽ 8 hàng (mỗi hàng 2 giường: trái và phải)
+    for (var hang = 1; hang <= 8; hang++) {
         var soTrai = (hang - 1) * 2 + 1;
         var soPhai = soTrai + 1;
         var maTrai = prefix + soTrai;
@@ -221,7 +294,7 @@ function veSoDoXe(tang, container) {
         html +=     '<span>' + maTrai + '</span>';
         html +=   '</div>';
         // Lối đi giữa
-        html +=   '<div class="bus-aisle"><i class="bi bi-three-dots-vertical text-secondary"></i></div>';
+        html +=   '<div class="bus-aisle"><i class="bi bi-three-dots-vertical text-secondary" style="opacity:0.25;"></i></div>';
         // Giường phải
         html +=   '<div class="bus-bed' + (daDatPhai ? ' booked' : '') + '" onclick="chonGiuongXe(this,\'' + maPhai + '\',\'' + tang + '\')">';
         html +=     '<span>' + maPhai + '</span>';
@@ -230,7 +303,7 @@ function veSoDoXe(tang, container) {
     }
 
     // Hàng cuối: 1 giường lẻ ở giữa
-    var soGuoi = 19;
+    var soGuoi = 17;
     var maGuoi = prefix + soGuoi;
     var daDatGuoi = daDatList.indexOf(maGuoi) > -1;
     html += '<div class="bus-row justify-content-center">';
@@ -264,12 +337,12 @@ function chonGiuongXe(phanTu, maGiuong, tang) {
 
     giuongXeDangChon = { maGiuong: maGiuong, tang: tenTang, gia: gia };
 
-    document.getElementById('thongTinGheXeDaChon').innerHTML =
+    document.getElementById('bus-seat-info-selected').innerHTML =
         'Giường <strong class="text-white">' + maGiuong + '</strong>' +
         ' <span class="badge bg-danger ms-1">' + tenTang + '</span>' +
         ' <span class="text-warning ms-2 fw-700">' + gia.toLocaleString('vi-VN') + ' ₫</span>';
 
-    var nutXN = document.getElementById('xacNhanXeKhach');
+    var nutXN = document.getElementById('btn-confirm-bus');
     if (nutXN) { nutXN.disabled = false; nutXN.innerHTML = '<i class="bi bi-check2-circle me-1"></i>Xác Nhận – ' + maGiuong; }
 }
 
@@ -294,6 +367,6 @@ function xacNhanDatXe() {
         );
     }
 
-    var modal = bootstrap.Modal.getInstance(document.getElementById('modalGheXeKhach'));
+    var modal = bootstrap.Modal.getInstance(document.getElementById('busSeatModal'));
     if (modal) modal.hide();
 }

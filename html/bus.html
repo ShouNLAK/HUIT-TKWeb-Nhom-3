@@ -8,7 +8,29 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/overlay.css">
-    <link rel="stylesheet" href="../css/bus.css">
+    <link rel="stylesheet" href="../css/bus.css?v=1.2">
+    <style>
+        .page-accent { color: #e74c3c; }
+        /* Filter bar */
+        .filter-bar {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px; padding: 12px 16px;
+            display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+            margin-bottom: 20px;
+        }
+        .filter-chip {
+            padding: 6px 14px; border-radius: 50px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: rgba(255,255,255,0.7); font-size: 0.82rem;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .filter-chip:hover, .filter-chip.active {
+            background: #e74c3c; border-color: #e74c3c; color: #fff;
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+        }
+    </style>
 </head>
 <body>
     <ul class="slideshow-bg"><li></li><li></li><li></li><li></li></ul>
@@ -21,7 +43,7 @@
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="thanhDieuHuong">
         <div class="container">
-            <a class="navbar-brand" href="../index.html" >
+            <a class="navbar-brand" href="../index.html" onclick="chuyenTrang(event,'../index.html')">
                 <img src="../img/Logo.jpg" alt="Logo" style="height:36px;border-radius:6px;" onerror="this.style.display='none'">
                 VIET TRAVEL HUB
             </a>
@@ -30,13 +52,13 @@
             </button>
             <div class="collapse navbar-collapse justify-content-center" id="menuChinh">
                 <ul class="navbar-nav align-items-lg-center gap-1 me-auto ms-lg-4">
-                    <li class="nav-item"><a class="nav-link" href="../index.html" ><i class="bi bi-house-door"></i> Trang Chủ</a></li>
-                    <li class="nav-item"><a class="nav-link" href="flight.html" ><i class="bi bi-airplane"></i> Máy Bay</a></li>
-                    <li class="nav-item"><a class="nav-link" href="train.html" ><i class="bi bi-train-front"></i> Tàu Hỏa</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../index.html" onclick="chuyenTrang(event,'../index.html')"><i class="bi bi-house-door"></i> Trang Chủ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="flight.html" onclick="chuyenTrang(event,'flight.html')"><i class="bi bi-airplane"></i> Máy Bay</a></li>
+                    <li class="nav-item"><a class="nav-link" href="train.html" onclick="chuyenTrang(event,'train.html')"><i class="bi bi-train-front"></i> Tàu Hỏa</a></li>
                     <li class="nav-item"><a class="nav-link active" href="bus.html"><i class="bi bi-bus-front"></i> Xe Khách</a></li>
                 </ul>
                 <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0">
-                    <a class="btn btn-outline-warning btn-sm px-3 position-relative" href="cart.html" >
+                    <a class="btn btn-outline-warning btn-sm px-3 position-relative" href="cart.html" onclick="chuyenTrang(event,'cart.html')">
                         <i class="bi bi-cart3"></i>
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="soLuongGioHang">0</span>
                     </a>
@@ -63,7 +85,7 @@
                 <!-- Form tìm xe -->
                 <div class="glass-panel mb-4">
                     <h6 class="fw-700 text-white mb-3"><i class="bi bi-search text-danger"></i> Tìm Chuyến Xe</h6>
-                    <form id="formTimXeKhach" onsubmit="timXe(event)">
+                    <form id="bus-search-form" onsubmit="timXe(event)">
                         <div class="row g-3">
                             <div class="col-md-3">
                                 <label class="form-label">Điểm Đi</label>
@@ -96,8 +118,19 @@
                     </form>
                 </div>
 
+                <!-- FILTER BAR -->
+                <div class="filter-bar">
+                    <span class="text-white-50 small fw-600"><i class="bi bi-funnel"></i> Lọc nhà xe:</span>
+                    <span class="filter-chip active" onclick="locHang(this,'')">Tất cả</span>
+                    <span class="filter-chip" onclick="locHang(this,'Phương Trang')">Phương Trang</span>
+                    <span class="filter-chip" onclick="locHang(this,'Thành Bưởi')">Thành Bưởi</span>
+                    <span class="filter-chip" onclick="locHang(this,'Hạnh Cafe')">Hạnh Cafe</span>
+                    <span class="filter-chip" onclick="locHang(this,'Hoàng Long')">Hoàng Long</span>
+                    <span class="ms-auto text-white-50 small" id="so-ket-qua">Đang tải...</span>
+                </div>
+
                 <!-- Kết quả xe khách -->
-                <div id="ketQuaXeKhach">
+                <div id="bus-results">
                     <div class="text-center py-5">
                         <i class="bi bi-bus-front text-danger" style="font-size:3rem;opacity:0.4;"></i>
                         <p class="text-white-50 mt-2">Nhập thông tin và bấm Tìm Xe</p>
@@ -154,7 +187,7 @@
     </section>
 
     <!-- MODAL CHỌN GIƯỜNG XE KHÁCH -->
-    <div class="modal fade" id="modalGheXeKhach" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="busSeatModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header" style="background:linear-gradient(135deg,#e74c3c,#c0392b);">
@@ -162,20 +195,29 @@
                         <h5 class="modal-title fw-800 text-white mb-0">
                             <i class="bi bi-bus-front-fill"></i> Chọn Giường Nằm
                         </h5>
-                        <div class="text-white opacity-75 small" id="thongTinGheXe">---</div>
+                        <div class="text-white opacity-75 small" id="bus-modal-info">---</div>
                     </div>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body" style="background:#f0f4f8;">
+                <div class="modal-body p-3" style="background:#111122;">
                     <!-- Chú thích -->
-                    <div class="seat-legend mb-4">
-                        <div class="legend-item"><div class="legend-dot" style="background:linear-gradient(135deg,#a8e6cf,#7dcd9f);border-color:#55b47f;"></div><span>Còn Trống</span></div>
-                        <div class="legend-item"><div class="legend-dot" style="background:linear-gradient(135deg,#0d6efd,#00c6ff);border-color:#0b5ed7;"></div><span>Đang Chọn</span></div>
-                        <div class="legend-item"><div class="legend-dot" style="background:linear-gradient(135deg,#bdc3c7,#95a5a6);border-color:#7f8c8d;"></div><span>Đã Đặt</span></div>
+                    <div class="seat-legend mb-4" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); color: #fff;">
+                        <div class="legend-item">
+                            <div class="legend-dot" style="background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.15);"></div>
+                            <span>Còn Trống</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot" style="background:linear-gradient(135deg,#e74c3c,#c0392b); border-color:#e74c3c;"></div>
+                            <span>Đang Chọn</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot" style="background:rgba(255,255,255,0.02); border-color:rgba(255,255,255,0.05);"></div>
+                            <span>Đã Đặt</span>
+                        </div>
                     </div>
 
                     <!-- Tab chọn tầng -->
-                    <ul class="nav nav-pills justify-content-center mb-4 gap-2" id="tabTangXeKhach" role="tablist">
+                    <ul class="nav nav-pills justify-content-center mb-4 gap-2" id="bus-tang-tab" role="tablist">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active px-4 fw-700" data-bs-toggle="pill"
                                     data-bs-target="#tang-duoi" type="button">
@@ -194,24 +236,24 @@
                         <div class="tab-pane fade show active" id="tang-duoi" role="tabpanel">
                             <div class="d-flex justify-content-center">
                                 <div class="bus-vehicle">
-                                    <div id="xeKhachTangDuoi"></div>
+                                    <div id="bus-map-lower"></div>
                                 </div>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="tang-tren" role="tabpanel">
                             <div class="d-flex justify-content-center">
                                 <div class="bus-vehicle">
-                                    <div id="xeKhachTangTren"></div>
+                                    <div id="bus-map-upper"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between" style="background:#1a1a2e;border-top:1px solid rgba(255,255,255,0.1);">
-                    <div class="text-white-50 small" id="thongTinGheXeDaChon">Chưa chọn giường</div>
+                    <div class="text-white-50 small" id="bus-seat-info-selected">Chưa chọn giường</div>
                     <div class="d-flex gap-2">
                         <button class="btn btn-outline-light" data-bs-dismiss="modal">Hủy</button>
-                        <button class="btn fw-700 px-4" id="xacNhanXeKhach" onclick="xacNhanDatXe()" disabled
+                        <button class="btn fw-700 px-4" id="btn-confirm-bus" onclick="xacNhanDatXe()" disabled
                                 style="background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;border:none;">
                             Xác Nhận Đặt
                         </button>
@@ -221,7 +263,7 @@
         </div>
     </div>
 
-    <footer class="trang-footer">
+    <footer style="padding:30px 0;border-top:1px solid rgba(255,255,255,0.08);margin-top:60px;">
         <div class="container text-center">
             <p class="text-white-50 small mb-0">© 2024 Viet Travel Hub · Xe khách giường nằm toàn quốc</p>
         </div>
@@ -232,6 +274,6 @@
     <script src="../js/auth.js"></script>
     <script src="../js/app.js"></script>
     <script src="../js/cart.js"></script>
-    <script src="../js/bus.js"></script>
+    <script src="../js/bus.js?v=1.2"></script>
 </body>
 </html>
